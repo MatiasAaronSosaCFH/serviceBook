@@ -4,10 +4,15 @@
  */
 package com.servicebook.models;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author julip
  */
+
+
+@Entity
 public class Trabajo {
     
 }
