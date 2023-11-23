@@ -124,4 +124,9 @@ public class UsuarioService {
     usuarios = usuarioRepositorio.findAll();
     return usuarios;
 }
-}
+   
+    public Usuario getOne(Long id){
+        return usuarioRepositorio.getOne(id);
+    }
+            
+    }
