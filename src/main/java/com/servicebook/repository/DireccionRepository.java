@@ -10,10 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DireccionRepository extends JpaRepository<Direccion, Long>{
     
-  @Query("UPDATE Direccion d SET d.alta = false WHERE d.calle = :calle AND d.localidad = :localidad AND "
-       + "d.provincia = :provincia AND d.numero = :numero")
-  public void darDeBaja(@Param("calle") String calle, @Param("localidad") String localidad, @Param("provincia") String provincia, 
-                        @Param("numero") String numero);
+  @Query("UPDATE Direccion d SET d.alta = false WHERE d.id = :id")
+  public void baja(@Param("id") Long id);
 
   
 }
