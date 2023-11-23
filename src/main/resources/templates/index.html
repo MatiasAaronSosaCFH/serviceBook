@@ -128,53 +128,50 @@
     </div>
 
     <header data-bs-theme="dark">
-      <div class="collapse text-bg-dark" id="navbarHeader">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-8 col-md-7 py-4">
-              <button class="inicio text-center">Iniciar sesion</button>
-            </div>
-            <div class="col-sm-4 offset-md-1 py-4">
-              <button class="inicio text-center">Registrarse</button>
+      <div class="fixed-top">
+        <nav
+          class="navbar navbar-expand-lg bg-body-tertiary"
+          style="height: 70px"
+        >
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">ServiceBook</a>
+
+            <button
+              class="navbar-toggler bg-dark"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarScroll"
+              aria-controls="navbarScroll"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarScroll">
+              <form class="d-flex" role="Buscar">
+                <input
+                  class="form-control me-2"
+                  type="Buscar"
+                  placeholder="Buscar"
+                  aria-label="Buscar"
+                />
+                <button class="btn btn-outline-success" type="submit">
+                  Buscar
+                </button>
+              </form>
+
+              <ul
+                class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+                style="--bs-scroll-height: 100px"
+              >
+                <li class="nav-item">
+                  <a href="#" class="btn btn-primary my-2">Iniciar sesión</a>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-          <a href="#" class="navbar-brand d-flex align-items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              aria-hidden="true"
-              class="me-2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
-              />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
-            <strong>Album</strong>
-          </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarHeader"
-            aria-controls="navbarHeader"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
+        </nav>
       </div>
     </header>
 
@@ -183,24 +180,18 @@
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">
-              ¡Bienvenido a ServiceBook <br> tu plataforma de servicios en línea!
+              Bienvenido a ServiceBook <br />
+              Tu plataforma de servicios en línea
             </h1>
             <p class="lead text-body-secondary">
-              ServiceBook es la solución perfecta para conectar a personas con
-              habilidades y servicios únicos con aquellos que buscan ayuda en el
-              hogar. Nuestra plataforma permite a los usuarios ofrecer y
-              encontrar una amplia variedad de servicios domésticos, desde
-              limpieza y reparaciones hasta cuidado de mascotas y asesoramiento
-              en el hogar. <br />
-              ServiceBook está aquí para simplificar tu vida y hacer que la
-              búsqueda de servicios domésticos sea rápida, segura y sin
-              complicaciones. Únete a nuestra comunidad hoy y descubre la
-              comodidad de encontrar y ofrecer servicios domésticos de calidad.
-              ¡Haz que tu vida sea más fácil con ServiceBook!
-            </p>
-            <p>
-              <a href="#" class="btn btn-primary my-2">Inicio de sesion</a>
-              <a href="#" class="btn btn-secondary my-2">Registrate</a>
+              ServiceBook conecta a personas con habilidades y servicios únicos
+              con aquellos que buscan ayuda en el hogar, ofreciendo una amplia
+              variedad de servicios, desde limpieza hasta cuidado de mascotas.
+              Simplificamos la búsqueda de servicios domésticos, haciéndola
+              rápida, segura y sin complicaciones. <br />
+              Únete a nuestra comunidad para descubrir la comodidad de encontrar
+              y ofrecer servicios de calidad, haciendo tu vida más fácil con
+              ServiceBook.
             </p>
           </div>
         </div>
