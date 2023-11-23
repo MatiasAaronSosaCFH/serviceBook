@@ -8,7 +8,7 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.enums.Role;
-import com.servicebook.repository.UsuarioRepositorio;
+import com.servicebook.repository.UsuarioRepository;
 import com.servicebook.service.UsuarioService;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private UsuarioService usuarioService;
 
@@ -120,7 +120,7 @@ public class UsuarioController {
 
     @GetMapping("/altaBajaUsuario/{id}")
     public void altaBajaUsuario(@PathVariable Long id, ModelMap modelo) {
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Optional<Usuario> respuesta = usuarioRepository.findById(id);
         if (respuesta.isPresent()) {
 
             Usuario usuario = respuesta.get();

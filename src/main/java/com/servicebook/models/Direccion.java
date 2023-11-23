@@ -19,7 +19,7 @@ public class Direccion {
   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     
     @Column(name = "calle")
@@ -35,7 +35,7 @@ public class Direccion {
     private String provincia;
     
     @Column(name = "alta")
-    private Boolean alta = true; 
+    private Boolean alta = true;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")   

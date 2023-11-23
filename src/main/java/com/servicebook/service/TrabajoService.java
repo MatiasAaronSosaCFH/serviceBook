@@ -2,16 +2,14 @@
 package com.servicebook.service;
 
 import com.servicebook.repository.TrabajoRepository;
-import com.servicebook.repository.UsuarioRepositorio;
+import com.servicebook.repository.UsuarioRepository;
 import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author julip
- */
+import javax.transaction.Transactional;
+
 
 @Service
 public class TrabajoService {
@@ -20,17 +18,17 @@ public class TrabajoService {
     private TrabajoRepository trabajo_repository;
     
     @Autowired
-    private UsuarioRepositorio usuarioRepository;
+    private UsuarioRepository usuarioRepository;
       
     @Autowired
-    private ProveedorRepository proveedorRepository;
+    //private ProveedorRepository proveedorRepository;
     
-    @Autowired
+    @Transactional
     public void crear_carta(MultipartFile archivo, String emailUsuario, String emailProvedor){
         
         
-        Optional<Cliente> respuestaCliente = usuarioRepository.findByEmail(emailUsuario);
-        Optional<Proveedor> respuestaProveedor = ProveedorRepository.findByEmail(emailProvedor);
+       // Optional<Cliente> respuestaCliente = usuarioRepository.findByEmail(emailUsuario);
+       // Optional<Proveedor> respuestaProveedor = ProveedorRepository.findByEmail(emailProvedor);
         
     }
     

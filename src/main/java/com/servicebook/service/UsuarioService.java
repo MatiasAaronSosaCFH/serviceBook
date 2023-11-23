@@ -8,7 +8,7 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.enums.Role;
-import com.servicebook.repository.UsuarioRepositorio;
+import com.servicebook.repository.UsuarioRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,16 +16,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author SAMIR
- */
+import javax.transaction.Transactional;
+
 @Service
 public class UsuarioService {
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepository usuarioRepository;
 
+    @Transactional
     public void crearUsuario(String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
 
         validar(email, nombre, role, password, password2, direccion);
@@ -39,7 +38,7 @@ public class UsuarioService {
         usuario.setAlta(alta);
         usuario.setPassword(password);
         usuario.setDireccion(direccion);
-        usuarioRepositorio.save(usuario);
+        usuarioRepository.save(usuario);
 
     }
 
@@ -67,11 +66,12 @@ public class UsuarioService {
         }
     }
 
+    @Transactional
     public void modificarUsuario(Long id, String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
 
         Usuario usuario = new Usuario() {};
         
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
         if (respuesta.isPresent()) {
             usuario = respuesta.get();
@@ -85,22 +85,23 @@ public class UsuarioService {
         usuario.setAlta(alta);
         usuario.setPassword(password);
         usuario.setDireccion(direccion);
-        usuarioRepositorio.save(usuario);
+        usuarioRepository.save(usuario);
 
     }
 
+    @Transactional
     public void eliminarUsuario(Long id) {
 
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Optional<Usuario> respuesta = usuarioRepository.findById(id);
         if (respuesta.isPresent()) {
-            usuarioRepositorio.deleteById(id);
+            usuarioRepository.deleteById(id);
         }
     }
 
     public void altaUsuario(Long id) {
         Usuario usuario = new Usuario() {};
 
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
         if (respuesta.isPresent()) {
             usuario = respuesta.get();
@@ -108,10 +109,11 @@ public class UsuarioService {
         }
     }
 
+    @Transactional
     public void bajaUsuario(Long id) {
         Usuario usuario = new Usuario() {};
 
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
         if (respuesta.isPresent()) {
             usuario = respuesta.get();
@@ -121,12 +123,18 @@ public class UsuarioService {
     
     public List<Usuario> listarUsuarios() {
     List<Usuario> usuarios = new ArrayList();
-    usuarios = usuarioRepositorio.findAll();
+    usuarios = usuarioRepository.findAll();
     return usuarios;
 }
    
-    public Usuario getOne(Long id){
-        return usuarioRepositorio.getOne(id);
+    public Usuario getOne(Long id) throws MiException {
+        Optional<Usuario> user = usuarioRepository.findById(id);
+        if (user.isPresent()){
+            return user.get();
+        }else {
+            throw new MiException("no existe");
+        }
+
     }
-            
+
     }

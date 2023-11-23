@@ -6,19 +6,9 @@ package com.servicebook.repository;
 
 import com.servicebook.models.Calificacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author mathi
- */
-
-
-
-
-/**
- *
- * @author mathi
- */
+@Repository
 public interface CalificacionRepository extends JpaRepository<Calificacion , Long> {
    
     

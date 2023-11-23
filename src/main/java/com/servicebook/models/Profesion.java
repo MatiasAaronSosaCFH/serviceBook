@@ -20,5 +20,6 @@ public class Profesion {
     private Long id;
     @Column(name = "nombre")
     private String nombre;
+    @Column(name = "alta")
     private Boolean alta = true;
 }

@@ -6,11 +6,9 @@ package com.servicebook.repository;
 
 import com.servicebook.models.Foto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author mathi
- */
+@Repository
 public interface FotoRepository extends JpaRepository<Foto , Long>  {
     
 }

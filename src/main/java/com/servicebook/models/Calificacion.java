@@ -5,16 +5,9 @@
 package com.servicebook.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.servicebook.models.enums.Estrellas;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,10 +33,10 @@ public class Calificacion {
     private Long id;
     
     @Column(name = "estrellas")
-    @Enumerated(EnumType.STRING)
-    private Integer estrellas;
+    @Enumerated(EnumType.ORDINAL)
+    private Estrellas estrellas;
     
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trabajo_id", referencedColumnName = "id")
     private Trabajo trabajo;
     
@@ -51,7 +44,8 @@ public class Calificacion {
     @Column(name = "descripcion")
     private String descripcion;
 
-  
+    @Column(name = "alta")
+    private Boolean alta = true;
     
     
     

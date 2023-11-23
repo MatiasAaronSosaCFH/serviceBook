@@ -1,13 +1,8 @@
 package com.servicebook.models;
 
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,26 +23,26 @@ public class Trabajo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @OneToOne
     private Long id; 
-    
-    @Column(name="proveedor", nullable=false)
-    @OneToOne
-    private Proveedor proveedor;
+
+    //@OneToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name="proveedor_id", nullable=false)
+    //private Proveedor proveedor;
     
     @Column(name="termino_cliente")
-    private Boolean termino_cliente;
+    private Boolean terminoCliente;
     
     @Column(name="termino_proveedor")
-    private Boolean termino_proveedor;
-    
-    @Column(name="calificacion")
+    private Boolean terminoProveedor;
+
     @OneToOne
+    @JoinColumn(name="calificacion_id")
     private Calificacion calificacion;
-    
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Foto> fotos;
     
     @Column(name="alta")
-    private Boolean alta;
+    private Boolean alta = true;
     
 }

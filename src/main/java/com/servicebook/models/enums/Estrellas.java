@@ -10,5 +10,6 @@ public enum Estrellas {
     ;
 
     Estrellas(double i) {
+
     }
 }
