@@ -75,8 +75,3 @@
 .bd-mode-toggle .dropdown-menu .active .bi {
   display: block !important;
 }
-
-.navbar {
-  display: grid;
-  justify-content: space-between;
-}
