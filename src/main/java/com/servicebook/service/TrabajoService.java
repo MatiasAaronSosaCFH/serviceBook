@@ -20,16 +20,16 @@ public class TrabajoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
       
-    @Autowired
+    //@Autowired
     //private ProveedorRepository proveedorRepository;
     
-    @Transactional
+   /* @Transactional
     public void crear_carta(MultipartFile archivo, String emailUsuario, String emailProvedor){
         
         
        // Optional<Cliente> respuestaCliente = usuarioRepository.findByEmail(emailUsuario);
        // Optional<Proveedor> respuestaProveedor = ProveedorRepository.findByEmail(emailProvedor);
         
-    }
+    }*/
     
 }
