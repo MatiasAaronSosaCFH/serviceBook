@@ -43,12 +43,12 @@ public abstract class Usuario {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	protected Role Role;
-        @Column(name = "alta")
+	@Column(name = "alta")
 	protected Boolean alta = true;
-        @Column(name = "password")
+	@Column(name = "password")
 	protected String password;
 	@OneToMany
-        protected List<Direccion> direccion;
+	protected List<Direccion> direccion;
 
 
 }
