@@ -25,6 +25,7 @@ public class Trabajo {
     @Column(name = "id", nullable = false)
     private Long id; 
 
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="proveedor_id", nullable=false)
     private Proveedor proveedor;
