@@ -1,7 +1,7 @@
 package com.servicebook.controller;
 
 import com.servicebook.models.Cliente;
-import com.servicebook.models.dtos.ClienteDto;
+import com.servicebook.models.dtos.ClienteDtoRecibido;
 import com.servicebook.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Controller
 @RequestMapping("/cliente")
@@ -20,10 +21,10 @@ public class ClienteController {
     ClienteService clienteService;
 
     @GetMapping("/busqueda")
-    public String buscarCliente(@RequestParam @Valid Long id, ModelMap model){
+    public String buscarCliente(@RequestParam @NotBlank Long id, ModelMap model){
 
         Cliente cliente = clienteService.findById(id);
-        ClienteDto clienteEnviar = new ClienteDto(cliente);
+        ClienteDtoRecibido clienteEnviar = new ClienteDtoRecibido(cliente);
         return "index.html";
     }
 }

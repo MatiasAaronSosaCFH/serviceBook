@@ -25,9 +25,9 @@ public class Trabajo {
     @Column(name = "id", nullable = false)
     private Long id; 
 
-    //@OneToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name="proveedor_id", nullable=false)
-    //private Proveedor proveedor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="proveedor_id", nullable=false, referencedColumnName = "id")
+    private Proveedor proveedor;
     
     @Column(name="termino_cliente")
     private Boolean terminoCliente;

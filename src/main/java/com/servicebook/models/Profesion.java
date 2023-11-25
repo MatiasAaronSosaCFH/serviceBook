@@ -22,4 +22,6 @@ public class Profesion {
     private String nombre;
     @Column(name = "alta")
     private Boolean alta = true;
+    @ManyToMany
+    private Proveedor proveedor;
 }
