@@ -1,4 +1,3 @@
-
 package com.servicebook.service;
 
 import com.servicebook.models.Calificacion;
@@ -21,7 +20,5 @@ public class CalificacionService {
         calificacion.setDescripcion(descripcion);
         return calificacion;
     }
-    
-    
-    
+
 }
