@@ -22,8 +22,8 @@ public class TrabajoController {
 
     @GetMapping("/lista")
     public String listar(ModelMap model) {
-        //List<Trabajo> trabajos = trabajoService;
-        //model.addAttribute("trabajos", trabajos);
+        List<Trabajo> trabajos = trabajoService;
+        model.addAttribute("trabajos", trabajos);
         return "/lista";
     }
 

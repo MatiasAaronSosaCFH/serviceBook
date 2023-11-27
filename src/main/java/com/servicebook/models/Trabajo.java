@@ -2,7 +2,6 @@ package com.servicebook.models;
 
 import java.util.List;
 import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

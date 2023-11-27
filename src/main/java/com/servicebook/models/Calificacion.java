@@ -43,10 +43,5 @@ public class Calificacion {
     
     @Column(name = "descripcion")
     private String descripcion;
-
-    @Column(name = "alta")
-    private Boolean alta = true;
-    
-    
     
 }

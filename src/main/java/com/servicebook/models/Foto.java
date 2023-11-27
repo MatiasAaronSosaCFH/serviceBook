@@ -40,4 +40,5 @@ public class Foto {
     
     @Column(name = "foto_id")
     private Integer fotoId;
+    
 }

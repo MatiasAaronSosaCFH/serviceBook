@@ -15,7 +15,7 @@ import java.util.List;
 public class Cliente extends Usuario{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// 
     private Long id;
     @OneToMany
     private List<Trabajo> trabajosPedidos;
