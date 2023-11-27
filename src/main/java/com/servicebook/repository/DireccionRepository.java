@@ -12,6 +12,9 @@ public interface DireccionRepository extends JpaRepository<Direccion, Long>{
     
   @Query("UPDATE Direccion d SET d.alta = false WHERE d.id = :id")
   public void baja(@Param("id") Long id);
+  
+  @Query("UPDATE Direccion d SET d.alta = true WHERE d.id = :id")
+  public void alta(@Param("id") Long id);
 
   
 }
