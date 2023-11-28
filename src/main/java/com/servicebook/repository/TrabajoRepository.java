@@ -24,5 +24,6 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
     
     @Query("UPDATE Trabajo t SET t.terminoCliente = true WHERE t.id = :id")
     public void confirmacionCliente(@Param("id") Long id);
+  
     
 }
