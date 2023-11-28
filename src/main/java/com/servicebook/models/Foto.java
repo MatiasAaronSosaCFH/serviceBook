@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.servicebook.models;
 
 import javax.persistence.*;
@@ -10,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-/**
- *
- * @author mathi
- */
+
 @Entity
 @Data
 @EqualsAndHashCode
@@ -39,6 +32,6 @@ public class Foto {
     private Trabajo trabajo;
     
     @Column(name = "foto_id")
-    private Integer fotoId;
+    private String fotoId;
     
 }
