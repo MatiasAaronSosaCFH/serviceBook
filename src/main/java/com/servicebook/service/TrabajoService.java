@@ -1,10 +1,10 @@
 package com.servicebook.service;
 
-import com.servicebook.models.Calificacion;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Trabajo;
 import com.servicebook.models.enums.Estrellas;
+import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.TrabajoRepository;
 import com.servicebook.repository.UsuarioRepository;
@@ -21,23 +21,21 @@ public class TrabajoService {
     private TrabajoRepository trabajoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
     private ProveedorRepository proveedorRepository;
-    
+
     @Autowired
     private CalificacionService calificacionService;
 
-//    @Autowired
-//    private Trabajo trabajo;
     @Transactional
-    public void crearTrabajo(Long idCliente, Long idProvedor) {
-        Optional<Cliente> respuestaCliente = usuarioRepository.findById(idCliente).isPresent().get();
-        Optional<Proveedor> respuestaProveedor = proveedorRepository.findById(idProveedor).get();// usar servicio de proveedor y cliente
+    public void crearTrabajo(Long idCliente, Long idProveedor) {
+        Optional<Cliente> respuestaCliente = clienteRepository.buscarPorId(idCliente);
+        Optional<Proveedor> respuestaProveedor = proveedorRepository.buscarPorId(idProveedor);
         Trabajo trabajo = new Trabajo();
-        trabajo.setCliente(respuestaCliente);
-        trabajo.setProveedor(respuestaProveedor);
+        trabajo.setCliente(respuestaCliente.orElse(new Cliente()));
+        trabajo.setProveedor(respuestaProveedor.orElse(new Proveedor()));
     }
 
     @Transactional
@@ -57,10 +55,10 @@ public class TrabajoService {
     }
 
     @Transactional
-    public void calificar(Long id,Estrellas estrellas, String descripcion){
+    public void calificar(Long id, Estrellas estrellas, String descripcion) {
         Optional<Trabajo> resp = trabajoRepository.findById(id);
         Trabajo trabajo = resp.get();
         trabajo.setCalificacion(calificacionService.calificar(estrellas, descripcion));//
     }
-    
+
 }
