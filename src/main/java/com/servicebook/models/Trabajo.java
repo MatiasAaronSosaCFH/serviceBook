@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "trabajos")
-public class Trabajo {
+public class Trabajo extends Cliente{    //falta extends Cliente !!
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

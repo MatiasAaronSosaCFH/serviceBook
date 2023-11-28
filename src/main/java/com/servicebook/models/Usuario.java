@@ -42,7 +42,7 @@ public abstract class Usuario {
 	protected Date fechaDeAlta;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
-	protected Role Role;
+	protected Role role;
 	@Column(name = "alta")
 	protected Boolean alta = true;
 	@Column(name = "password")
