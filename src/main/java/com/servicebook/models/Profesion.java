@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "profesiones")
-public class Profesion {
+public class Profesion extends Proveedor{    //falta extends Proveedor  !!
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
