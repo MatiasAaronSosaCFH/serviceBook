@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface DireccionRepository extends JpaRepository<Direccion, Long>{
     
   @Query("UPDATE Direccion d SET d.alta = false WHERE d.id = :id")
-  public void baja(@Param("id") Long id);
+  void baja(@Param("id") Long id);
   
   @Query("UPDATE Direccion d SET d.alta = true WHERE d.id = :id")
-  public void alta(@Param("id") Long id);
+  void alta(@Param("id") Long id);
 
   @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.id = :id")
   Optional<Direccion> buscarPorIdCliente(@Param("id") Long id);

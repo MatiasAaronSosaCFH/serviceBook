@@ -7,10 +7,20 @@ package com.servicebook.repository;
 import com.servicebook.models.Calificacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CalificacionRepository extends JpaRepository<Calificacion , Long> {
    
-    //@Query("")
+    @Query("SELECT c FROM Calificacion c WHERE c.alta = true")
+    List<Calificacion> listarCalificaciones();
+
+    @Query("SELECT c FROM Calificacion c WHERE c.alta = true AND c.trabajo = :id")
+    Optional<Calificacion> buscarPorIdTrabajo(@Param("id") Long id);
+
+
 } 
