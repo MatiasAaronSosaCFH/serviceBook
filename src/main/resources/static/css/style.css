@@ -96,5 +96,15 @@
 }
 
 .presentacion {
-  font-weight: 300;
+  font-weight: bold;
+}
+
+.card {
+  height: 425px;
+  max-width: 220px;
+
+}
+
+.card img {
+max-height: 225px;
 }

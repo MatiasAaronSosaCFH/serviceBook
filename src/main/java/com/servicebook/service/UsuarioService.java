@@ -13,13 +13,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService{
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -141,4 +150,26 @@ public class UsuarioService {
 
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        Usuario usuario = usuarioRepository.buscarPorEmail(email);
+        if (usuario != null) {
+            List<GrantedAuthority> permisos = new ArrayList();
+            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRole().toString()); //ROLE_USER
+            permisos.add(p);
+
+            //seguridad para ROLE_ADMIN
+            ServletRequestAttributes attr =  (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession session = attr.getRequest().getSession(true);
+            session.setAttribute("usuariosession", usuario);
+
+            User user = new User(usuario.getEmail(), usuario.getPassword(), permisos);
+            return user;
+        } else {
+            return null;
+        }
+    }
+    
+    
     }

@@ -7,5 +7,6 @@ package com.servicebook.models.enums;
  */
 public enum Role {
 	USER,
-	ADMIN;
+	ADMIN,
+        PROVEEDOR;        ;
 }
