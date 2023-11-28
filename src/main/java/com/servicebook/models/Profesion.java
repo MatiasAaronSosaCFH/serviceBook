@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,4 +23,7 @@ public class Profesion extends Proveedor{    //falta extends Proveedor  !!
     private String nombre;
     @Column(name = "alta")
     private Boolean alta = true;
+    @ManyToMany
+    @JoinColumn(name = "proveedor_profesion_id", referencedColumnName = "id")
+    private List<Proveedor> proveedores;
 }

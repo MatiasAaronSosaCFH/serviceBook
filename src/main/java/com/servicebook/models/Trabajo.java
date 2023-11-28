@@ -24,11 +24,11 @@ public class Trabajo extends Cliente{    //falta extends Cliente !!
     @Column(name = "id", nullable = false)
     private Long id; 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="proveedor_id", nullable=false)
     private Proveedor proveedor;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cliente_id", nullable=false)
     private Cliente cliente;
     

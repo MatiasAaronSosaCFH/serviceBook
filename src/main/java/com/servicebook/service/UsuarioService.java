@@ -118,7 +118,9 @@ public class UsuarioService {
         if (respuesta.isPresent()) {
             usuario = respuesta.get();
             usuario.setAlta(Boolean.FALSE);
+
             usuarioRepository.save(usuario);
+
             
         }
     }
