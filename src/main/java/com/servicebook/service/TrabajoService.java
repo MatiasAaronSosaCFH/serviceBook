@@ -38,6 +38,7 @@ public class TrabajoService {
         trabajo.setProveedor(respuestaProveedor.orElse(new Proveedor()));
     }
 
+
     @Transactional
     public void confirmacionProveedor(Long id) {
         Optional<Trabajo> resp = trabajoRepository.findById(id);

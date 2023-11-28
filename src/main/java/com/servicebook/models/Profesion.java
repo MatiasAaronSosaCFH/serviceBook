@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "profesiones")
-public class Profesion {
+public class Profesion extends Proveedor{    //falta extends Proveedor  !!
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +23,7 @@ public class Profesion {
     private String nombre;
     @Column(name = "alta")
     private Boolean alta = true;
+    @ManyToMany
+    @JoinColumn(name = "proveedor_profesion_id", referencedColumnName = "id")
+    private List<Proveedor> proveedores;
 }
