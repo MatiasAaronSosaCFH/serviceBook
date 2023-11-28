@@ -2,6 +2,8 @@
 package com.servicebook.repository;
 
 import com.servicebook.models.Direccion;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,6 @@ public interface DireccionRepository extends JpaRepository<Direccion, Long>{
 
   @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.id = :id")
   Optional<Direccion> buscarPorIdCliente(@Param("id") Long id);
+
+  Page<Direccion> listarDirecciones(Pageable paginacion);
 }

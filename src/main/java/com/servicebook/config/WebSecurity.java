@@ -1,5 +1,5 @@
 
-package com.servicebook;
+package com.servicebook.config;
 
 import com.servicebook.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
