@@ -31,14 +31,14 @@ public class TrabajoService {
 
 //    @Autowired
 //    private Trabajo trabajo;
-    @Transactional
+   /* @Transactional
     public void crearTrabajo(Long idCliente, Long idProvedor) {
         Optional<Cliente> respuestaCliente = usuarioRepository.findById(idCliente).isPresent().get();
         Optional<Proveedor> respuestaProveedor = proveedorRepository.findById(idProveedor).get();// usar servicio de proveedor y cliente
         Trabajo trabajo = new Trabajo();
         trabajo.setCliente(respuestaCliente);
         trabajo.setProveedor(respuestaProveedor);
-    }
+    }*/
 
     @Transactional
     public void confirmacionProveedor(Long id) {
