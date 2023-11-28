@@ -10,8 +10,10 @@ import java.util.List;
 public record ProveedorDtoEnviado(Long id,
 								String emailDeContacto,
 								String numeroDeContacto,
-								Boolean ocupado,
 								List<ProfesionDtoEnviado> profesiones,
+								String presentacion,
+								Integer precioPorHora,
+								Boolean disponible,
 								List<TrabajoDtoEnviado> trabajosRealizados
 								) {
 	
@@ -19,8 +21,10 @@ public record ProveedorDtoEnviado(Long id,
 		this(proveedor.getId(),
 			proveedor.getEmailDeContacto(),
 			proveedor.getNumeroDeContacto(),
-			proveedor.getOcupado(),
 			proveedor.getProfesiones().stream().map(ProfesionDtoEnviado::new).toList(),
+			proveedor.getPresentacion(),
+			proveedor.getPrecioPorHora(),
+			proveedor.getDisponible(),
 			proveedor.getTrabajosRealizados().stream().map(TrabajoDtoEnviado::new).toList()
 			);
 		
