@@ -18,7 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @EqualsAndHashCode
 @Table(name = "proveedores")
 
-public class Proveedor extends Usuario{
+public class Proveedor extends Usuario {
 
 
     @Column(name = "email_de_contacto", nullable = false)

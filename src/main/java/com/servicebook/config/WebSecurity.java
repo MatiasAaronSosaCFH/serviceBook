@@ -18,11 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	public UsuarioService usuarioService;
+	public CustomUserServiceDetails customUserServiceDetails;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(customUserServiceDetails).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
 	@Override

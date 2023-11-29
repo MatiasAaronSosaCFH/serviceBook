@@ -22,5 +22,4 @@ public interface CalificacionRepository extends JpaRepository<Calificacion , Lon
     @Query("SELECT c FROM Calificacion c WHERE c.alta = true AND c.trabajo = :id")
     Optional<Calificacion> buscarPorIdTrabajo(@Param("id") Long id);
 
-
 } 

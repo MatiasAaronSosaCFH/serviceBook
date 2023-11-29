@@ -40,7 +40,9 @@ public class Calificacion {
     @JoinColumn(name = "trabajo_id", referencedColumnName = "id")
     private Trabajo trabajo;
     
-    
+    @Column(name = "alta")
+    private Boolean alta;
+
     @Column(name = "descripcion")
     private String descripcion;
     
