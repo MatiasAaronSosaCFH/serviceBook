@@ -20,4 +20,8 @@ public class ProveedorService {
     public List<Proveedor> findByAlta(){
         return proveedorRepository.listarProveedores();
     }
+
+    public void save(Proveedor proveedor){
+        proveedorRepository.save(proveedor);
+    }
 }

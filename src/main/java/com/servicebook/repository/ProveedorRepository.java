@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
-    @Query(value = "SELECT * FROM user", nativeQuery = true)
+    @Query( "SELECT p FROM Proveedor p WHERE p.alta = true")
     List<Proveedor> listarProveedores();
 
     @Query("SELECT p FROM Proveedor p WHERE p.alta = true AND p.id = :id")

@@ -4,6 +4,7 @@ import com.servicebook.models.Direccion;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
+import com.servicebook.service.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,8 +21,13 @@ public class PortalController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private ProveedorService proveedorService;
+
     @GetMapping
-    public String dashboard(){
+    public String dashboard(ModelMap map){
+
+        map.addAttribute("proveedores" , proveedorService.findByAlta());
         return "index.html";
     }
 
