@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
 @Table(name = "clientes")
 public class Cliente extends Usuario {

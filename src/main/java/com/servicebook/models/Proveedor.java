@@ -13,11 +13,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @Data
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "proveedores")
-
 public class Proveedor extends Usuario {
 
 
@@ -37,7 +37,6 @@ public class Proveedor extends Usuario {
     @Column(name="precio_por_hora")
     private Integer precioPorHora;
 
-    @Column(name = "foto")
     @OneToOne
     @JoinColumn(name = "foto_id", referencedColumnName = "id")
     private FotoUsuario foto;
