@@ -18,6 +18,7 @@ public class ProveedorService {
     }
     
     public List<Proveedor> findByAlta(){
+      
         return proveedorRepository.listarProveedores();
     }
 
