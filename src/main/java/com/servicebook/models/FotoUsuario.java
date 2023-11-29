@@ -26,8 +26,7 @@ public class FotoUsuario {
     @Column(name = "url")
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proveedor_id", referencedColumnName = "id")
+    @OneToOne
     private Proveedor proveedor;
 
     @Column(name = "alta")

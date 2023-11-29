@@ -28,7 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
-public class UsuarioService implements UserDetailsService{
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -278,7 +278,7 @@ public class UsuarioService implements UserDetailsService{
 
     }
 
-    @Override
+    /*@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Usuario usuario;
@@ -340,7 +340,7 @@ public class UsuarioService implements UserDetailsService{
         } else {
             return null;
         }
-    }
+    }*/
     
     
     }

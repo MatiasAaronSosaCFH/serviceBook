@@ -38,8 +38,9 @@ public class Proveedor extends Usuario {
     private Integer precioPorHora;
 
     @Column(name = "foto")
-    @OneToMany
-    private List<FotoUsuario> foto;
+    @OneToOne
+    @JoinColumn(name = "foto_id", referencedColumnName = "id")
+    private FotoUsuario foto;
      
     @Column(name = "disponible")
     private Boolean disponible;
