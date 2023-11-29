@@ -8,7 +8,7 @@ public record FotoDtoEnviado(Long id,
 							String nombre,
 							String url,
 							Trabajo trabajo,
-							Integer fotoId
+							String fotoId
 	) {
 
 	public FotoDtoEnviado(Foto foto) {

@@ -8,11 +8,11 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.enums.Role;
+import com.servicebook.repository.ClienteRepository;
+import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.UsuarioRepository;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +33,48 @@ public class UsuarioService implements UserDetailsService{
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ProveedorRepository proveedorRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
     @Transactional
     public void crearUsuario(String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
 
         validar(email, nombre, role, password, password2, direccion);
 
-        Usuario usuario = new Usuario() {};
+        Usuario usuario = new Usuario() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority((role.name())));
+            }
+
+            @Override
+            public String getUsername() {
+                return this.getEmail();
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        };
         
         usuario.setEmail(email);
         usuario.setNombre(nombre);
@@ -78,7 +114,37 @@ public class UsuarioService implements UserDetailsService{
     @Transactional
     public void modificarUsuario(Long id, String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
 
-        Usuario usuario = new Usuario() {};
+        Usuario usuario = new Usuario() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority((role.name())));
+            }
+
+            @Override
+            public String getUsername() {
+                return this.getEmail();
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        };
         
         Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
@@ -108,7 +174,38 @@ public class UsuarioService implements UserDetailsService{
     }
 
     public void altaUsuario(Long id) {
-        Usuario usuario = new Usuario() {};
+        Usuario usuario = new Usuario() {
+
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority((role.name())));
+            }
+
+            @Override
+            public String getUsername() {
+                return this.getEmail();
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        };
 
         Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
@@ -120,7 +217,38 @@ public class UsuarioService implements UserDetailsService{
 
     @Transactional
     public void bajaUsuario(Long id) {
-        Usuario usuario = new Usuario() {};
+        Usuario usuario = new Usuario() {
+
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority((role.name())));
+            }
+
+            @Override
+            public String getUsername() {
+                return this.getEmail();
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        };
 
         Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
@@ -153,7 +281,50 @@ public class UsuarioService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Usuario usuario = usuarioRepository.buscarPorEmail(email);
+        Usuario usuario;
+
+        try{
+            usuario = proveedorRepository.findByEmail(email).orElse(null);
+        }catch (Exception ex ){
+            System.out.println(ex.toString());
+        }
+        try {
+            usuario = clienteRepository.findByEmail(email).orElse(null);
+        }catch (Exception ex){
+            System.out.println(ex.toString());
+        }finally {
+            usuario = new Usuario() {
+                @Override
+                public Collection<? extends GrantedAuthority> getAuthorities() {
+                    return null;
+                }
+
+                @Override
+                public String getUsername() {
+                    return null;
+                }
+
+                @Override
+                public boolean isAccountNonExpired() {
+                    return false;
+                }
+
+                @Override
+                public boolean isAccountNonLocked() {
+                    return false;
+                }
+
+                @Override
+                public boolean isCredentialsNonExpired() {
+                    return false;
+                }
+
+                @Override
+                public boolean isEnabled() {
+                    return false;
+                }
+            };
+        }
         if (usuario != null) {
             List<GrantedAuthority> permisos = new ArrayList();
             GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRole().toString()); //ROLE_USER

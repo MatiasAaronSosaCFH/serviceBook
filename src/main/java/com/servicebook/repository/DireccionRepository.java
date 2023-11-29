@@ -23,5 +23,5 @@ public interface DireccionRepository extends JpaRepository<Direccion, Long>{
   @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.id = :id")
   Optional<Direccion> buscarPorIdCliente(@Param("id") Long id);
 
-  Page<Direccion> listarDirecciones(Pageable paginacion);
+
 }

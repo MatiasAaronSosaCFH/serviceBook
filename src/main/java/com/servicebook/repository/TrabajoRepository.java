@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.lang.annotation.Native;
+import java.util.List;
 
 
 @Repository
@@ -25,4 +26,6 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
     @Query("UPDATE Trabajo t SET t.terminoCliente = true WHERE t.id = :id")
     public void confirmacionCliente(@Param("id") Long id);
 
+    @Query("SELECT t FROM Trabajo t JOIN Proveedor p ON p.id = t.proveedor_id WHERE p.id = :id")
+    List<Trabajo> listarPorIdProveedor(@Param("id") Long id);
 }

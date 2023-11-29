@@ -49,7 +49,7 @@ public class DireccionService {
   @Transactional(readOnly = true)
   public Page<Direccion> listado(Pageable paginacion) {
 
-    return direccionRepository.listarDirecciones(paginacion);
+    return direccionRepository.findAll(paginacion);
 
   }
 

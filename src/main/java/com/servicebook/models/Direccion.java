@@ -38,7 +38,15 @@ public class Direccion {
     private Boolean alta = true;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")   
-    private Usuario usuario;
-    
+    @JoinColumn(name = "proveedor_id", referencedColumnName = "id")
+    private Proveedor proveedor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
+
+
+    public Usuario orElse(){
+        if (this.proveedor != null) return this.proveedor;
+        else return this.cliente;
+    }
 }

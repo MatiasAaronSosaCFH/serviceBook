@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public record FotoDtoRecibido(@NotBlank String nombre,
 							@NotBlank String url,
 							@NotBlank Trabajo trabajo,
-							@NotBlank Integer fotoId
+							@NotBlank String fotoId
 							) {
 
 	public FotoDtoRecibido(Foto foto) {

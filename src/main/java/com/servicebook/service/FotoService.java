@@ -21,8 +21,6 @@ public class FotoService {
 //    @Autowired
 //    private Cloudinary cloudinary;
 
-    @Value("${cloudinary.folder}")
-    private String folder;
 
 //    public String subirFoto(MultipartFile archivo, String fotoId) throws IOException {
 //        byte[] bytes = archivo.getBytes();

@@ -2,6 +2,8 @@ package com.servicebook.repository;
 
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Proveedor;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    @Query("SELECT c FROM Cliente c WHERE c.alta = true AND f.id =:id")
+    @Query("SELECT c FROM Cliente c WHERE c.alta = true AND c.id =:id")
     Optional<Cliente> buscarPorId(@Param("id") Long id);
 
+    @Query("SELECT c FROM Cliente c WHERE c.alta = true")
+    List<Cliente> listarClientes();
+
+    Optional<Cliente> findByEmail(String email);
 }

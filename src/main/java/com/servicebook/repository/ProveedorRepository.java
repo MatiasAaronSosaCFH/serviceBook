@@ -12,18 +12,15 @@ import java.util.List;
 
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
-<<<<<<< HEAD
 
-    @Query("SELECT p FROM Proveedpr p WHERE p.alta = true")
+    @Query(value = "SELECT * FROM user", nativeQuery = true)
     List<Proveedor> listarProveedores();
 
     @Query("SELECT p FROM Proveedor p WHERE p.alta = true AND p.id = :id")
     Optional<Proveedor> buscarProveedorPorId(@Param("id") Long id);
-=======
-    
-    @Query("SELECT p FROM Proveedor p WHERE p.alta = true AND f.id =:id")
+
+    @Query("SELECT p FROM Proveedor p WHERE p.alta = true AND p.id =:id")
     Optional<Proveedor> buscarPorId(@Param("id") Long id);
-    
-    
->>>>>>> 2f1525de441acb3e1735f87faedfec622b531959
+
+    Optional<Proveedor> findByEmail(String email);
 }

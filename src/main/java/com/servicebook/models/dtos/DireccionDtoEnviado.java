@@ -18,8 +18,9 @@ public record DireccionDtoEnviado(Long id,
 			direccion.getNumero(),
 			direccion.getLocalidad(),
 			direccion.getProvincia(),
-			direccion.getUsuario()); // ManyToOne necesita lista???
+			direccion.orElse());
 	}
+
 
 //	public DireccionDtoEnviado(Long id, String calle, String numero, String localidad, String provincia, Boolean alta, Usuario usuario) {
 //		this.id = id;
