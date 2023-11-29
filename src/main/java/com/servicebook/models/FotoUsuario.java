@@ -26,9 +26,6 @@ public class FotoUsuario {
     @Column(name = "url")
     private String url;
 
-    @OneToOne
-    private Proveedor proveedor;
-
     @Column(name = "alta")
     private Boolean alta;
 
