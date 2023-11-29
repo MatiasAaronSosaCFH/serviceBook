@@ -16,7 +16,7 @@ public class ProovedorController {
 
     public String inicioIndex(ModelMap map){
 
-        map.put(proveedorService.findByAlta());
+        map.addAttribute("proveedores",proveedorService.findByAlta());
 
         return "index.html";
     }
