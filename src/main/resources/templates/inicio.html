@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="/fragments/head :: head" </head></head>
+
+  <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+
+    <svg th:replace="/fragments/svg :: svg" </svg></svg>
+    <header th:replace="/fragments/header :: header" </header></header>
+
+  <main id="main-content">
+
+    <section class="py-5 text-center container img-container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light bienvenido">
+            Bienvenido a ServiceBook <br />
+            Tu plataforma de servicios en línea
+          </h1>
+          <p class="lead text-body-secondary presentacion">
+            ServiceBook conecta a personas con habilidades y servicios únicos
+            con aquellos que buscan ayuda en el hogar, ofreciendo una amplia
+            variedad de servicios, desde limpieza hasta cuidado de mascotas.
+            Simplificamos la búsqueda de servicios domésticos, haciéndola
+            rápida, segura y sin complicaciones. <br />
+            Únete a nuestra comunidad para descubrir la comodidad de encontrar
+            y ofrecer servicios de calidad, haciendo tu vida más fácil con
+            ServiceBook.
+          </p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="cards">
+
+      <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+                          <div class="col-12 d-flex justify-content-center col-sm-6 col-md-4 col-lg-3 col-xl-2" th:each ="proveedor : ${proveedores}">
+                            <div class="card shadow-sm">
+                              <img th:src = "${proveedor.foto.url}" alt="">
+                              <div class="card-body">
+                                <h4 th:text = "${proveedor.nombre}"></h4>
+                                <p class="card-text" th:text = "${proveedor.presentacion}">
+            
+                                </p>
+                                <div
+                                  class="d-flex justify-content-between align-items-center">
+                                  <div class="btn-group">
+                                    <button
+                                      type="button"
+                                      class="btn btn-sm btn-outline-secondary">
+                                      Contactar
+                                    </button>
+                                  </div>
+                                  <small class="text-body-secondary">☆☆☆</small>
+                              
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+          </div>
+        </div>
+      </div>    
+    </section>
+  </main>
+
+  <div><footer th:replace="/fragments/footer :: footer" </footer></div>
+  <script src="../static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

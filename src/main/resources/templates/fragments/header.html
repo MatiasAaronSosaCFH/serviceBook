@@ -1,0 +1,148 @@
+<header>
+    <div class="fixed-top">
+      <nav class="navbar navbar-expand-md p-0 bg-body-tertiary py-sm-0 py-md-3">
+        <div class="container-fluid p-0">
+          <div class="row w-100 g-0">
+            <div class="col-lg-4 col-md d-flex justify-content-between align-items-center">
+              <div class="row w-100 g-0">
+                <div class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-start my-2 my-md-0 ms-0 ms-md-4 text-center">
+                  <a class="navbar-brand m-0" href="#">ServiceBook</a>
+                </div>
+                <div class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-end mb-3 mb-md-0">
+                  <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 col-md-9">
+              <div class="collapse d-md-inline" id="navbarScroll">
+                <ul class="p-0 list-unstyled mb-0">
+                  <div class="row w-100 p-0 g-0 flex-column-reverse flex-md-row">
+                    <div class="col-lg-6 col-md-8 col-md d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                      <li class="nav-item w-100">
+                        <form class="d-flex">
+                          <div class="row w-100 g-0">
+                            <div class="col-1 col-sm-2 col-md-0"></div>
+                            <div class="col-10 col-sm-8 col-md-12 d-flex">
+                              <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" />
+                              <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </div>
+                            <div class="col-1 col-sm-2 col-md-0"></div>
+                          </div>
+                        </form>
+                      </li>
+                    </div>
+                    <div class="col-lg-6 col-md d-flex justify-content-md-end justify-content-center align-items-center mb-3 mb-md-0">
+                      <li class="nav-item">
+                        <a href="/templates/login.html" class="btn btn-primary me-0 me-md-4">Iniciar sesión</a>
+                      </li>
+                    </div>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+<!-- 
+
+<nav class="navbar navbar-expand-lg navBar"> 
+   <div class="containerImg">
+        <a href="/" class="navbar-brand d-flex align-items-center">
+            <img class="logo" src="/img/Egg.png" alt="Img logo egg">
+        </a>
+    </div> 
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse elementosNav" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto elementos">
+            <li>
+                <div><div th:replace="/fragments/exitoErrorNavBar :: div" </div></div>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}"  href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Usuarios
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/usuario/registrar/USER}">Crear Usuario</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/usuario/lista}">Editar Usuarios</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/usuario/lista}">Lista de Usuarios</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/todos/lista}">Lista de Todos</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}"  href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Periodistas
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/usuario/registrar/PERIODISTA}">Crear Periodista</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/periodista/lista}">Editar Periodistas</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/periodista/lista}">Lista de Periodistas</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Noticias</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/noticia/registrar}">Crear Noticia</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/panelAdmin/lista}">Modificar Noticia</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/panelAdmin/eliminar}">Eliminar Noticia</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin/inicio}">Mostrar noticias</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><a class="dropdown-item" th:href="@{/noticia/registrar}">Crear Noticia</a></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><a class="dropdown-item" th:href="@{/admin/inicio}">mostrar mis Noticias</a></li>                    
+                    <li sec:authorize="hasRole('PERIODISTA')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><a class="dropdown-item" th:href="@{/admin/panelAdmin/miLista}">Modificar Noticias</a></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasRole('PERIODISTA')"><a class="dropdown-item" th:href="@{/admin/panelAdmin/miLista}">Lista de mis Noticias</a></li>                    
+                    <li sec:authorize="hasRole('PERIODISTA')"><hr class="dropdown-divider"></li>
+                    <li sec:authorize="hasAnyRole('PERIODISTA','USER')"><a class="dropdown-item" th:href="@{/inicio}">Mostrar Noticias</a></li>                    
+                    <li sec:authorize="hasAnyRole('PERIODISTA','USER')"><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" th:href="@{/noticia/lista}">Lista de Noticias</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}" th:text="'Usuario: ' + ${session.usuariosession.nombreUsuario}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-link"><a th:href="@{/admin/panelAdmin}" class="btn btn-primary">PanelAdmin</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" th:if="${session.usuariosession != null}" ><span th:text="'Rol: ' + ${session.usuariosession.rol}"></a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" th:href="@{/perfil}" >Editar mi perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}" >Cerrar Sesión</a></li>
+                </ul>                
+            </li>
+
+            <li class="nav-link">
+                <a class="nav-link" th:if="${session.usuariosession == null}" th:href="@{/registrar}">
+                    Registrate!
+                </a>
+
+            </li>
+
+            <li class="nav-link">
+                <a class="nav-link" th:if="${session.usuariosession == null}" th:href="@{/login}" >
+                    Login
+                </a>
+        </ul>
+    </div>
+</nav> -->

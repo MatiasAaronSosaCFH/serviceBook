@@ -39,7 +39,7 @@ public class DireccionController {
     
     model.addAttribute("direcciones", direcciones);
   
-    return "nombre_archivo.html";
+    return "direccion_registro.html";
     
   }
   

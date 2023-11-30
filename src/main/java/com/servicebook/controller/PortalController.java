@@ -38,4 +38,21 @@ public class PortalController {
         //model.put(new ClienteDtoEnviado(clienteService.findById(authentication.getId())))
         return "perfil.html";
     }
+
+//controller de prueba para fragments ! ! !  leon	 
+    @GetMapping("/inicio")
+    public String inicio(ModelMap map){
+
+        map.addAttribute("proveedores" , proveedorService.findByAlta());
+        return "inicio.html";
+    }	 
+	 
+	     @GetMapping("/template")
+    public String template(ModelMap map){
+
+        map.addAttribute("proveedores" , proveedorService.findByAlta());
+        return "template.html";
+	 }	 
+	 
+	 
 }
