@@ -27,6 +27,15 @@
     }
   }
 
+  const updateNavbarTogglerColor = theme => {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    if (navbarToggler) {
+      navbarToggler.classList.remove('bg-dark', 'bg-light');
+      navbarToggler.classList.add(theme === 'dark' ? 'bg-dark' : 'bg-light');
+    }
+  }
+
+
   setTheme(getPreferredTheme())
 
   const showActiveTheme = (theme, focus = false) => {
@@ -55,12 +64,15 @@
     if (focus) {
       themeSwitcher.focus()
     }
+
+    updateNavbarTogglerColor(theme);
   }
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     const storedTheme = getStoredTheme()
     if (storedTheme !== 'light' && storedTheme !== 'dark') {
       setTheme(getPreferredTheme())
+      updateNavbarTogglerColor(newTheme);
     }
   })
 
@@ -74,7 +86,24 @@
           setStoredTheme(theme)
           setTheme(theme)
           showActiveTheme(theme, true)
+          updateNavbarTogglerColor(theme);
         })
       })
   })
 })()
+
+$(document).ready(function() {
+  function setMainMargin() {
+    var navbarHeight = $(".fixed-top").outerHeight();
+    $("#main-content").css("margin-top", navbarHeight + "px");
+  }
+
+  setMainMargin();
+  $(window).resize(setMainMargin);
+
+  $('#navbarScroll').on('show.bs.collapse hide.bs.collapse', function () {
+    $('#navbarScroll').one('shown.bs.collapse hidden.bs.collapse', function () {
+      setMainMargin();
+    });
+  });
+});

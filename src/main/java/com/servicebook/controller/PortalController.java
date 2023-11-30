@@ -53,6 +53,13 @@ public class PortalController {
         map.addAttribute("proveedores" , proveedorService.findByAlta());
         return "template.html";
 	 }	 
-	 
+    
+    @GetMapping("/login")
+    public String login(){
+
+        return "login.html";
+        
+    }
+    
 	 
 }

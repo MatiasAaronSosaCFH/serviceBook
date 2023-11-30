@@ -29,23 +29,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception{
 		http
 			.authorizeHttpRequests()
-				.antMatchers("/admin/*").hasRole("ADMIN")
-				.antMatchers("/proveedor/*").hasRole("PROVEEDOR")
-				.antMatchers("/css/*","/js/*","/img/*","/**")
-				.permitAll()
+				.antMatchers("/*").hasRole("ADMIN")
+				//.antMatchers("/proveedor/*").hasRole("PROVEEDOR")
+				//.antMatchers("/css/*","/js/*","/img/*","/**")
+				//.permitAll()
 			.and().formLogin()
 				.loginPage("/login")
 				.loginProcessingUrl("/logincheck")
 				.usernameParameter("email")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/index")
+				.defaultSuccessUrl("/inicio")
 				.permitAll()
 			.and().logout()
 				.logoutUrl("/logout")
 				.logoutSuccessUrl("/login")
 				.permitAll()
-			.and().csrf()
-				.disable();			
+			.and().csrf().disable();
 	}	
 
 }
