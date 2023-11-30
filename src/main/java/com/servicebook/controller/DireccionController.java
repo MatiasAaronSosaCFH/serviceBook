@@ -39,14 +39,14 @@ public class DireccionController {
     
     model.addAttribute("direcciones", direcciones);
   
-    return "direccion_registro.html";
+    return "nombre_archivo.html";
     
   }
   
   @GetMapping("/registrar")
   public String registrar(){
   
-    return "nombre_archivo.html";
+    return "direccion_registro.html";
     
   }
   
@@ -60,7 +60,7 @@ public class DireccionController {
       Logger.getLogger(DireccionController.class.getName()).log(Level.SEVERE, null, ex);
     }
     
-    return "nombre_archivo.html";
+    return "direccion_registro.html";
   
   }
   
