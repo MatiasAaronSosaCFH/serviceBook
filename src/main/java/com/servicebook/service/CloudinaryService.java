@@ -20,9 +20,9 @@ public class CloudinaryService {
     private Map<String, String> valores = new HashMap<>();
 
     public CloudinaryService(){
-        valores.put("cloud_name", "deuesxnd0");
-        valores.put("api_key", "714892488354463");
-        valores.put("api_secret", "qzGt_AzupIQTidX6tVgAaCJwhgI");
+        valores.put("cloud_name", "dsvcbfopx");
+        valores.put("api_key", "884734765111849");
+        valores.put("api_secret", "ny-wN-6QQkV8gsroFpvAkZZEaJU");
         cloudinary = new Cloudinary(valores);
     }
     public Map subirFoto(MultipartFile multipartFile) throws IOException{

@@ -2,8 +2,13 @@ package com.servicebook.controller;
 
 import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
+import com.servicebook.models.Direccion;
 import com.servicebook.models.dtos.ClienteDtoRecibido;
+import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,7 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Controller
 @RequestMapping("/cliente")
@@ -30,11 +41,6 @@ public class ClienteController {
         return "index.html";
     }
     
-    @GetMapping("/crearCliente")
-    public String crearCliente() {
-        return "usuario_registro.html";
-        /*-----Linkear a front----*/
-    }
 
     @PostMapping("/crearCliente")
     public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
@@ -53,5 +59,53 @@ public class ClienteController {
         }
         return "inicio.html";
     }
+    
+    @PostMapping("/modificar/{id}")
+    public String modificar(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
+
+        try {
+            clienteService.modificarCliente(id, email, nombre, password, password2);
+            
+            Cliente cliente = clienteService.findById(id);
+            
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+            HttpSession session = attr.getRequest().getSession();
+
+            session.setAttribute("usuariosession", cliente);
+                 
+            modelo.put("exito", "El cliente fue modificado correctamente!");
+        } catch (Exception e) {
+
+            modelo.put("error", e.getMessage());
+            modelo.put("email", email);
+            modelo.put("nombre", nombre);
+            modelo.put("password", password);
+            modelo.put("id", id);
+            return "perfil.html";
+        }
+        return "redirect:/inicio";
+    }
+    
+    @GetMapping("/modificar/{id}")
+    public String modificar(@PathVariable Long id, ModelMap model){
+  
+      Cliente cliente = clienteService.findById(id);
+      model.addAttribute("cliente", cliente);
+      return "perfil.html";
+  
+  }
+    
+  
+  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @GetMapping("/perfil")
+  public String perfil(HttpSession session, ModelMap model) {
+    
+    Cliente cliente = (Cliente) session.getAttribute("usuariosession");
+      
+    model.addAttribute("cliente", cliente);
+    
+    return "perfil.html";
+  }
     
 }

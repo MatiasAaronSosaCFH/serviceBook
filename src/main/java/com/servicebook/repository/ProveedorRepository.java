@@ -22,5 +22,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
     @Query("SELECT p FROM Proveedor p WHERE p.alta = true AND p.id =:id")
     Optional<Proveedor> buscarPorId(@Param("id") Long id);
 
-    Optional<Proveedor> findByEmail(String email);
+    @Query("SELECT p FROM Proveedor p WHERE p.email = :email")
+    public Proveedor findByEmail(@Param("email") String email);
 }
