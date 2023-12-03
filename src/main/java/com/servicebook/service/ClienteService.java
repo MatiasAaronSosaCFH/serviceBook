@@ -94,7 +94,7 @@ public class ClienteService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-    Cliente cliente = clienteRepository.findByEmail(email);
+    Cliente cliente = clienteRepository.findByEmail(email).orElse(null);
 
     if (cliente != null) {
 
@@ -114,7 +114,7 @@ public class ClienteService implements UserDetailsService {
 
     }
 
-    Proveedor proveedor = proveedorRepository.findByEmail(email);
+    Proveedor proveedor = proveedorRepository.findByEmail(email).orElse(null);
 
     if (proveedor != null) {
       

@@ -43,7 +43,7 @@ public class Calificacion {
     @Column(name = "alta")
     private Boolean alta;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion",columnDefinition = "TEXT")
     private String descripcion;
     
 }
