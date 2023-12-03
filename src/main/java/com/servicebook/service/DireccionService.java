@@ -2,9 +2,13 @@ package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
 import com.servicebook.models.Direccion;
+import com.servicebook.models.dtos.DireccionDtoRecibido;
+import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.DireccionRepository;
 import java.util.List;
 import java.util.Optional;
+
+import com.servicebook.repository.ProveedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +20,12 @@ public class DireccionService {
 
   @Autowired
   private DireccionRepository direccionRepository;
+
+  @Autowired
+  private ProveedorRepository proveedorRepository;
+
+  @Autowired
+  private ClienteRepository clienteRepository;
 
   @Transactional
   public void registrar(String calle, String numero, String localidad, String provincia) throws MiException {
@@ -145,4 +155,15 @@ public class DireccionService {
 
   }
 
+  public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion){
+    Direccion dire = new Direccion();
+    dire.setProvincia(direccion.provincia());
+    dire.setNumero(direccion.numero());
+    dire.setCalle(direccion.calle());
+    dire.setAlta(true);
+    dire.setLocalidad(direccion.localidad());
+    if(direccion.role().equalsIgnoreCase("USER")) dire.setCliente(clienteRepository.buscarPorId(direccion.usuario()).orElse(null));
+    else dire.setProveedor(proveedorRepository.buscarPorId(direccion.usuario()).orElse(null));
+    return dire;
+  }
 }

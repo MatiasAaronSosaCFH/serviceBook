@@ -10,7 +10,7 @@ public record DireccionDtoEnviado(Long id,
 								String numero,
 								String localidad,
 								String provincia,
-								Usuario usuario
+								Long usuario
 								) {
 	public DireccionDtoEnviado(Direccion direccion){
 		this(direccion.getId(),
@@ -18,19 +18,6 @@ public record DireccionDtoEnviado(Long id,
 			direccion.getNumero(),
 			direccion.getLocalidad(),
 			direccion.getProvincia(),
-			direccion.orElse());
+			direccion.orElse().getId());
 	}
-
-
-//	public DireccionDtoEnviado(Long id, String calle, String numero, String localidad, String provincia, Boolean alta, Usuario usuario) {
-//		this.id = id;
-//		this.calle = calle;
-//		this.numero = numero;
-//		this.localidad = localidad;
-//		this.provincia = provincia;
-//		this.alta = alta;
-//		this.usuario = usuario;
-//	}
-	
-	
 }

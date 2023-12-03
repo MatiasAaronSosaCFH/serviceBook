@@ -13,10 +13,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author mathi
- */
 @Entity
 @Data
 @EqualsAndHashCode
@@ -45,5 +41,7 @@ public class Calificacion {
 
     @Column(name = "descripcion",columnDefinition = "TEXT")
     private String descripcion;
+
+
     
 }

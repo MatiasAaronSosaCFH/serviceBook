@@ -10,21 +10,21 @@ import java.util.List;
 
 public record TrabajoDtoEnviado (Long id,
 								Proveedor proveedor,
-								Cliente cliente,
+								ClienteDtoEnviado cliente,
 								Boolean terminoCliente,
 								Boolean terminoProveedor,
-								Calificacion calificacion,
-								List<FotoDtoEnviado> fotos  //revisar el DTO de fotos
+								Integer calificacion,
+								List<FotoDtoEnviado> fotos
 								){
 
 	public TrabajoDtoEnviado(Trabajo trabajo) {
 		this(trabajo.getId(),
 			trabajo.getProveedor(),
-			trabajo.getCliente(),
+			new ClienteDtoEnviado(trabajo.getCliente()),
 			trabajo.getTerminoCliente(),
 			trabajo.getTerminoProveedor(),
-			trabajo.getCalificacion(),
-		trabajo.getFotos().stream().map(FotoDtoEnviado::new).toList()
+			trabajo.getCalificacion().getEstrellas().getNumero(),
+			trabajo.getFotos().stream().map(FotoDtoEnviado::new).toList()
 		);
 	}
 }
