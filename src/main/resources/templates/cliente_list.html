@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <head th:replace="/fragments/head :: head" </head></head>
+  <head th:replace="/fragments/head :: head" </head> </head>
 
   <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
 
@@ -36,7 +36,7 @@
                   <td th:text="${cliente.fechaDeAlta}"></td>
                   <td th:text="${cliente.role}"></td>
                   <td th:text="${cliente.alta}"></td>
-                  <td><a th:href="@{/admin/cambiarEstado/__${cliente.id}__}" >Alta/Baja</a></td>
+                  <td><a th:href="@{/admin/cambiarEstado/__${cliente.id}__}" class="button-link">Alta/Baja</a></td>
                   <td >
                       <!-- <form class="formulario" th:action="@{/admin/perfil/rol/__${usuario.id}__}" method="POST" enctype="multipart/form-data">
                           <div class="d-flex justify-content-center">
@@ -57,9 +57,9 @@
                           </div>
                           
                       </form>  -->
-                      <a th:href="@{/admin/rotarRol/__${cliente.id}__}" >Rotar Rol</a>
+                      <a th:href="@{/admin/rotarRol/__${cliente.id}__}" class="button-link" >Rotar Rol</a>
                   </td>
-                  <td ><a th:href="@{/admin/perfil/__${cliente.id}__}"> <i class="fas fa-feather-alt"></i>Modificar</a></td>
+                  <td ><a th:href="@{/admin/perfil/__${cliente.id}__}"  class="button-link" > Modificar</a></td>
               </tr>
           </tbody>
       </table>
