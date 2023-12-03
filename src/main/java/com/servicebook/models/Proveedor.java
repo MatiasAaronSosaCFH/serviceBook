@@ -1,6 +1,5 @@
 package com.servicebook.models;
 
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
 
@@ -8,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @Data
@@ -44,6 +41,6 @@ public class Proveedor extends Usuario {
     @Column(name = "disponible")
     private Boolean disponible;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedor")
     private List<Trabajo> trabajosRealizados;
 }
