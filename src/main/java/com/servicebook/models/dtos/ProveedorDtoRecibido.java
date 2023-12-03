@@ -15,12 +15,6 @@ public record ProveedorDtoRecibido(@NotBlank String emailDeContacto,
 								List<TrabajoDtoRecibido> trabajosRealizados	
 								) {
 	
-	public ProveedorDtoRecibido(Proveedor proveedor){
-		this(proveedor.getEmailDeContacto(),
-			proveedor.getNumeroDeContacto(),
-			proveedor.getProfesiones().stream().map(ProfesionDtoRecibido::new).toList(),
-			proveedor.getTrabajosRealizados().stream().map(TrabajoDtoRecibido::new).toList()
-		);
-	}
+
 
 }

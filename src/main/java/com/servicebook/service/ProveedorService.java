@@ -12,10 +12,6 @@ public class ProveedorService {
 
     @Autowired
     private ProveedorRepository proveedorRepository;
-
-//    public Proveedor findByEmail(String email){
-//        return proveedorRepository.findByEmail(email).orElse(null);
-//    }
     
     public List<Proveedor> findByAlta(){
       

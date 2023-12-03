@@ -32,7 +32,7 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
     List<Trabajo> listarTrabajos();
 
     @Query("SELECT t FROM Trabajo t WHERE t.alta = true AND t.id = :id")
-    Optional<Trabajo> buscarPorID(@Param("id")Long id);
+    Optional<Trabajo> buscarPorId(@Param("id")Long id);
 
     @Modifying
     @Query("UPDATE Trabajo t SET t.terminoProveedor = true WHERE t.id = :id")
