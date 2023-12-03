@@ -19,13 +19,24 @@ public class CloudinaryService {
 
     private Map<String, String> valores = new HashMap<>();
 
+//    public CloudinaryService(){
+//        valores.put("cloud_name", "dsvcbfopx");
+//        valores.put("api_key", "884734765111849");
+//        valores.put("api_secret", "ny-wN-6QQkV8gsroFpvAkZZEaJU");
+//        cloudinary = new Cloudinary(valores);
+//    }
+	 
+// nueva configuracion Cloudinary 
     public CloudinaryService(){
-        valores.put("cloud_name", "dsvcbfopx");
-        valores.put("api_key", "884734765111849");
-        valores.put("api_secret", "ny-wN-6QQkV8gsroFpvAkZZEaJU");
+        valores.put("cloud_name", "dte154gnk");
+        valores.put("api_key", "146417589721878");
+        valores.put("api_secret", "EkVGVIZIYgosXmm8QHFbR2x_jgE");
         cloudinary = new Cloudinary(valores);
-    }
-    public Map subirFoto(MultipartFile multipartFile) throws IOException{
+    }	 
+	 
+	 
+	 
+	 public Map subirFoto(MultipartFile multipartFile) throws IOException{
         File archivo = convetir(multipartFile);
         Map resultado = cloudinary.uploader().upload(archivo, ObjectUtils.emptyMap());
         archivo.delete();
