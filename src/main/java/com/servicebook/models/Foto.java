@@ -2,6 +2,7 @@ package com.servicebook.models;
 
 import javax.persistence.*;
 
+import com.servicebook.models.dtos.FotoDtoRecibido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,5 +35,11 @@ public class Foto {
     private Boolean alta;
     @Column(name = "foto_id")
     private String fotoId;
-    
+
+
+    public Foto(FotoDtoRecibido foto){
+        this.setNombre(foto.nombre());
+        this.setUrl(foto.url());
+        this.setFotoId(fotoId);
+    }
 }

@@ -37,7 +37,7 @@ public class ClienteController {
     public String buscarCliente(@RequestParam @NotBlank Long id, ModelMap model){
 
         Cliente cliente = clienteService.findById(id);
-        ClienteDtoRecibido clienteEnviar = new ClienteDtoRecibido(cliente);
+        //ClienteDtoRecibido clienteEnviar = new ClienteDtoRecibido(cliente);
         return "index.html";
     }
     
