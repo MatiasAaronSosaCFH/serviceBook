@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "proveedores")
 public class Proveedor extends Usuario {
 
-
     @Column(name = "email_de_contacto", nullable = false)
     private String emailDeContacto;
     
