@@ -52,8 +52,8 @@ public String panelAdminListaNoticias(ModelMap modelo, HttpSession session){
 			List<Cliente> clientes = clienteService.findAll();
 			modelo.addAttribute("clientes", clientes);		
 		return "cliente_list.html";
-	}	
-	
+	}
+        
 	@GetMapping("/rotarRol/{id}")
 	public String rotarRol(@PathVariable Long id, ModelMap modelo){
 		modelo.put("cliente", clienteService.findById(id));
