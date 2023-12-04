@@ -8,16 +8,10 @@ import javax.validation.constraints.NotBlank;
 
 public record FotoDtoRecibido(@NotBlank String nombre,
 							@NotBlank String url,
-							@NotBlank Trabajo trabajo,
+							@NotBlank Long trabajo,
 							@NotBlank String fotoId
 							) {
 
-	public FotoDtoRecibido(Foto foto) {
-		this(foto.getNombre(),
-			foto.getUrl(),
-			foto.getTrabajo(),
-			foto.getFotoId()
-		);
-	}
+
 	
 }

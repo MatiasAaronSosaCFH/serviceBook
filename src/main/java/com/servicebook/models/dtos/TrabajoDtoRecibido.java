@@ -10,25 +10,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
-public record TrabajoDtoRecibido(@NotBlank Proveedor proveedor,
-								@NotBlank Cliente cliente,
+public record TrabajoDtoRecibido(@NotBlank Long proveedor,
+								@NotBlank Long cliente,
 								@NotNull Boolean terminoCliente,
 								@NotNull Boolean terminoProveedor,
-								Calificacion calificacion,
-								List<FotoDtoEnviado> fotos
+								@NotBlank CalificacionDtoRecibido calificacion,
+								List<FotoDtoRecibido> fotos
 								) {
-
-	public TrabajoDtoRecibido(Trabajo trabajo) {
-		this(trabajo.getProveedor(),
-			trabajo.getCliente(),
-			trabajo.getTerminoCliente(),
-			trabajo.getTerminoProveedor(),
-			trabajo.getCalificacion(),
-			trabajo.getFotos().stream().map(FotoDtoEnviado::new).toList()
-		);
-		
-		
-	}
 
 	
 }

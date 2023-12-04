@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode
 @Table(name = "user")
 @MappedSuperclass
-public abstract class Usuario implements UserDetails {
+public abstract class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

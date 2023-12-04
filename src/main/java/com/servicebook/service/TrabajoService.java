@@ -1,19 +1,19 @@
 package com.servicebook.service;
 
+import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
-import com.servicebook.models.Foto;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Trabajo;
+import com.servicebook.models.Foto;
+import com.servicebook.models.dtos.TrabajoDtoRecibido;
 import com.servicebook.models.enums.Estrellas;
 import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.TrabajoRepository;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class TrabajoService {
@@ -53,7 +53,7 @@ public class TrabajoService {
     }
 
     @Transactional
-    public void calificar(Long id, Estrellas estrellas, String descripcion) {
+    public void calificar(Long id, Estrellas estrellas, String descripcion) throws MiException{
         Optional<Trabajo> resp = trabajoRepository.findById(id);
         Trabajo trabajo = resp.get();
         trabajo.setCalificacion(calificacionService.calificar(estrellas, descripcion));
@@ -67,5 +67,16 @@ public class TrabajoService {
 //        List<Foto> fotos = fotoService.subirFoto(archivo, fotoId);
 //        trabajo.setFotos(fotos);
 //    }
-    
+
+    public Trabajo convertirDtoRecibido(TrabajoDtoRecibido trabajo){
+        Trabajo trabajoFinal = new Trabajo();
+        trabajoFinal.setCalificacion(calificacionService.convertirDtoRecibido(trabajo.calificacion()));
+        trabajoFinal.setAlta(true);
+        trabajoFinal.setCliente(clienteRepository.buscarPorId(trabajo.cliente()).orElse(null));
+        trabajoFinal.setProveedor(proveedorRepository.buscarPorId(trabajo.proveedor()).orElse(null));
+        trabajoFinal.setTerminoCliente(trabajo.terminoCliente());
+        trabajoFinal.setTerminoProveedor(trabajo.terminoProveedor());
+        trabajoFinal.setFotos(fotoService.convertirDtoRecibido(trabajo.fotos()));
+        return trabajoFinal;
+    }
 }

@@ -7,10 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author julip
- */
 @Entity
 @Data
 @EqualsAndHashCode
@@ -39,10 +35,10 @@ public class Trabajo{
     private Boolean terminoProveedor;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="calificacion_id")
+    @JoinColumn(name="calificacion_id", referencedColumnName = "id")
     private Calificacion calificacion;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
     private List<Foto> fotos;
     
     @Column(name="alta")

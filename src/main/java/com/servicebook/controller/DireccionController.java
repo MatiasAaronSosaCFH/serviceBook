@@ -46,7 +46,7 @@ public class DireccionController {
   @GetMapping("/registrar")
   public String registrar(){
   
-    return "nombre_archivo.html";
+    return "direccion_registro.html";
     
   }
   
@@ -60,7 +60,7 @@ public class DireccionController {
       Logger.getLogger(DireccionController.class.getName()).log(Level.SEVERE, null, ex);
     }
     
-    return "nombre_archivo.html";
+    return "direccion_registro.html";
   
   }
   

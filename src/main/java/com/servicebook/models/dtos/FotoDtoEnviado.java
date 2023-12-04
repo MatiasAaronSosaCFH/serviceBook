@@ -7,7 +7,7 @@ import com.servicebook.models.Trabajo;
 public record FotoDtoEnviado(Long id,
 							String nombre,
 							String url,
-							Trabajo trabajo,
+							Long trabajo,
 							String fotoId
 	) {
 
@@ -15,7 +15,7 @@ public record FotoDtoEnviado(Long id,
 		this(foto.getId(),
 			foto.getNombre(),
 			foto.getUrl(),
-			foto.getTrabajo(),
+			foto.getTrabajo().getId(),
 			foto.getFotoId()
 		);
 	}

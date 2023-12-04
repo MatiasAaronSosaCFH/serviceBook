@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,28 +43,27 @@ public class UsuarioController {
     }
 
     @PostMapping("/crearUsuario")
-    public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam List<Direccion> direccion, ModelMap modelo) {
+    public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam(required=false)  List<Direccion> direccion, ModelMap modelo) {
 
         try {
             usuarioService.crearUsuario(email, nombre, fechaDeAlta, role, alta, password, password2, direccion);
             modelo.put("exito", "El Usuario fue registrado correctamente!");
-        } catch (MiException e) {
-
-            modelo.put("error", e.getMessage());
+        } catch (MiException ex) {
+		modelo.addAttribute("roles", Role.values() );
+            modelo.put("error", ex.getMessage());
             modelo.put("email", email);
             modelo.put("nombre", nombre);
             modelo.put("password", password);
             modelo.put("password2", password2);
-            modelo.put("direccion", direccion);
-
+		modelo.put("direccion", direccion);
             return "usuario_registro.html";
             /*-----Linkear a front----*/
         }
-        return "index.html";
+        return "inicio.html";
     }
 
     @PostMapping("/modificarUsuario/{id}")
-    public String modificarUsuario(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam List<Direccion> direccion, ModelMap modelo) {
+    public String modificarUsuario(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam(required=false)  List<Direccion> direccion, ModelMap modelo) {
 
         try {
             usuarioService.modificarUsuario(id, email, nombre, fechaDeAlta, role, alta, password, password2, direccion);
@@ -75,8 +75,7 @@ public class UsuarioController {
             modelo.put("nombre", nombre);
             modelo.put("password", password);
             modelo.put("password2", password2);
-            modelo.put("direccion", direccion);
-
+		modelo.put("direccion", direccion);
             return "usuario_modificar.html";
             /*-----Linkear a front----*/
         }

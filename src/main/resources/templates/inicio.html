@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-bs-theme="auto"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <head th:replace="/fragments/head :: head" </head></head>
+
+  <body>
+
+    <header th:replace="/fragments/header :: header" </header></header>
+ 
+    <div id="deleteModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeDeleteModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
+          cuenta?</h5>
+        <form th:action="@{/cliente/bajaCliente/__${usuario.id}__}"
+          method="POST" class="d-flex flex-column">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center">
+            <label for="habilitar" class="mb-1 text-white">Habilitar Botón</label>
+            <input type="checkbox" id="habilitar" name="habilitar">
+          </div>
+          <button type="submit" id="btnEliminar" class="mb-4 mt-4 btn" disabled>Si,
+            eliminar</button>
+          <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <main id="main-content">
+      <div class="w-100 tarjeta-carousel row g-0 p-0">
+        <div class="col-lg-5">
+          
+          <section id="carousel">
+            <div id="carouselExampleFade"
+              class="carousel slide carousel-fade" data-bs-ride="carousel"
+              data-bs-interval="3000">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="./img/paseadoras de perros.jpg"
+                    class="d-block w-100"
+                    alt="imagen paseadoras de perros">
+                </div>
+                <div class="carousel-item">
+                  <img src="./img/electricista.jpg" class="d-block w-100"
+                    alt="imagen electricista">
+                </div>
+                <div class="carousel-item">
+                  <img src="./img/plomero.jpg" class="d-block w-100"
+                    alt="imagen plomero">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button"
+                data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button"
+                data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </section>
+        </div>
+        <div
+          class="col-lg-7 d-flex justify-content-center align-items-center p-3">
+          <div class="text-center text-white">
+            <h1>
+              Bienvenido a ServiceBook <br />
+              Tu plataforma de servicios en línea
+            </h1>
+            <p class="lead d-flex flex-wrap">
+              ServiceBook conecta a personas con habilidades y servicios únicos
+              con aquellos que buscan ayuda en el hogar, ofreciendo una amplia
+              variedad de servicios, desde limpieza hasta cuidado de mascotas.
+              Simplificamos la búsqueda de servicios domésticos, haciéndola
+              rápida, segura y sin complicaciones. <br />
+              Únete a nuestra comunidad para descubrir la comodidad de encontrar
+              y ofrecer servicios de calidad, haciendo tu vida más fácil con
+              ServiceBook.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <section class="cards mt-5 mb-5">
+        <h2 class="text-center mb-5">Encuentra a tus Expertos Locales</h2>
+        <div class="container-fluid m-0 p-0 g-0">
+          <div class="row g-0 p-0 m-0 w-100">
+            <div class="col-1 col-md-1"></div>
+            <div class="col-10 col-md-10">
+              <div class="tarjeta">
+                <div th:each="proveedor : ${proveedores}">
+                  <div class="card m-0 p-0">
+                    <img th:src="${proveedor.foto.url}" class="card-img-top"
+                      alt="Imagen del proveedor">
+                    <div class="card-body">
+                      <div class="badge bg-warning text-dark mb-3">Electricista</div>
+                      <h5 th:text="${proveedor.nombre}"
+                        class="card-title text-center mb-3"></h5>
+                      <p class="card-text card-description text-center"
+                        th:text="${proveedor.presentacion}"></p>
+                    </div>
+                    <div class="card-footer">
+                      <div
+                        class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-outline-secondary">
+                            Contactar
+                          </button>
+                        </div>
+                        <small class="stars">☆☆☆</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-1 col-md-1"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/borrar.js"></script>
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
