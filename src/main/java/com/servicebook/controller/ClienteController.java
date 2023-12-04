@@ -88,7 +88,7 @@ public class ClienteController {
   }
     
   
-  @PreAuthorize("hasAnyRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR', 'ROLE_ADMIN')")
   @GetMapping("/perfil")
   public String perfil(HttpSession session, ModelMap model) {
     

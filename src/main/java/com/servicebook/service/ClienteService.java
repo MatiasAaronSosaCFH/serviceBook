@@ -38,9 +38,54 @@ public class ClienteService implements UserDetailsService {
     return clienteRepository.findById(id).orElse(null);
   }
 
-//  public Cliente findByEmail(String email) {
+  public Cliente findByEmail(String email) {
 //    return clienteRepository.findByEmail(email).orElse(null);
-//  }
+	     return clienteRepository.findByEmail(email);
+  }
+  
+  public List<Cliente> findAll(){
+	  return clienteRepository.findAll();
+  }
+  
+  public void cambiarEstado(Long id){
+	  Optional<Cliente> respuesta = clienteRepository.findById(id);
+	if (respuesta.isPresent()) {
+		Boolean estado = respuesta.get().getAlta();
+		Cliente cliente = respuesta.get();
+
+		cliente.setAlta(!estado);
+
+		clienteRepository.save(cliente);
+	}
+  }
+	
+    public void rotarRol(Long id){
+	
+	Optional<Cliente> respuesta = clienteRepository.findById(id);
+	if (respuesta.isPresent()) {
+			Role role = respuesta.get().getRole();
+		Cliente cliente = respuesta.get();
+		
+		System.out.println("r0:" + cliente.getRole());
+		if (role.equals(Role.USER)) {
+			cliente.setRole(Role.PROVEEDOR);
+			System.out.println(role);
+			System.out.println("ru" + cliente.getRole());
+		} 
+		if (role.equals(Role.PROVEEDOR)) {
+			cliente.setRole(Role.ADMIN);
+			System.out.println(role);
+			System.out.println("rp:" + cliente.getRole());
+		}
+		if(role.equals(Role.ADMIN)) {
+			cliente.setRole(Role.USER);
+			System.out.println(role);
+			System.out.println("ra:" + cliente.getRole());
+		}
+		clienteRepository.save(cliente);
+	}
+}
+
   public void crearCliente(String email, String nombre, String password, String password2) throws MiException {
     validar(email, nombre, password, password2);
 
@@ -70,6 +115,14 @@ public class ClienteService implements UserDetailsService {
     cliente.setEmail(email);
     cliente.setNombre(nombre);
     cliente.setPassword(new BCryptPasswordEncoder().encode(password));
+//evaluar si conviene utilizar "traer el password encriptado cuando apretan el boton cambiar contraseña, habria que llenar los 2 campos en la vista con thymeleaf  	 
+//		String pass = cliente.getPassword();
+//		if (password.equals(pass)) {
+//			System.out.println("sin cambio de password");
+//		} else {
+//			cliente.setPassword(new BCryptPasswordEncoder().encode(password));
+//		}
+
     clienteRepository.save(cliente);
   }
 
