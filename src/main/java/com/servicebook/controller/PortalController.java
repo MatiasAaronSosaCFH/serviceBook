@@ -74,6 +74,14 @@ public class PortalController {
 
     }
 
+    if (usuario.getRole().toString().equals("ADMIN")) {
+
+      Cliente admin = (Cliente) session.getAttribute("usuariosession");
+
+      model.addAttribute("usuario", admin);
+
+    }
+    
     model.addAttribute("proveedores", proveedorService.findByAlta());
     return "inicio.html";
   }
