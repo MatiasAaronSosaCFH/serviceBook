@@ -8,7 +8,6 @@ import com.servicebook.repository.CalificacionRepository;
 import com.servicebook.repository.TrabajoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 
@@ -57,4 +56,12 @@ public class CalificacionService {
     public void modificarTrabajo(Long trabajo, Long id){
         calificacionRepository.modificarTrabajo(trabajo, id);
     }
+
+    public void modificarCalificacion(String descipcion, Integer estrellas, Long id){
+        calificacionRepository.cambiarCalificacion(descipcion,estrellas,id);
+    }
+
+
+
+
 }
