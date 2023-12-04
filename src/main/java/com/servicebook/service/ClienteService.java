@@ -39,8 +39,13 @@ public class ClienteService implements UserDetailsService {
   }
 
   public Cliente findByEmail(String email) {
+<<<<<<< HEAD
 //    return clienteRepository.findByEmail(email).orElse(null);
 	     return clienteRepository.findByEmail(email).orElse(null);
+=======
+      return clienteRepository.findByEmail(email).orElse(null);
+      //return clienteRepository.findByEmail(email);
+>>>>>>> 407e1e30ce61b34c0d84a534efb219ef2dcc256b
   }
   
   public List<Cliente> findAll(){
@@ -125,14 +130,30 @@ public class ClienteService implements UserDetailsService {
 
     clienteRepository.save(cliente);
   }
+  
+  @Transactional
+  public void bajaCliente(Long id) {
+    Cliente cliente = new Cliente() {};
+
+    Optional<Cliente> respuesta = clienteRepository.findById(id);
+
+    if (respuesta.isPresent()) {
+      cliente = respuesta.get();
+      cliente.setAlta(false);
+
+      clienteRepository.save(cliente);
+
+    }
+  }
 
   public void validar(String email, String nombre, String password, String password2) throws MiException {
+    
+    if (nombre.isEmpty()) {
+      throw new MiException("el nombre no puede ser nulo o estar vacio");
+    }
 
     if (email.isEmpty()) {
       throw new MiException("el email no puede ser nulo o estar vacio");
-    }
-    if (nombre.isEmpty()) {
-      throw new MiException("el nombre no puede ser nulo o estar vacio");
     }
 
     if (password.isEmpty() || password == null || password.length() <= 5) {

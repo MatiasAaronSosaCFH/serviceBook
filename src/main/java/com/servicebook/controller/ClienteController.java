@@ -8,6 +8,7 @@ import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,87 +26,99 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cliente")
 public class ClienteController {
 
-    @Autowired
-    ClienteService clienteService;
+  @Autowired
+  ClienteService clienteService;
 
-    @GetMapping("/busqueda")
-    public String buscarCliente(@RequestParam @NotBlank Long id, ModelMap model){
+  @GetMapping("/busqueda")
+  public String buscarCliente(@RequestParam @NotBlank Long id, ModelMap model) {
 
-        Cliente cliente = clienteService.findById(id);
-        //ClienteDtoRecibido clienteEnviar = new ClienteDtoRecibido(cliente);
-        return "index.html";
-    }
-    
-
-    @PostMapping("/crearCliente")
-    public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
-
-        try {
-            clienteService.crearCliente(email, nombre, password, password2);
-            modelo.put("exito", "El Usuario fue registrado correctamente!");
-        } catch (MiException ex) {
-           //modelo.put("error", ex.getMessage());
-            modelo.put("email", email);
-            modelo.put("nombre", nombre);
-            modelo.put("password", password);
-            modelo.put("password2", password2);
-            return "usuario_registro.html";
-            /*-----Linkear a front----*/
-        }
-        return "inicio.html";
-    }
-    
-    @PostMapping("/modificar/{id}")
-    public String modificar(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
-
-        try {
-            clienteService.modificarCliente(id, email, nombre, password, password2);
-            
-            Cliente cliente = clienteService.findById(id);
-            
-            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-
-            HttpSession session = attr.getRequest().getSession();
-
-            session.setAttribute("usuariosession", cliente);
-                 
-            modelo.put("exito", "El cliente fue modificado correctamente!");
-        } catch (Exception e) {
-
-            modelo.put("error", e.getMessage());
-            modelo.put("email", email);
-            modelo.put("nombre", nombre);
-            modelo.put("password", password);
-            modelo.put("id", id);
-            return "perfil.html";
-        }
-        return "redirect:/inicio";
-    }
-    
-    @GetMapping("/modificar/{id}")
-    public String modificar(@PathVariable Long id, ModelMap model){
-  
-      Cliente cliente = clienteService.findById(id);
-      model.addAttribute("cliente", cliente);
-      return "perfil.html";
-  
+    Cliente cliente = clienteService.findById(id);
+    //ClienteDtoRecibido clienteEnviar = new ClienteDtoRecibido(cliente);
+    return "index.html";
   }
-    
-  
+
+  @PostMapping("/crearCliente")
+  public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
+
+    try {
+      clienteService.crearCliente(email, nombre, password, password2);
+      modelo.put("exito", "El Usuario fue registrado correctamente!");
+    } catch (MiException ex) {
+      //modelo.put("error", ex.getMessage());
+      modelo.put("email", email);
+      modelo.put("nombre", nombre);
+      modelo.put("password", password);
+      modelo.put("password2", password2);
+      return "usuario_registro.html";
+      /*-----Linkear a front----*/
+    }
+    return "inicio.html";
+  }
+
+  @PostMapping("/modificar/{id}")
+  public String modificar(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
+
+    try {
+      clienteService.modificarCliente(id, email, nombre, password, password2);
+
+      Cliente cliente = clienteService.findById(id);
+
+      ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+      HttpSession session = attr.getRequest().getSession();
+
+      session.setAttribute("usuariosession", cliente);
+
+      modelo.put("exito", "El cliente fue modificado correctamente!");
+    } catch (Exception e) {
+
+      modelo.put("error", e.getMessage());
+      modelo.put("email", email);
+      modelo.put("nombre", nombre);
+      modelo.put("password", password);
+      modelo.put("id", id);
+      return "perfil.html";
+    }
+    return "redirect:/inicio";
+  }
+
+  @GetMapping("/modificar/{id}")
+  public String modificar(@PathVariable Long id, ModelMap model) {
+
+    Cliente cliente = clienteService.findById(id);
+    model.addAttribute("cliente", cliente);
+    return "perfil.html";
+
+  }
+
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR', 'ROLE_ADMIN')")
   @GetMapping("/perfil")
   public String perfil(HttpSession session, ModelMap model) {
-    
+
     Cliente cliente = (Cliente) session.getAttribute("usuariosession");
-      
+
     model.addAttribute("cliente", cliente);
-    
+
     return "perfil.html";
   }
-    
+
+  @PostMapping("/bajaCliente/{id}")
+  public String bajaCliente(@PathVariable Long id, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+    clienteService.bajaCliente(id);
+
+    redirectAttributes.addFlashAttribute("estado", "El cliente fue dado de baja");
+
+    request.getSession().invalidate();
+
+    return "redirect:/logout";
+
+  }
+
 }

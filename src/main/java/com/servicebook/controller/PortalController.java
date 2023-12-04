@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/")
@@ -44,7 +45,6 @@ public class PortalController {
     return "index.html";
   }
 
-  
   @GetMapping("/perfil")
   public String retornarPerfil(ModelMap model) {
 
@@ -58,20 +58,28 @@ public class PortalController {
   public String inicio(HttpSession session, ModelMap model) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
-    if(usuario.getRole().toString().equals("USER")){
-    
+    if (usuario.getRole().toString().equals("USER")) {
+
       Cliente cliente = (Cliente) session.getAttribute("usuariosession");
-      
+
       model.addAttribute("usuario", cliente);
-    
+
     }
-    
-    if(usuario.getRole().toString().equals("PROVEEDOR")){
-    
+
+    if (usuario.getRole().toString().equals("PROVEEDOR")) {
+
       Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-      
+
       model.addAttribute("usuario", proveedor);
-    
+
+    }
+
+    if (usuario.getRole().toString().equals("ADMIN")) {
+
+      Cliente admin = (Cliente) session.getAttribute("usuariosession");
+
+      model.addAttribute("usuario", admin);
+
     }
     
     model.addAttribute("proveedores", proveedorService.findByAlta());
@@ -102,24 +110,43 @@ public class PortalController {
     return "registro.html";
   }
 
+//  @PostMapping("/registrar")
+//  public String registrar(@RequestParam String nombre, @RequestParam String email, @RequestParam String password,
+//          @RequestParam String password2, ModelMap model) {
+//
+//    try {
+//
+//      clienteService.crearCliente(email, nombre, password, password2);
+//
+//      //model.put("exito", "Usuario registrado exitosamente!");
+//      return "redirect:/login";
+//
+//    } catch (MiException ex) {
+//
+//      //model.put("error", ex.getMessage());
+//      return "registro.html";
+//
+//    }
+//
+//  }
   @PostMapping("/registrar")
-  public String registrar(@RequestParam String nombre, @RequestParam String email, @RequestParam String password,
-          @RequestParam String password2, ModelMap model) {
+  public String registrar(@RequestParam String email, @RequestParam String nombre,
+          @RequestParam String password, @RequestParam String password2, RedirectAttributes redirectAttributes) {
 
     try {
-
       clienteService.crearCliente(email, nombre, password, password2);
-
-      //model.put("exito", "Usuario registrado exitosamente!");
-      return "redirect:/login";
-
+      redirectAttributes.addFlashAttribute("exito", "El usuario fue registrado exitosamente!");
     } catch (MiException ex) {
-
-      //model.put("error", ex.getMessage());
-      return "registro.html";
-
+      // Si hay un error, redirige con los atributos flash
+      redirectAttributes.addFlashAttribute("error", ex.getMessage());
+      redirectAttributes.addFlashAttribute("email", email);
+      redirectAttributes.addFlashAttribute("nombre", nombre);
+      redirectAttributes.addFlashAttribute("password", password);
+      redirectAttributes.addFlashAttribute("password2", password2);
+      return "redirect:/";
     }
 
+    return "redirect:/";
   }
 
 }
