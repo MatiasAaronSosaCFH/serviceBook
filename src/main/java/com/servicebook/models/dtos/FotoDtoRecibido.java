@@ -12,12 +12,6 @@ public record FotoDtoRecibido(@NotBlank String nombre,
 							@NotBlank String fotoId
 							) {
 
-	public FotoDtoRecibido(Foto foto) {
-		this(foto.getNombre(),
-			foto.getUrl(),
-			foto.getTrabajo().getId(),
-			foto.getFotoId()
-		);
-	}
+
 	
 }
