@@ -39,13 +39,8 @@ public class ClienteService implements UserDetailsService {
   }
 
   public Cliente findByEmail(String email) {
-<<<<<<< HEAD
-//    return clienteRepository.findByEmail(email).orElse(null);
 	     return clienteRepository.findByEmail(email).orElse(null);
-=======
-      return clienteRepository.findByEmail(email).orElse(null);
-      //return clienteRepository.findByEmail(email);
->>>>>>> 407e1e30ce61b34c0d84a534efb219ef2dcc256b
+
   }
   
   public List<Cliente> findAll(){
