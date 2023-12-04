@@ -46,7 +46,7 @@ public class CalificacionController {
         return "modificarCalifcacion.html";
     }
     
-    @PostMapping("/modificarCalifcacion/{id}")
+    /*@PostMapping("/modificarCalifcacion/{id}")
     public String modificarCalifcacion(@PathVariable Long id, @RequestParam String descripcion ,
             @PathVariable Estrellas estrella ){
        
@@ -55,6 +55,6 @@ public class CalificacionController {
        
         
         return "modificarCalifcacion.html";
-    }
+    }*/
     
 }
