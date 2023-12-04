@@ -1,5 +1,6 @@
 package com.servicebook.service;
 
+import com.servicebook.exception.MiException;
 import com.servicebook.models.Calificacion;
 import com.servicebook.models.dtos.CalificacionDtoRecibido;
 import com.servicebook.models.enums.Estrellas;
@@ -26,7 +27,7 @@ public class CalificacionService {
         cal.setTrabajo(trabajoRepository.buscarPorId(calificacion.trabajo()).orElse(null));
         return cal;
     }
-    public Calificacion calificar(Estrellas estrellas, String descripcion){
+    public Calificacion calificar(Estrellas estrellas, String descripcion) throws MiException{
         Calificacion calificacion = new Calificacion();
         calificacion.setEstrellas(estrellas);
         calificacion.setDescripcion(descripcion);

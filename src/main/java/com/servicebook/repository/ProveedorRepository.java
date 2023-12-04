@@ -83,6 +83,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
                           @Param("presentacion") String presentacion,
                           @Param("precio") Double precio,
                           @Param("id") Long id);
-
-
+    
+    
 }

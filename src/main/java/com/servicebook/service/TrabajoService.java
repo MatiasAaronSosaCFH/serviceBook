@@ -1,5 +1,6 @@
 package com.servicebook.service;
 
+import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Trabajo;
@@ -52,7 +53,7 @@ public class TrabajoService {
     }
 
     @Transactional
-    public void calificar(Long id, Estrellas estrellas, String descripcion) {
+    public void calificar(Long id, Estrellas estrellas, String descripcion) throws MiException{
         Optional<Trabajo> resp = trabajoRepository.findById(id);
         Trabajo trabajo = resp.get();
         trabajo.setCalificacion(calificacionService.calificar(estrellas, descripcion));
