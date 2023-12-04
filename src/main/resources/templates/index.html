@@ -4,132 +4,180 @@
   data-bs-theme="auto"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <head>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"></script>
-    <script src="./js/color-modes.js"></script>
+  
+  <head th:replace="/fragments/head :: head" </head></head>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content />
-    <meta
-      name="author"
-      content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
-    <meta name="generator" content="Hugo 0.118.2" />
-    <title>ServiceBook</title>
+  <body>
 
-    <link
-      rel="canonical"
-      href="https://getbootstrap.com/docs/5.3/examples/album/" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+    <div th:if="${param.error != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              openLoginModal();
+          });
+      </script>
+    </div>
 
-    <link href="./css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
+    <div th:if="${exito}">
+      <script th:inline="javascript">
+        $(document).ready(function () {
+            var exito = /*[[${exito}]]*/ null;
+    
+            if (exito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: /*[[${exito}]]*/ '',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+      </script>
+    </div>
 
-  <body class="bg-gradient"
-    style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+    <div th:if="${error != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              var email = /*[[${email}]]*/ '';
+              var nombre = /*[[${nombre}]]*/ '';
+              var password = /*[[${password}]]*/ '';
+              var password2 = /*[[${password2}]]*/ '';
+              openRegisterModal();
+              $('#email').val(email);
+              $('#nombre').val(nombre);
+              $('#password').val(password);
+              $('#password2').val(password2);
+          });
+      </script>
+    </div>
 
-    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-      <symbol id="check2" viewBox="0 0 16 16">
-        <path
-          d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-      </symbol>
-      <symbol id="circle-half" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
-      </symbol>
-      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
-        <path
-          d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
-        <path
-          d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
-      </symbol>
-      <symbol id="sun-fill" viewBox="0 0 16 16">
-        <path
-          d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
-      </symbol>
-    </svg>
+    <header th:replace="/fragments/header :: header" </header></header>
 
-    <header>
-      <div class="fixed-top">
-        <nav
-          class="navbar navbar-expand-md p-0 bg-body-tertiary py-sm-0 py-md-3">
-          <div class="container-fluid p-0">
-            <div class="row w-100 g-0">
-              <div
-                class="col-lg-4 col-md d-flex justify-content-between align-items-center">
-                <div class="row w-100 g-0">
-                  <div
-                    class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-start my-2 my-md-0 ms-0 ms-md-4 text-center">
-                    <a class="navbar-brand m-0" href="#">ServiceBook</a>
-                  </div>
-                  <div
-                    class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-end mb-3 mb-md-0">
-                    <button class="navbar-toggler bg-dark" type="button"
-                      data-bs-toggle="collapse" data-bs-target="#navbarScroll"
-                      aria-controls="navbarScroll" aria-expanded="false"
-                      aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-8 col-md-9">
-                <div class="collapse d-md-inline" id="navbarScroll">
-                  <ul class="p-0 list-unstyled mb-0">
-                    <div
-                      class="row w-100 p-0 g-0 flex-column-reverse flex-md-row">
-                      <div
-                        class="col-lg-6 col-md-6 col-md d-flex justify-content-center align-items-center mb-3 mb-md-0">
-                        <li class="nav-item w-100">
-                          <form class="d-flex">
-                            <div class="row w-100 g-0">
-                              <div class="col-1 col-sm-2 col-md-0"></div>
-                              <div class="col-10 col-sm-8 col-md-12 d-flex">
-                                <input class="form-control me-2" type="search"
-                                  placeholder="Buscar" aria-label="Buscar" />
-                                <button class="btn btn-outline-success"
-                                  type="submit">Buscar</button>
-                              </div>
-                              <div class="col-1 col-sm-2 col-md-0"></div>
-                            </div>
-                          </form>
-                        </li>
-                      </div>
-                      <div
-                        class="col-lg-6 col-md d-flex flex-column flex-md-row justify-content-md-end justify-content-center align-items-center mb-3 mb-md-0">
-                        <li class="nav-item">
-                          <a href="/login"
-                            class="btn btn-primary me-0 me-md-4 mb-3 mb-md-0">Iniciar
-                            sesión</a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="/registrar"
-                            class="btn btn-primary me-0 me-md-4">Registrarse</a>
-                        </li>
-                      </div>
-                    </div>
-                  </ul>
-                </div>
-              </div>
-            </div>
+    <div id="loginModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeLoginModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">inicio de sesión</h5>
+        <form action="/logincheck" method="POST" class="d-flex flex-column">
+          <div th:if="${param.error != null}" class="alert alert-danger" role="alert">
+            <p>Error de autenticación. Verifica tus credenciales.</p>
           </div>
-        </nav>
+          <input
+            autocomplete="off"
+            placeholder="email@ejemplo.com"
+            class="input-field mb-3"
+            type="email"
+            name="email" />
+          <input
+            autocomplete="off"
+            placeholder="Contraseña"
+            class="input-field mb-3"
+            type="password"
+            name="password" />
+          <button type="submit">Iniciar Sesión</button>
+        </form>
+        <a href="#" class="bottomLink mt-3 mb-3 text-end">¿Olvidaste tu
+          contraseña?</a>
+        <a href="#" id="enlace-registrar" class="bottomLink mb-3 text-end">Regístrarse</a>
       </div>
-    </header>
+    </div>
+
+    <div id="registerModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeRegisterModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">Registro</h5>
+        <form action="/registrar" method="POST"
+          class="d-flex flex-column">
+          <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+          </div>
+          <input
+            autocomplete="off"
+            placeholder="Nombre"
+            class="input-field mb-3"
+            type="text"
+            name="nombre"
+            id="nombre" />
+          <input
+            autocomplete="off"
+            placeholder="email@ejemplo.com"
+            class="input-field mb-3"
+            type="email"
+            name="email"
+            id="email" />
+          <input
+            autocomplete="off"
+            placeholder="Contraseña"
+            class="input-field mb-3"
+            type="password"
+            name="password"
+            id="password" />
+          <input
+            autocomplete="off"
+            placeholder="Repetir Contraseña"
+            class="input-field mb-3"
+            type="password"
+            name="password2"
+            id="password2" />
+          <button type="submit">Registrarse</button>
+        </form>
+        <a href="#" id="btnVolver" class="bottomLink mt-3 mb-3 text-end">Volver</a>
+      </div>
+    </div>
 
     <main id="main-content">
-      <section class="py-5 text-center container img-container">
-        <div class="row py-lg-5">
-          <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light bienvenido">
+      <div class="w-100 tarjeta-carousel row g-0 p-0">
+        <div class="col-lg-5">
+          <section id="carousel">
+            <div id="carouselExampleFade"
+              class="carousel slide carousel-fade" data-bs-ride="carousel"
+              data-bs-interval="3000">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="./img/paseadoras de perros.jpg"
+                    class="d-block w-100"
+                    alt="imagen paseadoras de perros">
+                </div>
+                <div class="carousel-item">
+                  <img src="./img/electricista.jpg" class="d-block w-100"
+                    alt="imagen electricista">
+                </div>
+                <div class="carousel-item">
+                  <img src="./img/plomero.jpg" class="d-block w-100"
+                    alt="imagen plomero">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button"
+                data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button"
+                data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </section>
+        </div>
+        <div
+          class="col-lg-7 d-flex justify-content-center align-items-center p-3">
+          <div class="text-center text-white">
+            <h1>
               Bienvenido a ServiceBook <br />
               Tu plataforma de servicios en línea
             </h1>
-            <p class="lead text-body-secondary presentacion">
+            <p class="lead d-flex flex-wrap text-white">
               ServiceBook conecta a personas con habilidades y servicios únicos
               con aquellos que buscan ayuda en el hogar, ofreciendo una amplia
               variedad de servicios, desde limpieza hasta cuidado de mascotas.
@@ -141,46 +189,40 @@
             </p>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="cards">
-        <div class="container mt-4">
-          <div class="row">
-            <div
-              class="col-12 d-flex justify-content-center col-sm-6 col-lg-4 col-xl-3 m-0 p-3"
-              th:each="proveedor : ${proveedores}">
-              <div
-                class="card shadow-sm h-100 d-flex justify-content-md-center justify-content-lg-center justify-content-xl-center">
-                <img th:src="${proveedor.foto.url}" class="card-img-top"
-                  alt="Imagen del proveedor">
-                <div class="card-body">
-                  <h5 th:text="${proveedor.nombre}"
-                    class="card-title text-uppercase text-center"></h5>
-                  <p class="card-text card-description"
-                    th:text="${proveedor.presentacion}"></p>
+      <section class="cards mt-5 mb-5">
+        <h2 class="text-center mb-5">Encuentra a tus Expertos Locales</h2>
+        <div class="container-fluid m-0 p-0 g-0">
+          <div class="row g-0 p-0 m-0 w-100">
+            <div class="col-1 col-md-1"></div>
+            <div class="col-10 col-md-10">
+              <div class="tarjeta">
+                <div th:each="proveedor : ${proveedores}">
+                  <div class="card m-0 p-0">
+                    <img th:src="${proveedor.foto.url}" class="card-img-top"
+                      alt="Imagen del proveedor">
+                    <div class="card-body">
+                      <div class="badge bg-warning text-dark mb-3">Electricista</div>
+                      <h5 th:text="${proveedor.nombre}"
+                        class="card-title text-center mb-3"></h5>
+                      <p class="card-text card-description text-center"
+                        th:text="${proveedor.presentacion}"></p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="col-1 col-md-1"></div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="text-body-secondary py-5 bottom">
-      <div class="container">
-        <p class="float-end mb-1">
-          <a href="#">Back to top</a>
-        </p>
-        <p class="mb-1">
-          Album example is &copy; Bootstrap, but please download and customize
-          it for yourself!
-        </p>
-        <p class="mb-0">
-          New to Bootstrap? <a href="/">Visit the homepage</a> or read our
-          <a href="../getting-started/introduction/">getting started guide</a>.
-        </p>
-      </div>
-    </footer>
-    <script src="./js/bootstrap.bundle.min.js"></script>
+    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/registro-login.js"></script>
+    <script src="../../js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
