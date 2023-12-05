@@ -56,7 +56,7 @@
                     <li class="nav-item me-md-2 me-0 text-white"
                       id="perfilDirecto"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
-                      th:if="${#httpServletRequest.getRequestURI() == '/inicio'}"
+                      th:if="${#httpServletRequest.getRequestURI() != '/'}"
                       th:text="'Hola, ' + ${usuario?.nombre}"></li>
                     <div class="me-md-3 me-0"
                       id="perfilDropdown"
@@ -66,14 +66,15 @@
                           <a class="nav-link dropdown-toggle p-0" href="#"
                             role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <img src="./img/usuario-de-perfil.png"
-                              alt="foto perfil">
+                            <img
+                              th:src="${usuario.foto != null} ? ${usuario.foto.url} : './img/usuario-de-perfil.png'"
+                              alt="foto perfil" class="imagen-perfil-miniatura">
                           </a>
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item"
-                                href="/cliente/modificar">Modificar Datos</a></li>
+                                href="/modificar">Modificar Datos</a></li>
                             <li><a class="dropdown-item"
-                                href="/cliente/modificar">Solicitar ser
+                                href="#">Solicitar ser
                                 Proveedor</a></li>
                             <li><a class="dropdown-item" id="enlace-borrar"
                                 href="#">Eliminar Cuenta</a></li>

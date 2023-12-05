@@ -27,8 +27,9 @@ public class FotoUsuario {
     private String url;
 
     @Column(name = "alta")
-    private Boolean alta;
+    private Boolean alta = true;
 
     @Column(name = "foto_id")
     private String fotoId;
+    
 }

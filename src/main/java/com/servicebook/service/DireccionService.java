@@ -1,7 +1,9 @@
 package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
+import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
+import com.servicebook.models.Proveedor;
 import com.servicebook.models.dtos.DireccionDtoRecibido;
 import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.DireccionRepository;
@@ -28,7 +30,7 @@ public class DireccionService {
   private ClienteRepository clienteRepository;
 
   @Transactional
-  public void registrar(String calle, String numero, String localidad, String provincia) throws MiException {
+  public void registrar(Long idUsuario, String calle, String numero, String localidad, String provincia) throws MiException {
 
     validar(calle, numero, localidad, provincia);
 
@@ -38,6 +40,19 @@ public class DireccionService {
     direccion.setNumero(numero);
     direccion.setLocalidad(localidad);
     direccion.setProvincia(provincia);
+    
+    Optional<Cliente> resCliente = clienteRepository.buscarPorId(idUsuario);
+    Optional<Proveedor> resProveedor = proveedorRepository.buscarPorId(idUsuario);
+    
+    if(resCliente.isPresent()){
+      
+      direccion.setCliente(resCliente.get());
+    
+    } else if(resProveedor.isPresent()){
+    
+      direccion.setProveedor(resProveedor.get());
+      
+    }
 
     direccionRepository.save(direccion);
 
@@ -129,6 +144,18 @@ public class DireccionService {
 
   public void validar(String calle, String numero, String localidad, String provincia) throws MiException {
 
+    if (provincia.trim().isEmpty() || provincia == null) {
+
+      throw new MiException("La provincia no puede ser nula o estar vacía");
+
+    }
+    
+    if (localidad.trim().isEmpty() || localidad == null) {
+
+      throw new MiException("La localidad no puede ser nula o estar vacía");
+
+    }
+    
     if (calle.trim().isEmpty() || calle == null) {
 
       throw new MiException("La calle no puede ser nula o estar vacía");
@@ -140,19 +167,6 @@ public class DireccionService {
       throw new MiException("El número no puede ser nulo o estar vacío");
 
     }
-
-    if (localidad.trim().isEmpty() || localidad == null) {
-
-      throw new MiException("La localidad no puede ser nula o estar vacía");
-
-    }
-
-    if (provincia.trim().isEmpty() || provincia == null) {
-
-      throw new MiException("La provincia no puede ser nula o estar vacía");
-
-    }
-
   }
 
   public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion){

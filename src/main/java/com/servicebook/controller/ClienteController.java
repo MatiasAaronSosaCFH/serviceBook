@@ -53,7 +53,7 @@ public class ClienteController {
   }
 
   @PostMapping("/modificar/{id}")
-  public String modificar(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
+  public String modificar(@PathVariable Long id, @RequestParam(required = false) String email, @RequestParam String nombre, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
 
     try {
       clienteService.modificarCliente(id, email, nombre, password, password2);
