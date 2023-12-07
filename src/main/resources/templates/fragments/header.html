@@ -57,7 +57,7 @@
                       id="perfilDirecto"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
                       th:if="${#httpServletRequest.getRequestURI() != '/'}"
-                      th:text="'Hola, ' + ${usuario?.nombre}"></li>
+                      th:text="'Hola, ' + ${usuario.nombre}"></li>
                     <div class="me-md-3 me-0"
                       id="perfilDropdown"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')">

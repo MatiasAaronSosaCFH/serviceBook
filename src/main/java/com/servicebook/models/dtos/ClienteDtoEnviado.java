@@ -17,7 +17,7 @@ public record ClienteDtoEnviado(Long id,
 
     public ClienteDtoEnviado(Cliente cliente){
         this(cliente.getId(), cliente.getNombre(), cliente.getFoto(), cliente.getEmail(),
-                cliente.getDireccion().stream().map(DireccionDtoEnviado::new).toList(),
+                cliente.getDirecciones().stream().map(DireccionDtoEnviado::new).toList(),
                 cliente.getFechaDeAlta(),cliente.getRole().toString(),
                 cliente.getTrabajosPedidos().stream().map(TrabajoDtoEnviado::new).toList());
     }

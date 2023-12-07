@@ -21,4 +21,10 @@ public class ProveedorService {
     public void save(Proveedor proveedor){
         proveedorRepository.save(proveedor);
     }
+
+  public Proveedor findById(Long id) {
+    
+    return proveedorRepository.findById(id).orElse(null);
+    
+  }
 }

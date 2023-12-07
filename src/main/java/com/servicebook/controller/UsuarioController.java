@@ -43,10 +43,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/crearUsuario")
-    public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam(required=false)  List<Direccion> direccion, ModelMap modelo) {
+    public String crearUsuario(@RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
 
         try {
-            usuarioService.crearUsuario(email, nombre, fechaDeAlta, role, alta, password, password2, direccion);
+            usuarioService.crearUsuario(email, nombre, fechaDeAlta, role, alta, password, password2);
             modelo.put("exito", "El Usuario fue registrado correctamente!");
         } catch (MiException ex) {
 		modelo.addAttribute("roles", Role.values() );
@@ -55,7 +55,6 @@ public class UsuarioController {
             modelo.put("nombre", nombre);
             modelo.put("password", password);
             modelo.put("password2", password2);
-		modelo.put("direccion", direccion);
             return "usuario_registro.html";
             /*-----Linkear a front----*/
         }
@@ -63,10 +62,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/modificarUsuario/{id}")
-    public String modificarUsuario(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, @RequestParam(required=false)  List<Direccion> direccion, ModelMap modelo) {
+    public String modificarUsuario(@PathVariable Long id, @RequestParam String email, @RequestParam String nombre, @RequestParam("fechaDeAlta") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDeAlta, @RequestParam Role role, @RequestParam Boolean alta, @RequestParam String password, @RequestParam String password2, ModelMap modelo) {
 
         try {
-            usuarioService.modificarUsuario(id, email, nombre, fechaDeAlta, role, alta, password, password2, direccion);
+            usuarioService.modificarUsuario(id, email, nombre, fechaDeAlta, role, alta, password, password2);
             modelo.put("exito", "El Usuario fue modificado correctamente!");
         } catch (MiException e) {
 
@@ -75,7 +74,6 @@ public class UsuarioController {
             modelo.put("nombre", nombre);
             modelo.put("password", password);
             modelo.put("password2", password2);
-		modelo.put("direccion", direccion);
             return "usuario_modificar.html";
             /*-----Linkear a front----*/
         }

@@ -12,16 +12,14 @@ public record UsuarioDtoEnviado(Long id,
 								String  email,
 								String nombre,
 								Date fechaDeAlta,
-								Role role,
-								List<DireccionDtoEnviado> direccion) {
+								Role role) {
 
 	public UsuarioDtoEnviado(Usuario usuario){
 		this(usuario.getId(), 
 			usuario.getEmail(),
 			usuario.getNombre(),
 			usuario.getFechaDeAlta(),
-			usuario.getRole(),
-			usuario.getDireccion().stream().map(DireccionDtoEnviado::new).toList() );
+			usuario.getRole());
 	}
 
 	

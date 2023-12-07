@@ -9,7 +9,7 @@
 
   <body>
 
-    <div th:if="${exito}">
+    <div th:if="${exito != null}">
       <script th:inline="javascript">
         $(document).ready(function () {
             var exito = /*[[${exito}]]*/ null;
@@ -26,37 +26,21 @@
       </script>
     </div>
 
-    <div th:if="${error}">
-      <script th:inline="javascript">
-        $(document).ready(function () {
-            var exito = /*[[${error}]]*/ null;
-    
-            if (exito) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: /*[[${exito}]]*/ '',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-      </script>
-    </div>
-
-    <!-- <div th:if="${error != null}">
+    <div th:if="${errorDireccion != null}">
       <script th:inline="javascript">
           $(document).ready(function() {
               var provincia = /*[[${provincia}]]*/ '';
               var localidad = /*[[${localidad}]]*/ '';
               var calle = /*[[${calle}]]*/ '';
               var numero = /*[[${numero}]]*/ '';
+              abrirDireccion();
               $('#provincia').val(provincia);
               $('#localidad').val(localidad);
               $('#calle').val(calle);
               $('#numero').val(numero);
           });
       </script>
-    </div> -->
+    </div>
 
     <header th:replace="/fragments/header :: header" </header></header>
 
@@ -127,15 +111,17 @@
                     src="./img/flecha.png" alt="Flecha">
                 </div>
                 <div id="detalles" class="detalles p-0">
-                  <form method="POST" th:action="@{/cliente/registrar/__${usuario.id}__}"  class="formulario">
+                  <form method="POST"
+                    th:action="@{/cliente/modificar/__${usuario.id}__}"
+                    id="formBasica" class="formulario" th:object="${usuario}">
                     <input hidden name="id" th:value="${usuario.id}">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre"
+                    <input type="text" id="nombre" th:field="*{nombre}"
                       th:value="${usuario.nombre}">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email"
+                    <input type="email" id="email" th:field="*{email}"
                       th:value="${usuario.email}">
-                      <button type="submit" id="boton-guardar2">Guardar Cambios</button>
+                    <button type="submit" id="boton-guardar2">Actualizar</button>
                   </form>
                 </div>
               </div>
@@ -143,103 +129,59 @@
 
             <div class="informacion-direccion">
               <div id="desplegable-direccion" class="desplegable">
-                <div id="cabecera-direccion" class="cabecera d-flex align-items-center">
+                <div id="cabecera-direccion"
+                  class="cabecera d-flex align-items-center">
                   <h2 class="flex-grow-1 text-center m-0">Direccion</h2>
                   <img id="flecha-direccion" class="flecha me-5 ms-auto"
                     src="./img/flecha.png" alt="Flecha">
                 </div>
                 <div id="detalles-direccion" class="detalles p-0">
-                  <form method="POST" th:action="@{/direccion/registrar/__${usuario.id}__}"  class="formulario">
-                    <input type="hidden" name="id" th:value="${usuario.id}">
-                    <label for="provincia">Provincia:</label>
-                    <input type="text" id="provincia" name="provincia"
-                      >
-                    <label for="localidad">Localidad:</label>
-                    <input type="text" id="localidad" name="localidad"
-                      >
-                    <label for="calle">Calle:</label>
-                    <input type="text" id="calle" name="calle"
-                      >
-                    <label for="numero">Número:</label>
-                    <input type="text" id="numero" name="numero"
-                      >
-                      <button type="submit" id="boton-guardar3">Guardar Cambios</button>
-                  </form>
+                  <div id="tabla">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center" scope="col">Localidad</th>
+                          <th class="text-center" scope="col">Provincia</th>
+                          <th class="text-center" scope="col">Calle</th>
+                          <th class="text-center" scope="col">Ciudad</th>
+                          <th class="text-center" scope="col">Modificar</th>
+                          <th class="text-center" scope="col">Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody th:each="direccion : ${usuario.direcciones}">
+                        <tr>
+                          <td class="text-center"
+                            th:text="${direccion.localidad}"></td>
+                          <td class="text-center"
+                            th:text="${direccion.provincia}"></td>
+                          <td class="text-center" th:text="${direccion.id}"></td>
+                          <td class="text-center" th:text="${direccion.numero}"></td>
+                          <td class="text-center">
+                            <a href="#formDireccion" class="enlaceModificar"
+                              th:attr="onclick=|mostrarFormularioModificar('${direccion.localidad}','${direccion.provincia}','${direccion.calle}','${direccion.numero}','${direccion.id}')|">
+                              <img src="./img/edit.png" alt="imagen edit" />
+                            </a>
+                          </td>
+                          <td class="text-center">
+                            <form th:action="@{/direccion/eliminar/__${usuario.id}__/__${direccion.id}__}" method="POST">
+                              <button type="submit" class="enlaceEliminar">
+                                <img src="./img/delete.png" alt="imagen delete" />
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="button" id="btnDireccion"
+                    th:attr="onclick=|mostrarFormularioRegistro('${usuario.id}')|">Agregar
+                      Dirección</button>
+                  </div>             
                 </div>
               </div>
             </div>
 
-            <!-- <div class="informacion-direccion">
-              <div id="desplegable-direccion" class="desplegable">
-                <div id="cabecera-direccion"
-                  class="cabecera d-flex align-items-center">
-                  <h2 class="flex-grow-1 text-center m-0">Información de
-                    Dirección</h2>
-                  <img id="flecha-direccion" class="flecha me-5 ms-auto"
-                    src="./img/flecha.png" alt="Flecha">
-                </div>
-                <div id="detalles-direccion" class="detalles p-0"> 
-                  <div th:if="${#lists.isEmpty(usuario.direcciones)}">
-                    <p>No hay direcciones asociadas.</p>
-                    <button type="button" id="btnDireccion" onclick="mostrarFormulario()">Agregar
-                      Dirección</button>
-                  </div>
-                   <form method="POST">
-                    <div th:if="${error}" class="alert alert-danger" role="alert">
-                      <p th:text="${error}"></p>
-                    </div>
-                    <input type="hidden" name="idUsuario" th:value="${usuario.id}">
-                    <label for="provincia">Provincia:</label>
-                    <input type="text" id="provincia" name="provincia"
-                      th:value="">
-                    <label for="localidad">Localidad:</label>
-                    <input type="text" id="localidad" name="localidad"
-                      th:value="">
-                    <label for="calle">Calle:</label>
-                    <input type="text" id="calle" name="calle"
-                      th:value="">
-                    <label for="numero">Número:</label>
-                    <input type="text" id="numero" name="numero"
-                      th:value="">
-                      <button type="submit" id="boton-guardar3">Guardar Cambios</button>
-                  </form>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- <div class="informacion-direccion">
-              <div id="desplegable-direccion" class="desplegable">
-                <div id="cabecera-direccion"
-                  class="cabecera d-flex align-items-center">
-                  <h2 class="flex-grow-1 text-center m-0">Información de
-                    Dirección</h2>
-                  <img id="flecha-direccion" class="flecha me-5 ms-auto"
-                    src="./img/flecha.png" alt="Flecha">
-                </div>        
-                  <form method="POST" th:action="@{/direccion/registrar/__${usuario.id}__}" id="formulario-direccion" class="formulario">
-                    <div id="detalles-direccion" class="detalles p-0">
-                    <input type="hidden" name="idUsuario" th:value="${usuario.id}">
-                    <label for="provincia">Provincia:</label>
-                    <input type="text" id="provincia" name="provincia"
-                      th:value="${direccion.provincia != null ? direccion.provincia : ''}">
-                    <label for="localidad">Localidad:</label>
-                    <input type="text" id="localidad" name="localidad"
-                      th:value="${direccion.localidad != null ? direccion.localidad : ''}">
-                    <label for="calle">Calle:</label>
-                    <input type="text" id="calle" name="calle"
-                      th:value="${direccion.calle != null ? direccion.calle : ''}">
-                    <label for="numero">Número:</label>
-                    <input type="text" id="numero" name="numero"
-                      th:value="${direccion.numero != null ? direccion.numero : ''}">
-                      <button type="submit" id="boton-guardar3">Guardar Cambios</button>
-                    </div>
-                  </form>
-              
-                
-              </div>
-            </div> -->
-
-            <div id="desplegable-contrasena" class="desplegable rounded-modificar-abajo">
+            <div id="desplegable-contrasena"
+              class="desplegable rounded-modificar-abajo">
               <div id="cabecera-contrasena"
                 class="cabecera d-flex align-items-center">
                 <h2 class="flex-grow-1 text-center m-0">Administrar Contraseñas</h2>
@@ -247,7 +189,7 @@
                   src="./img/flecha.png" alt="Flecha">
               </div>
               <div id="detalles-contrasena" class="detalles p-0">
-                <form id="formulario-contrasena" class="formulario">
+                <form id="formContrasena" class="formulario">
                   <label for="contrasena-actual">Contraseña Actual:</label>
                   <input type="password" id="contrasena-actual"
                     name="contrasena-actual" required>
@@ -259,8 +201,7 @@
                   <label for="repetir-contrasena">Repetir Nueva Contraseña:</label>
                   <input type="password" id="repetir-contrasena"
                     name="repetir-contrasena" required>
-
-                    <button type="submit" id="boton-guardar4">Guardar Cambios</button>
+                  <button type="submit" id="boton-guardar4">Guardar Cambios</button>
                 </form>
               </div>
             </div>
@@ -269,12 +210,9 @@
           <div class="col col-sm-1 col-md col-lg"></div>
         </div>
       </div>
-
-   
     </main>
 
     <footer th:replace="/fragments/footer :: footer" </footer></footer>
-
     <script src="../../js/color-modes.js"></script>
     <script src="../../js/borrar.js"></script>
     <script src="../../js/bootstrap.bundle.min.js"></script>

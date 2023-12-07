@@ -173,6 +173,40 @@ public class ClienteService implements UserDetailsService {
     return null;
   }
 
+  @Transactional
+  public void modificar(Long id, Cliente clienteActualizado) {
+
+    Optional<Cliente> clienteResp = clienteRepository.buscarPorId(id);
+
+    if (clienteResp.isPresent()) {
+
+      Cliente cliente = clienteResp.get();
+      
+      if (clienteActualizado.getNombre() != null) {
+        cliente.setNombre(clienteActualizado.getNombre());
+      }
+      if (clienteActualizado.getEmail() != null) {
+        cliente.setEmail(clienteActualizado.getEmail());
+      }
+      if (clienteActualizado.getAlta() != null) {
+        cliente.setAlta(clienteActualizado.getAlta());
+      }
+      if (clienteActualizado.getRole() != null) {
+        cliente.setRole(clienteActualizado.getRole());
+      }
+      if (clienteActualizado.getFoto() != null) {
+        cliente.setFoto(clienteActualizado.getFoto());
+      }
+      if (clienteActualizado.getPassword() != null) {
+        cliente.setPassword(clienteActualizado.getPassword());
+      }
+      
+      clienteRepository.save(cliente);
+
+    }
+
+  }
+
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 

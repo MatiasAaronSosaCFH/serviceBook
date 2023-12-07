@@ -413,7 +413,6 @@ footer {
 
 .desplegable {
   border: 1px solid #ccc;
-  cursor: pointer;
   overflow: hidden;
   transition: transform 0.3s;
   width: 100%;
@@ -422,6 +421,7 @@ footer {
 .cabecera {
   background-color: #ccc;
   color: #000000;
+  cursor: pointer;
   height: 120px;
   transition: background-color 0.3s, transform 0.3s;
 }
@@ -578,6 +578,27 @@ footer {
   color: #fff;
   margin: 25px 15%;
   width: 70%;
+}
+
+.enlaceModificar img {
+  height: 20px;
+  width: 20px;
+}
+
+.enlaceEliminar img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.enlaceEliminar {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  outline: none;
+  padding: 0;
+  width: 20px;
 }
 
 @media (max-width: 576px) {

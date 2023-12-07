@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.servicebook.repository.ProveedorRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,18 +41,22 @@ public class DireccionService {
     direccion.setNumero(numero);
     direccion.setLocalidad(localidad);
     direccion.setProvincia(provincia);
-    
+
     Optional<Cliente> resCliente = clienteRepository.buscarPorId(idUsuario);
     Optional<Proveedor> resProveedor = proveedorRepository.buscarPorId(idUsuario);
-    
-    if(resCliente.isPresent()){
-      
-      direccion.setCliente(resCliente.get());
-    
-    } else if(resProveedor.isPresent()){
-    
-      direccion.setProveedor(resProveedor.get());
-      
+
+    if (resCliente.isPresent()) {
+
+      Cliente cliente = resCliente.get();
+      direccion.getClientes().add(cliente);
+      cliente.getDirecciones().add(direccion);
+
+    } else if (resProveedor.isPresent()) {
+
+      Proveedor proveedor = resProveedor.get();
+      direccion.getProveedores().add(proveedor);
+      proveedor.getDirecciones().add(direccion);
+
     }
 
     direccionRepository.save(direccion);
@@ -69,6 +74,13 @@ public class DireccionService {
 
     }
 
+  }
+  
+  @Transactional
+  public void eliminarPorCliente(Long idCliente, Long idDireccion) {
+
+    direccionRepository.deleteClientesDirecciones(idCliente, idDireccion);
+    
   }
 
   @Transactional(readOnly = true)
@@ -99,35 +111,35 @@ public class DireccionService {
 
     Optional<Direccion> respuesta = direccionRepository.findById(id);
 
-        if (respuesta.isPresent()) {
-            
-           direccionRepository.baja(id);
-          
-        } else {
-        
-          throw new MiException("No existe la dirección con el id " + id);
-        
-        }
+    if (respuesta.isPresent()) {
+
+      direccionRepository.baja(id);
+
+    } else {
+
+      throw new MiException("No existe la dirección con el id " + id);
+
+    }
 
   }
-  
+
   @Transactional
   public void alta(Long id) throws MiException {
 
     Optional<Direccion> respuesta = direccionRepository.findById(id);
 
-        if (respuesta.isPresent()) {
-            
-           direccionRepository.alta(id);
-          
-        } else {
-        
-          throw new MiException("No existe la dirección con el id " + id);
-        
-        }
+    if (respuesta.isPresent()) {
+
+      direccionRepository.alta(id);
+
+    } else {
+
+      throw new MiException("No existe la dirección con el id " + id);
+
+    }
 
   }
-  
+
   @Transactional
   public void modificar(Long id, String calle, String numero, String localidad, String provincia) throws MiException {
 
@@ -149,13 +161,13 @@ public class DireccionService {
       throw new MiException("La provincia no puede ser nula o estar vacía");
 
     }
-    
+
     if (localidad.trim().isEmpty() || localidad == null) {
 
       throw new MiException("La localidad no puede ser nula o estar vacía");
 
     }
-    
+
     if (calle.trim().isEmpty() || calle == null) {
 
       throw new MiException("La calle no puede ser nula o estar vacía");
@@ -169,15 +181,32 @@ public class DireccionService {
     }
   }
 
-  public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion){
+  public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion) {
     Direccion dire = new Direccion();
     dire.setProvincia(direccion.provincia());
     dire.setNumero(direccion.numero());
     dire.setCalle(direccion.calle());
     dire.setAlta(true);
     dire.setLocalidad(direccion.localidad());
-    if(direccion.role().equalsIgnoreCase("USER")) dire.setCliente(clienteRepository.buscarPorId(direccion.usuario()).orElse(null));
-    else dire.setProveedor(proveedorRepository.buscarPorId(direccion.usuario()).orElse(null));
+
+    List<Cliente> clientes = new ArrayList<>();
+    List<Proveedor> proveedores = new ArrayList<>();
+
+    if (direccion.role().equalsIgnoreCase("USER")) {
+      Cliente cliente = clienteRepository.buscarPorId(direccion.usuario()).orElse(null);
+      if (cliente != null) {
+        clientes.add(cliente);
+      }
+    } else {
+      Proveedor proveedor = proveedorRepository.buscarPorId(direccion.usuario()).orElse(null);
+      if (proveedor != null) {
+        proveedores.add(proveedor);
+      }
+    }
+
+    dire.setClientes(clientes);
+    dire.setProveedores(proveedores);
+
     return dire;
   }
 }

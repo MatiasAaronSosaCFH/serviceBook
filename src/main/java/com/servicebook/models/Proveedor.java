@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -42,4 +43,12 @@ public class Proveedor extends Usuario {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedor")
     private List<Trabajo> trabajosRealizados;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "proveedores_direcciones",
+        joinColumns = @JoinColumn(name = "proveedor_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "direccion_id", referencedColumnName = "id")
+    )
+    private List<Direccion> direcciones = new ArrayList<>();
 }

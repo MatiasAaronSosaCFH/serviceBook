@@ -12,6 +12,7 @@ import com.servicebook.service.DireccionService;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class DireccionController {
 
   @Autowired
   private DireccionService direccionService;
-  
+
   @Autowired
   private ClienteService clienteService;
 
@@ -67,13 +68,8 @@ public class DireccionController {
   @PostMapping("/registrar/{id}")
   public String registrar(@PathVariable Long id, @RequestParam String calle, @RequestParam String numero, @RequestParam String localidad,
           @RequestParam String provincia, HttpSession session, RedirectAttributes redirectAttributes) {
-    System.out.println(provincia);
-    System.out.println(numero);
-    System.out.println(calle);
-    System.out.println(localidad);
-    System.out.println(id);
+
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-    System.out.println(usuario.getId());
 
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
@@ -94,13 +90,47 @@ public class DireccionController {
     try {
       direccionService.registrar(id, calle, numero, localidad, provincia);
       redirectAttributes.addFlashAttribute("exito", "La dirección fue guardada correctamente");
-      return "redirect:/inicio";
+      return "redirect:/modificar";
     } catch (MiException ex) {
-      redirectAttributes.addFlashAttribute("error", ex.getMessage());
-       return "redirect:/modificar";
+      redirectAttributes.addFlashAttribute("errorDireccion", ex.getMessage());
+      redirectAttributes.addFlashAttribute("provincia", provincia);
+      redirectAttributes.addFlashAttribute("localidad", localidad);
+      redirectAttributes.addFlashAttribute("calle", calle);
+      redirectAttributes.addFlashAttribute("numero", numero);
+      return "redirect:/modificar";
     }
 
-   
+  }
+
+  @PostMapping("/eliminar/{idCliente}/{idDireccion}")
+  public String bajaDireccion(@PathVariable Long idCliente, @PathVariable Long idDireccion ,RedirectAttributes redirectAttributes, HttpSession session) {
+
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId();
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          redirectAttributes.addFlashAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", proveedor);
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", admin);
+      }
+    }
+    
+    try {
+      direccionService.eliminarPorCliente(idCliente, idDireccion);
+      redirectAttributes.addFlashAttribute("exito", "La dirección fue eliminada correctamente");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+    }
+
+    return "redirect:/modificar";
 
   }
 

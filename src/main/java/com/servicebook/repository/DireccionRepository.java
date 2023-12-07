@@ -1,7 +1,9 @@
 
 package com.servicebook.repository;
 
+import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
+import com.servicebook.models.Proveedor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface DireccionRepository extends JpaRepository<Direccion, Long> {
@@ -53,15 +56,20 @@ public interface DireccionRepository extends JpaRepository<Direccion, Long> {
   @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.id = :id")
   Optional<Direccion> buscarPorId(@Param("id") Long id);
 
-  @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.cliente = :id")
-  List<Direccion> buscarDireccionesPorCLiente(@Param("id")Long id);
+  @Query("SELECT d FROM Direccion d WHERE d.alta = true AND :cliente MEMBER OF d.clientes")
+  List<Direccion> buscarDireccionesPorCliente(@Param("cliente") Cliente cliente);
 
-  @Query("SELECT d FROM Direccion d WHERE d.alta = true AND d.proveedor = :id")
-  List<Direccion> buscarDireccionesPorProveedor(@Param("id")Long id);
+  @Query("SELECT d FROM Direccion d WHERE d.alta = true AND :proveedor MEMBER OF d.proveedores")
+  List<Direccion> buscarDireccionesPorProveedor(@Param("proveedor") Proveedor proveedor);
 
   @Query("SELECT d FROM Direccion d WHERE d.provincia = :provincia")
   List<Direccion> buscarPorProvincia(@Param("provincia") String provincia);
 
   @Query("SELECT d FROM Direccion d WHERE d.localidad = :localidad")
   List<Direccion> buscarPorLocalidad(@Param("localidad") String localidad);
+  
+  @Modifying
+  @Transactional
+  @Query(value = "DELETE FROM clientes_direcciones WHERE cliente_id = :clienteId AND direccion_id = :direccionId", nativeQuery = true)
+  void deleteClientesDirecciones(Long clienteId, Long direccionId);
 }

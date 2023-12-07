@@ -37,8 +37,4 @@ public abstract class Usuario {
 	protected Boolean alta = true;
 	@Column(name = "password")
 	protected String password;
-	@OneToMany
-	protected List<Direccion> direccion;
-
-
 }
