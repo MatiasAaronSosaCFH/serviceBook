@@ -8,8 +8,15 @@
             class="col-lg-4 col-md d-flex justify-content-between align-items-center">
             <div class="row w-100 g-0">
               <div
-                class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-start my-2 my-md-0 ms-0 ms-md-4 text-center">
+                class="col-md-6 col-xs-12 d-flex justify-content-center align-items-center justify-content-md-start my-2 my-md-0 ms-0 ms-md-4 text-center">
                 <a class="navbar-brand m-0 text-white" href="#">ServiceBook</a>
+
+                <a
+                  sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
+                  th:if="${#httpServletRequest.getRequestURI() != '/'}"
+                  href="/inicio"
+                  class="home ms-md-3 mb-md-0 mb-2 ms-0 mt-md-0 mt-2"
+                  type="submit"><img src="../../img/home.png" alt="home"></a>
               </div>
               <div
                 class="col-md-6 col-xs-12 d-flex justify-content-center justify-content-md-end mb-3 mb-md-0">
@@ -39,7 +46,8 @@
                             <input class="form-control me-2" type="search"
                               placeholder="Buscar" name="buscar" />
                             <button class="btnBuscar"
-                              type="submit"><img src="./img/lupa.png" alt="lupa"></button>
+                              type="submit"><img src="../../img/lupa.png"
+                                alt="lupa"></button>
                           </div>
                           <div class="col-1 col-sm-2 col-md-0"></div>
                         </div>
@@ -48,6 +56,28 @@
                   </div>
                   <div
                     class="col-lg-6 col-md-6 d-flex flex-column flex-md-row justify-content-md-end justify-content-center align-items-center mb-3 mb-md-0">
+                    <div class="me-md-3 me-1"
+                      id="perfilDropdown2"
+                      sec:authorize="hasAnyRole('ADMIN')">
+                      <ul class="navbar-nav mb-lg-0">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle p-0 logo-admin" href="#"
+                            role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">.
+                            <img
+                              src="../../img/admin.png"
+                              alt="menu admin">
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item"
+                                href="/admin/cliente/lista">Panel de Control</a></li>
+                            <li><a class="dropdown-item"
+                                href="/profesion/registrar" sec:authorize="hasAnyRole('ADMIN')">
+                                Registrar Profesion</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
                     <li th:if="${#httpServletRequest.getRequestURI() == '/'}"
                       class="nav-item">
                       <button class="btn me-0 me-md-4 btnLogin"
@@ -58,7 +88,7 @@
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
                       th:if="${#httpServletRequest.getRequestURI() != '/'}"
                       th:text="'Hola, ' + ${usuario.nombre}"></li>
-                    <div class="me-md-3 me-0"
+                    <div class="me-md-3 me-1"
                       id="perfilDropdown"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')">
                       <ul class="navbar-nav mb-lg-0">
@@ -66,15 +96,16 @@
                           <a class="nav-link dropdown-toggle p-0" href="#"
                             role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">.
-                            <!-- <img
-                              th:src="${usuario.foto != null} ? ${usuario.foto.url} : './img/usuario-de-perfil.png'"
-                              alt="foto perfil" class="imagen-perfil-miniatura"> -->
+                            <img
+                              th:src="${usuario.foto != null} ? ${usuario.foto.url} : '../../img/usuario-de-perfil.png'"
+                              alt="foto perfil" class="imagen-perfil-miniatura">
                           </a>
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item"
                                 href="/modificar">Modificar Datos</a></li>
                             <li><a class="dropdown-item"
-                                href="/proveedor/registrar/id">Solicitar ser
+                                href="/proveedor/registrar/id"
+                                sec:authorize="hasAnyRole('USER')">Solicitar ser
                                 Proveedor</a></li>
                             <li><a class="dropdown-item" id="enlace-borrar"
                                 href="#">Eliminar Cuenta</a></li>

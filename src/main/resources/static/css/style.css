@@ -9,7 +9,10 @@
 
 body {
   background-color: #dcdcdc;
+  display: grid;
   font-family: Lato, Helvetica, sans-serif;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
 }
 
 :root {
@@ -465,6 +468,13 @@ footer {
   padding: 20px;
 }
 
+.formulario2 {
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
 .foto-usuario {
   background-color: #ccc;
   height: 320px;
@@ -599,6 +609,77 @@ footer {
   outline: none;
   padding: 0;
   width: 20px;
+}
+
+select {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.presentacion {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.contenedor-disponible {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.disponible {
+  margin-left: 2px !important;
+  width: 6% !important;
+}
+
+select[multiple] {
+  padding: 5px;
+}
+
+select[multiple]:hover {
+  cursor: pointer; 
+}
+
+select[multiple]:focus {
+  border-color:  #00b6cd; 
+}
+
+.btnProfesion {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.home {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0; 
+}
+
+.home img {
+  height: 23px;
+}
+
+.logo-admin {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.logo-admin img {
+  height: 23px;
+}
+
+td img {
+  height: 20px;
+}
+
+td {
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media (max-width: 576px) {

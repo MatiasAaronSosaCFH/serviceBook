@@ -49,7 +49,7 @@ public void bajaProveedor(Long id) {
     
   }
   
- public void crearProveedor(Long idCliente, String emailDeContacto, String numeroDeContacto, List<Profesion> profesiones, String presentacion, Integer precioPorHora, Boolean disponible, MultipartFile archivo){
+ public Proveedor crearProveedor(Long idCliente, String emailDeContacto, String numeroDeContacto, List<Profesion> profesiones, String presentacion, Integer precioPorHora, Boolean disponible){
 	Cliente cliente = clienteRepository.findById(idCliente).orElse(null);
 	Proveedor proveedor = new Proveedor();
 	//proveedor.setId(idCliente);
@@ -68,11 +68,12 @@ public void bajaProveedor(Long id) {
 	proveedor.setPrecioPorHora(precioPorHora);
 	
 //	proveedor.setFoto((FotoUsuario) archivo);
-	proveedor.setAprovacion(false);
+	proveedor.setAprobacion(false);
 	proveedor.setDisponible(disponible);
 
 	proveedorRepository.save(proveedor);
 	
+        return proveedor;
 } 
   
   

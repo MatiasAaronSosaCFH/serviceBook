@@ -15,22 +15,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/profesion")
 public class ProfesionController {
 
-    @Autowired
-    private ProfesionService profesionService;
+  @Autowired
+  private ProfesionService profesionService;
 
-	 @GetMapping("/registrar")
-	public String crearProfesion(HttpSession session, ModelMap map){
-		
-		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-		map.addAttribute("usuario", usuario);
-		return "profesion_registro.html";
-	}
-	
-	 @PostMapping("/registrar")
-	public String crearProfesion(@RequestParam String nombre){
-		profesionService.crearProfesion(nombre);
-		return "redirect:registrar";
-	}	
-		 
-	 
+  @GetMapping("/registrar")
+  public String crearProfesion(HttpSession session, ModelMap map) {
+
+    Cliente usuario = (Cliente) session.getAttribute("usuariosession");
+    map.addAttribute("usuario", usuario);
+    return "profesion_registro.html";
+  }
+
+  @PostMapping("/registrar")
+  public String crearProfesion(@RequestParam String nombre, ModelMap map) {
+    try {
+      profesionService.crearProfesion(nombre);
+      map.addAttribute("exito", "Se registro la profesión correctamente!");
+    } catch (Exception e) {
+      map.addAttribute("error", "Error: no se pudo registrar la profesión");
+    }
+    return "redirect:registrar";
+
+  }
+
 }

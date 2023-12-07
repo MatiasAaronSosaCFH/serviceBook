@@ -21,8 +21,6 @@ import com.servicebook.service.CloudinaryService;
 import com.servicebook.service.FotoUsuarioService;
 import com.servicebook.service.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/imagenes")
@@ -51,13 +50,14 @@ private ClienteRepository clienteRepository;
 private ProveedorRepository proveedorRepository;
 
     @PostMapping("/upload")
-    public String upload(@RequestParam MultipartFile multipartFile, HttpSession session) throws IOException {
+    public String upload(@RequestParam MultipartFile multipartFile, HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
         BufferedImage entry = ImageIO.read(multipartFile.getInputStream());
 
          if (entry == null) {
         
-          return "Imagen Nula";
-        
+          redirectAttributes.addFlashAttribute("error", "Imagen Nula"); 
+           
+          return "redirect:/modificar";        
         }
         
         Map resultado = cloudinaryService.subirFoto(multipartFile);
@@ -77,18 +77,11 @@ private ProveedorRepository proveedorRepository;
 			 clienteRepository.save(cliente);
           //clienteService.modificarFoto(cliente);
         
-        } else {
-        
-          Proveedor proveedor = proveedorService.findById(usuario.getId());
-          proveedor.setFoto(foto);
-			 proveedorRepository.save(proveedor);
-          //proveedorService.modificarFoto(proveedor);
-          
-        }
+        } 
      
         
-        
-        return "";
+        redirectAttributes.addFlashAttribute("exito", "imagen registrada con éxtio!");
+        return "redirect:/modificar";
     }
 
 //    @DeleteMapping("/delete/{id}")

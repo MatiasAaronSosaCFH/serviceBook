@@ -146,7 +146,7 @@
                   </div>
                   <div id="perfil-foto" class="foto-perfil">
                     <img
-                      th:src="${usuario.foto != null} ? ${usuario.foto.url} : './img/usuario-de-perfil.png'"
+                      th:src="${usuario.foto != null} ? ${usuario.foto.url} : '../../img/usuario-de-perfil.png'"
                       alt="Foto de perfil" id="imagen-perfil">
                   </div>
                   <input type="file" id="imagen" name="multipartFile"
@@ -201,7 +201,7 @@
                           <th class="text-center" scope="col">Localidad</th>
                           <th class="text-center" scope="col">Provincia</th>
                           <th class="text-center" scope="col">Calle</th>
-                          <th class="text-center" scope="col">Ciudad</th>
+                          <th class="text-center" scope="col">Numero</th>
                           <th class="text-center" scope="col">Modificar</th>
                           <th class="text-center" scope="col">Eliminar</th>
                         </tr>
@@ -212,7 +212,7 @@
                             th:text="${direccion.localidad}"></td>
                           <td class="text-center"
                             th:text="${direccion.provincia}"></td>
-                          <td class="text-center" th:text="${direccion.id}"></td>
+                          <td class="text-center" th:text="${direccion.calle}"></td>
                           <td class="text-center" th:text="${direccion.numero}"></td>
                           <td class="text-center">
                             <a href="#formDireccion" class="enlaceModificar"

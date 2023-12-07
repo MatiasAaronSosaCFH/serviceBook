@@ -62,11 +62,13 @@ public class PortalController {
   @GetMapping("/inicio")
   public String inicio(HttpSession session, ModelMap model) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
-        Cliente cliente = (Cliente) session.getAttribute("usuariosession");
-        model.addAttribute("usuario", cliente);
+        Long clienteId = usuario.getId(); 
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          model.addAttribute("usuario", clienteDto);
+        }
       } else if (usuario.getRole() == Role.PROVEEDOR) {
         Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
         model.addAttribute("usuario", proveedor);
