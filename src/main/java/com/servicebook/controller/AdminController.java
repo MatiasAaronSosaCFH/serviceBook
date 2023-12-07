@@ -48,7 +48,10 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 }
 
 	@GetMapping("/cambiarEstado/{id}")
-	public String cambiarEstado(@PathVariable Long id, ModelMap modelo){
+	public String cambiarEstado(@PathVariable Long id, ModelMap modelo, HttpSession session){
+		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
+		modelo.put("usuario", usuario);	
+		
 		modelo.put("cliente", clienteService.findById(id));
 		clienteService.cambiarEstado(id);
 			List<Cliente> clientes = clienteService.findAll();
@@ -57,7 +60,11 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 	}
         
 	@GetMapping("/rotarRol/{id}")
-	public String rotarRol(@PathVariable Long id, ModelMap modelo){
+	public String rotarRol(@PathVariable Long id, ModelMap modelo, HttpSession session){
+		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
+		modelo.put("usuario", usuario);
+		
+		
 		modelo.put("cliente", clienteService.findById(id));
 		clienteService.rotarRol(id);
 		Role role = clienteService.findById(id).getRole();
@@ -78,7 +85,9 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/perfil/{id}")
-	public String modificarPerfil(@PathVariable Long id, ModelMap modelo){
+	public String modificarPerfil(@PathVariable Long id, ModelMap modelo, HttpSession session){
+		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
+		modelo.put("usuario", usuario);
 		Cliente cliente = clienteService.findById(id);
 		modelo.put("cliente", cliente);
 		modelo.addAttribute("roles", Role.values() );
