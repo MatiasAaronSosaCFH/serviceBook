@@ -102,7 +102,6 @@ function abrirDireccion() {
     detalles.style.display = "block";
     flecha.style.transform = "rotate(180deg)";
   }
-
   const formDireccion = document.getElementById("formDireccion");
 
   if (formDireccion) {
@@ -110,7 +109,7 @@ function abrirDireccion() {
   }
 }
 
-function abrirContrasena() {
+function abrirPassword() {
   const detalles = document.querySelector("#detalles-contrasena");
   const flecha = document.querySelector("#flecha-contrasena");
 
@@ -156,13 +155,13 @@ function mostrarFormularioModificar(localidad, provincia, calle, numero, id) {
   form.id = "formDireccion";
   form.className = "formulario";
 
-  form.insertAdjacentHTML(
-    "afterbegin",
-    '<div th:if="${errorDireccion}" th:class="${\'alert alert-danger\'}"' +
-      'role="alert">' +
-      '<p th:text="${errorDireccion}"></p>' +
-      '</div>'
-  );
+  // form.insertAdjacentHTML(
+  //   "afterbegin",
+  //   '<div th:if="${errorDireccionRegistrar}" th:class="${\'alert alert-danger\'}"' +
+  //     'role="alert">' +
+  //     '<p th:text="${errorDireccionRegistrar}"></p>' +
+  //     '</div>'
+  // );
 
   var localidadLabel = document.createElement("label");
   localidadLabel.htmlFor = "localidad";
@@ -244,13 +243,13 @@ function mostrarFormularioRegistro(id) {
   form.id = "formDireccion";
   form.className = "formulario";
 
-  form.insertAdjacentHTML(
-    "afterbegin",
-    '<div th:if="${errorDireccion}" th:class="${\'alert alert-danger\'}"' +
-      'role="alert">' +
-      '<p th:text="${errorDireccion}"></p>' +
-      '</div>'
-  );
+  // form.insertAdjacentHTML(
+  //   "afterbegin",
+  //   '<div th:if="${errorDireccion}" th:class="${\'alert alert-danger\'}"' +
+  //     'role="alert">' +
+  //     '<p th:text="${errorDireccion}"></p>' +
+  //     '</div>'
+  // );
 
   var localidadLabel = document.createElement("label");
   localidadLabel.htmlFor = "localidad";
@@ -312,4 +311,18 @@ function mostrarFormularioRegistro(id) {
   var tabla = document.getElementById("tabla");
 
   detalleDireccionDiv.insertBefore(form, tabla.nextSibling);
+}
+
+function insertarError(error){
+
+  var form = document.getElementById("formDireccion");
+
+  form.insertAdjacentHTML(
+    "afterbegin",
+    '<div class="alert alert-danger"' +
+      'role="alert">' +
+      `<p>${error}</p>` +
+      '</div>'
+  );
+
 }

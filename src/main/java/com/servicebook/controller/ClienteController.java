@@ -83,10 +83,9 @@ public class ClienteController {
 //    }
 //    return "redirect:/inicio";
 //  }
-  
   @PostMapping("/modificar/{id}")
   public String modificar(@PathVariable Long id, @ModelAttribute Cliente cliente, RedirectAttributes redirectAttributes, HttpSession session) {
-    
+
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
     if (usuario != null) {
@@ -108,8 +107,10 @@ public class ClienteController {
     try {
       clienteService.modificar(id, cliente);
       redirectAttributes.addFlashAttribute("exito", "Cliente modificado correctamente");
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("error", e.getMessage());
+    } catch (MiException ex) {
+      redirectAttributes.addFlashAttribute("errorBasica", ex.getMessage());
+      redirectAttributes.addFlashAttribute("nombre", cliente.getNombre());
+      redirectAttributes.addFlashAttribute("email", cliente.getEmail());
       return "redirect:/modificar";
     }
     return "redirect:/modificar";
@@ -147,6 +148,48 @@ public class ClienteController {
     return "redirect:/logout";
 
   }
-  
+
+  @PostMapping("/modificarPassword/{id}")
+  public String cambiarPassword(
+          @RequestParam("passwordActual") String passwordActual,
+          @RequestParam("nuevaPassword") String nuevaPassword,
+          @RequestParam("repetirPassword") String repetirPassword,
+          @PathVariable Long id,
+          RedirectAttributes redirectAttributes,
+          HttpSession session) {
+
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId();
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          redirectAttributes.addFlashAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", proveedor);
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", admin);
+      }
+    }
+
+    try {
+      clienteService.modificarPassword(id, passwordActual, nuevaPassword, repetirPassword);
+      redirectAttributes.addFlashAttribute("exito", "Contraseña actualizada exitosamente.");
+    } catch (MiException ex) {
+      redirectAttributes.addFlashAttribute("errorPassword", ex.getMessage());
+      redirectAttributes.addFlashAttribute("passwordActual", passwordActual);
+      redirectAttributes.addFlashAttribute("nuevaPassword", nuevaPassword);
+      redirectAttributes.addFlashAttribute("repetirPassword", repetirPassword);
+
+      return "redirect:/modificar";
+    }
+
+    return "redirect:/modificar";
+
+  }
 
 }

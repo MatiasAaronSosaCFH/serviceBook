@@ -75,12 +75,12 @@ public class DireccionService {
     }
 
   }
-  
+
   @Transactional
   public void eliminarPorCliente(Long idCliente, Long idDireccion) {
 
     direccionRepository.deleteClientesDirecciones(idCliente, idDireccion);
-    
+
   }
 
   @Transactional(readOnly = true)
@@ -143,28 +143,36 @@ public class DireccionService {
   @Transactional
   public void modificar(Long id, String calle, String numero, String localidad, String provincia) throws MiException {
 
-    Direccion direccion = buscarPorId(id);
+    validar(calle, numero, localidad, provincia);
 
-    direccion.setCalle(calle);
-    direccion.setLocalidad(localidad);
-    direccion.setNumero(numero);
-    direccion.setProvincia(provincia);
+    Optional<Direccion> direccionResp = direccionRepository.buscarPorId(id);
 
-    direccionRepository.save(direccion);
+    if (direccionResp.isPresent()) {
+
+      Direccion direccion = direccionResp.get();
+      
+      direccion.setCalle(calle);
+      direccion.setLocalidad(localidad);
+      direccion.setNumero(numero);
+      direccion.setProvincia(provincia);
+      
+      direccionRepository.save(direccion);
+
+    }
 
   }
 
   public void validar(String calle, String numero, String localidad, String provincia) throws MiException {
 
-    if (provincia.trim().isEmpty() || provincia == null) {
-
-      throw new MiException("La provincia no puede ser nula o estar vacía");
-
-    }
-
     if (localidad.trim().isEmpty() || localidad == null) {
 
       throw new MiException("La localidad no puede ser nula o estar vacía");
+
+    }
+
+    if (provincia.trim().isEmpty() || provincia == null) {
+
+      throw new MiException("La provincia no puede ser nula o estar vacía");
 
     }
 

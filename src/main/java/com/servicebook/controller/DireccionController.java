@@ -92,10 +92,11 @@ public class DireccionController {
       redirectAttributes.addFlashAttribute("exito", "La dirección fue guardada correctamente");
       return "redirect:/modificar";
     } catch (MiException ex) {
-      redirectAttributes.addFlashAttribute("errorDireccion", ex.getMessage());
+      redirectAttributes.addFlashAttribute("errorDireccionRegistrar", ex.getMessage());
       redirectAttributes.addFlashAttribute("provincia", provincia);
       redirectAttributes.addFlashAttribute("localidad", localidad);
       redirectAttributes.addFlashAttribute("calle", calle);
+      redirectAttributes.addFlashAttribute("id", id);
       redirectAttributes.addFlashAttribute("numero", numero);
       return "redirect:/modificar";
     }
@@ -127,11 +128,49 @@ public class DireccionController {
       direccionService.eliminarPorCliente(idCliente, idDireccion);
       redirectAttributes.addFlashAttribute("exito", "La dirección fue eliminada correctamente");
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      redirectAttributes.addFlashAttribute("errorDireccion", e.getMessage());
     }
 
     return "redirect:/modificar";
 
   }
 
+  @PostMapping("/modificar/{id}")
+  public String modificar(@PathVariable Long id, @RequestParam String localidad, @RequestParam String provincia, @RequestParam String calle , @RequestParam String numero, RedirectAttributes redirectAttributes, HttpSession session) {
+
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId();
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          redirectAttributes.addFlashAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", proveedor);
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        redirectAttributes.addFlashAttribute("usuario", admin);
+      }
+    }
+    
+    try {
+      direccionService.modificar(id, calle, numero, localidad, provincia);
+      redirectAttributes.addFlashAttribute("exito", "La dirección fue modificada correctamente");
+    } catch (MiException ex) {
+      redirectAttributes.addFlashAttribute("errorDireccionModificar", ex.getMessage());
+      redirectAttributes.addFlashAttribute("provincia", provincia);
+      redirectAttributes.addFlashAttribute("localidad", localidad);
+      redirectAttributes.addFlashAttribute("calle", calle);
+      redirectAttributes.addFlashAttribute("id", id);
+      redirectAttributes.addFlashAttribute("numero", numero);
+      return "redirect:/modificar";
+    }
+
+    return "redirect:/modificar";
+
+  }
+  
 }

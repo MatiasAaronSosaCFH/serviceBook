@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -34,7 +35,10 @@ public class ClienteService implements UserDetailsService {
 
   @Autowired
   private ProveedorRepository proveedorRepository;
-
+  
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+   
   public Cliente findById(Long id) {
     return clienteRepository.findById(id).orElse(null);
   }
@@ -174,13 +178,25 @@ public class ClienteService implements UserDetailsService {
   }
 
   @Transactional
-  public void modificar(Long id, Cliente clienteActualizado) {
+  public void modificar(Long id, Cliente clienteActualizado) throws MiException {
 
     Optional<Cliente> clienteResp = clienteRepository.buscarPorId(id);
 
     if (clienteResp.isPresent()) {
 
       Cliente cliente = clienteResp.get();
+      
+      if(clienteActualizado.getNombre().trim().isEmpty()){
+        
+          throw new MiException("El nombre no puede estar vacío");
+        
+      }
+
+      if(clienteActualizado.getEmail().trim().isEmpty()){
+        
+          throw new MiException("El email no puede estar vacío");
+        
+        }
       
       if (clienteActualizado.getNombre() != null) {
         cliente.setNombre(clienteActualizado.getNombre());
@@ -200,7 +216,36 @@ public class ClienteService implements UserDetailsService {
       if (clienteActualizado.getPassword() != null) {
         cliente.setPassword(clienteActualizado.getPassword());
       }
+
+      clienteRepository.save(cliente);
+
+    }
+
+  }
+
+  public void modificarPassword(Long id, String passwordActual, String nuevaPassword, String repetirPassword) throws MiException {
+    Optional<Cliente> clienteResp = clienteRepository.buscarPorId(id);
+
+    if (clienteResp.isPresent()) {
+
+      Cliente cliente = clienteResp.get();
+
+      if (!passwordEncoder.matches(passwordActual, cliente.getPassword())) {
+        throw new MiException("Ingresó una contraseña incorrecta");
+      }
+
+      if(nuevaPassword.length() < 6 || repetirPassword.length() < 6 ){
       
+        throw new MiException("La contraseña no puede tener menos de 6 caracteres");
+      
+      }
+      
+      if (!nuevaPassword.equals(repetirPassword)) {
+        throw new MiException("Las contraseñas nuevas no coinciden");
+      }
+
+      // Actualizar la contraseña
+      cliente.setPassword(passwordEncoder.encode(nuevaPassword));
       clienteRepository.save(cliente);
 
     }
