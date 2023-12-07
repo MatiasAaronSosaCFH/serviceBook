@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="/fragments/head :: head" </head> </head>
+
+  <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+
+    <header th:replace="/fragments/header :: header" </header></header>
+
+  <main id="main-content">
+    
+    <h1 class="fw-light bienvenido">Clientes ServiceBook</h1>
+    <div class="container-fluid m-5 contenedor">
+    <!-- <div><div th:replace="/fragments/exitoError :: div" </div></div>                  -->
+
+      <table class="table table-dark table-hover">
+          <thead class="table-dark">
+              <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Fecha de Alta</th>
+                  <th scope="col">Rol</th>
+                  <th scope="col">Alta</th>                  
+                  <th scope="col">Cambiar Estado</th>
+                  <th scope="col">Cambiar Rol</th>
+                  <th scope="col" sec:authorize="hasRole('ADMIN')">Modificar</th>
+              </tr>
+          </thead>
+          <tbody th:each="cliente : ${clientes}">
+              <tr>
+                  <td th:text="${cliente.id}"></td>
+                  <td th:text="${cliente.email}"></td>
+                  <!-- <td ><a><img th.if="${usuario.imagen != null}" class="logo" th:src="@{/imagen/perfil/__${usuario.id}__}" ></a></td> -->
+                  <td th:text="${cliente.nombre}"></td>
+                  <td th:text="${cliente.fechaDeAlta}"></td>
+                  <td th:text="${cliente.role}"></td>
+                  <td th:text="${cliente.alta}"></td>
+                  <td><a th:href="@{/admin/cambiarEstado/__${cliente.id}__}" class="button-link">Alta/Baja</a></td>
+                  <td >
+                      <!-- <form class="formulario" th:action="@{/admin/perfil/rol/__${usuario.id}__}" method="POST" enctype="multipart/form-data">
+                          <div class="d-flex justify-content-center">
+                              <div class="input-group w-auto">
+                                  <input hidden th:value="${usuario.id}" type="text" class="form-control" name="id">                    
+                                  <input hidden th:value="${usuario.nombreUsuario}" type="text" class="form-control" name="nombreUsuario" placeholder="nombre de usuario">
+                                  <select name="rol" id="" sec:authorize="hasRole('ADMIN')" >
+                                      <option th:text="${usuario.rol}"></option>
+                                      <option>USER</option>
+                                      <option>ADMIN</option>
+                                      <option>PERIODISTA</option>
+                                  </select>
+                                  <input hidden th:value="${archivo}" type="file" class="form-control" name="archivo" >
+                                  <input hidden th:value="${usuario.password}" type="password" class="form-control" name="password" placeholder="password al menos 6 digitos">
+                                  <input hidden th:value="${usuario.password}" type="password" class="form-control" name="password2" placeholder="reingrese password">
+                              </div>
+                              <button type="submit" class="btn btn-primary"> Cambiar Rol </button>
+                          </div>
+                          
+                      </form>  -->
+                      <a th:href="@{/admin/rotarRol/__${cliente.id}__}" class="button-link" >Rotar Rol</a>
+                  </td>
+                  <td ><a th:href="@{/admin/perfil/__${cliente.id}__}"  class="button-link" > Modificar</a></td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+  </main>
+
+  <div><footer th:replace="/fragments/footer :: footer" </footer></div>
+  <script src="../static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

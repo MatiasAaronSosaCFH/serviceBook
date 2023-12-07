@@ -22,7 +22,10 @@ public interface ProfesionRepository extends JpaRepository<Profesion, Long> {
 
     @Query("SELECT p FROM Profesion p WHERE p.nombre = :nombre")
     List<Profesion> buscarProfesion(@Param("nombre") String nombre);
-
+	 
+	@Query("SELECT p FROM Profesion p WHERE p.nombre = :nombre")
+    Optional<Profesion> buscarProfesionPorNombre(@Param("nombre") String nombre);
+	 
     @Modifying
     @Query("UPDATE Profesion p SET p.nombre = :nombre WHERE p.id = :id")
     void modificarNombre(@Param("nombre") String nombre);

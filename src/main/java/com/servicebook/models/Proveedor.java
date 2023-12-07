@@ -40,7 +40,10 @@ public class Proveedor extends Usuario {
      
     @Column(name = "disponible")
     private Boolean disponible;
-    
+	 
+     @Column(name = "aprovacion")
+    private Boolean aprovacion;   
+	  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedor")
     private List<Trabajo> trabajosRealizados;
     

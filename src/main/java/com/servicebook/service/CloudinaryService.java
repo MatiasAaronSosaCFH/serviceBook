@@ -36,7 +36,7 @@ public class CloudinaryService {
   public Map subirFoto(MultipartFile multipartFile) throws IOException {
     File archivo = convetir(multipartFile);
     Map resultado = cloudinary.uploader().upload(archivo, ObjectUtils.emptyMap());
-    //archivo.delete();
+    archivo.delete();
     return resultado;
   }
 
