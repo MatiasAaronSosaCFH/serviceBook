@@ -72,22 +72,13 @@ public class ClienteService implements UserDetailsService {
       Role role = respuesta.get().getRole();
       Cliente cliente = respuesta.get();
 
-      System.out.println("r0:" + cliente.getRole());
       if (role.equals(Role.USER)) {
         cliente.setRole(Role.PROVEEDOR);
-        System.out.println(role);
-        System.out.println("ru" + cliente.getRole());
       }
       if (role.equals(Role.PROVEEDOR)) {
-        cliente.setRole(Role.ADMIN);
-        System.out.println(role);
-        System.out.println("rp:" + cliente.getRole());
-      }
-      if (role.equals(Role.ADMIN)) {
         cliente.setRole(Role.USER);
-        System.out.println(role);
-        System.out.println("ra:" + cliente.getRole());
       }
+
       clienteRepository.save(cliente);
     }
   }

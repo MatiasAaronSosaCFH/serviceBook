@@ -38,4 +38,7 @@ public interface FotoUsuarioRepository extends JpaRepository<FotoUsuario, Long> 
 
     @Query("SELECT f FROM FotoUsuario f WHERE f.id = :id")
     Optional<FotoUsuario> buscarFotoPorId(@Param("id")long id);
+
+    @Query("SELECT f FROM FotoUsuario f WHERE f.fotoId = :fotoId")
+    Optional<FotoUsuario> buscarFotoPorPublicId(@Param("fotoId") String fotoId); 	 
 }

@@ -37,13 +37,15 @@ public String panelAdminListaNoticias(ModelMap modelo, HttpSession session){
 	return "proveedor_list.html";
 }
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/cliente/lista")
-	public String listaPeriodistas(ModelMap modelo){
-		List<Cliente> clientes = clienteService.findAll();
-		modelo.addAttribute("clientes", clientes);
-		return "cliente_list.html";
-	}
+@PreAuthorize("hasRole('ROLE_ADMIN')")
+@GetMapping("/cliente/lista")
+public String listaPeriodistas(ModelMap modelo, HttpSession session) {
+	Cliente usuario = (Cliente) session.getAttribute("usuariosession");
+	modelo.put("usuario", usuario);
+	List<Cliente> clientes = clienteService.findAll();
+	modelo.addAttribute("clientes", clientes);
+	return "cliente_list.html";
+}
 
 	@GetMapping("/cambiarEstado/{id}")
 	public String cambiarEstado(@PathVariable Long id, ModelMap modelo){

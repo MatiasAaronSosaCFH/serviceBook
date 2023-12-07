@@ -14,6 +14,8 @@ import com.servicebook.models.Cliente;
 import com.servicebook.models.FotoUsuario;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
+import com.servicebook.repository.ClienteRepository;
+import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.CloudinaryService;
 import com.servicebook.service.FotoUsuarioService;
@@ -43,6 +45,10 @@ public class FotoUsuarioController {
     private ProveedorService proveedorService;
     @Autowired
     private ClienteService clienteService;
+	 @Autowired
+private ClienteRepository clienteRepository;
+	 @Autowired
+private ProveedorRepository proveedorRepository;
 
     @PostMapping("/upload")
     public String upload(@RequestParam MultipartFile multipartFile, HttpSession session) throws IOException {
@@ -60,7 +66,7 @@ public class FotoUsuarioController {
         foto.setUrl((String) resultado.get("url"));
         foto.setFotoId((String)resultado.get("public_id"));
         
-        fotoUsuarioService.guardar(foto);
+        foto = fotoUsuarioService.guardar(foto);
         
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         
@@ -68,12 +74,14 @@ public class FotoUsuarioController {
         
           Cliente cliente = clienteService.findById(usuario.getId());
           cliente.setFoto(foto);
+			 clienteRepository.save(cliente);
           //clienteService.modificarFoto(cliente);
         
         } else {
         
           Proveedor proveedor = proveedorService.findById(usuario.getId());
           proveedor.setFoto(foto);
+			 proveedorRepository.save(proveedor);
           //proveedorService.modificarFoto(proveedor);
           
         }

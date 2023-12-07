@@ -13,8 +13,8 @@ public class FotoUsuarioService {
     private FotoUsuarioRepository fotoUsuarioRepository;
 
     @Transactional
-    public void guardar(FotoUsuario fotoUsuario) {
-        fotoUsuarioRepository.save(fotoUsuario);
+    public FotoUsuario guardar(FotoUsuario fotoUsuario) {
+        return fotoUsuarioRepository.save(fotoUsuario);
     }
 
 }
