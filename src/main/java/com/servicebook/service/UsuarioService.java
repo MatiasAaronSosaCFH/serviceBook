@@ -34,9 +34,9 @@ public class UsuarioService {
   private UsuarioRepository usuarioRepository;
 
   @Transactional
-  public void crearUsuario(String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
+  public void crearUsuario(String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2) throws MiException {
 
-    validar(email, nombre, role, password, password2, direccion);
+    validar(email, nombre, role, password, password2);
 
     Usuario usuario = new Usuario() {};
     
@@ -46,12 +46,11 @@ public class UsuarioService {
     usuario.setRole(role);
     usuario.setAlta(alta);
     usuario.setPassword(password);
-    usuario.setDireccion(direccion);
     usuarioRepository.save(usuario);
 
   }
 
-  public void validar(String email, String nombre, Role role, String password, String password2, List<Direccion> direccion) throws MiException {
+  public void validar(String email, String nombre, Role role, String password, String password2) throws MiException {
 
     if (email.isEmpty()) {
       throw new MiException("el email no puede ser nulo o estar vacio");
@@ -70,13 +69,10 @@ public class UsuarioService {
     if (!password.equals(password2)) {
       throw new MiException("las contraseñas ingresadas deben ser iguales");
     }
-    if (direccion.isEmpty()) {
-      throw new MiException("la direccion no puede ser nulo o estar vacio");
-    }
   }
 
   @Transactional
-  public void modificarUsuario(Long id, String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2, List<Direccion> direccion) throws MiException {
+  public void modificarUsuario(Long id, String email, String nombre, Date fechaDeAlta, Role role, Boolean alta, String password, String password2) throws MiException {
 
     Usuario usuario = new Usuario() {};
 
@@ -86,14 +82,13 @@ public class UsuarioService {
       usuario = respuesta.get();
     }
 
-    validar(email, nombre, role, password, password2, direccion);
+    validar(email, nombre, role, password, password2);
     usuario.setEmail(email);
     usuario.setNombre(nombre);
     usuario.setFechaDeAlta(fechaDeAlta);
     usuario.setRole(role);
     usuario.setAlta(alta);
     usuario.setPassword(password);
-    usuario.setDireccion(direccion);
     usuarioRepository.save(usuario);
 
   }

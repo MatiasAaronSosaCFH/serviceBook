@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-bs-theme="auto"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <head th:replace="/fragments/head :: head" </head></head>
+
+  <body>
+
+    <div th:if="${exito != null}">
+      <script th:inline="javascript">
+        $(document).ready(function () {
+            var exito = /*[[${exito}]]*/ null;
+    
+            if (exito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: /*[[${exito}]]*/ '',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+      </script>
+    </div>
+
+    <div th:if="${errorBasica != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              var nombre = /*[[${nombre}]]*/ '';
+              var email = /*[[${email}]]*/ '';
+              abrirBasica();
+              $('#nombre').val(nombre);
+              $('#email').val(email);
+          });
+      </script>
+    </div>
+
+    <div th:if="${errorDireccionRegistrar != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              var provincia = /*[[${provincia}]]*/ '';
+              var localidad = /*[[${localidad}]]*/ '';
+              var calle = /*[[${calle}]]*/ '';
+              var id = /*[[${id}]]*/ '';
+              var numero = /*[[${numero}]]*/ '';
+              var error = /*[[${errorDireccionRegistrar}]]*/ '';
+              console.log(error);
+              mostrarFormularioRegistro(id);
+              insertarError(error);
+              console.log(error);
+              abrirDireccion();
+              $('#provincia').val(provincia);
+              $('#localidad').val(localidad);
+              $('#calle').val(calle);
+              $('#numero').val(numero);
+          });
+      </script>
+    </div>
+
+    <div th:if="${errorDireccionModificar != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              var provincia = /*[[${provincia}]]*/ '';
+              var localidad = /*[[${localidad}]]*/ '';
+              var calle = /*[[${calle}]]*/ '';
+              var id = /*[[${id}]]*/ '';
+              var numero = /*[[${numero}]]*/ '';
+              var error = /*[[${errorDireccionModificar}]]*/ '';
+              console.log(error);
+              mostrarFormularioModificar(localidad, provincia, calle, numero, id);
+              insertarError(error);
+              console.log(error);
+              abrirDireccion();
+              $('#provincia').val(provincia);
+              $('#localidad').val(localidad);
+              $('#calle').val(calle);
+              $('#numero').val(numero);
+          });
+      </script>
+    </div>
+
+    <div th:if="${errorPassword != null}">
+      <script th:inline="javascript">
+          $(document).ready(function() {
+              var passwordActual = /*[[${passwordActual}]]*/ '';
+              var nuevaPassword = /*[[${nuevaPassword}]]*/ '';
+              var repetirPassword = /*[[${repetirPassword}]]*/ '';
+              console.log("Hola");
+              abrirPassword();
+              $('#passwordActual').val(passwordActual);
+              $('#nuevaPassword').val(nuevaPassword);
+              $('#repetirPassword').val(repetirPassword);
+          });
+      </script>
+    </div>
+
+    <header th:replace="/fragments/header :: header" </header></header>
+
+    <div id="deleteModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeDeleteModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
+          cuenta?</h5>
+        <form th:action="@{/cliente/bajaCliente/__${usuario.id}__}"
+          method="POST" class="d-flex flex-column">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center">
+            <label for="habilitar" class="mb-1 text-white">Habilitar Botón</label>
+            <input type="checkbox" id="habilitar" name="habilitar">
+          </div>
+          <button type="submit" id="btnEliminar" class="mb-4 mt-4 btn" disabled>Si,
+            eliminar</button>
+          <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <main id="main-content" class="mb-5 me-0">
+
+      <div
+        class="text-white titulo-modificar w-100 d-flex justify-content-center align-items-center">
+        <h1>
+          Modificar Datos del Perfil
+        </h1>
+      </div>
+      <div class="container-fluid p-0 m-0 g-0 contenedor-modificar">
+        <div class="row p-0 m-0 no-gutters w-100">
+          <div class="col col-sm-1 col-md col-lg"></div>
+          <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+            <div
+              class="foto-usuario mt-5 d-flex justify-content-center align-items-center rounded-modificar-arriba">
+              <form action="/imagenes/upload" method="POST"
+                enctype="multipart/form-data">
+                <div id="foto-perfil">
+                  <div id="camara" class="icono">
+                    <i class="fas fa-camera fa-lg"></i>
+                  </div>
+                  <div id="perfil-foto" class="foto-perfil">
+                    <img
+                      th:src="${usuario.foto != null} ? ${usuario.foto.url} : '../../img/usuario-de-perfil.png'"
+                      alt="Foto de perfil" id="imagen-perfil">
+                  </div>
+                  <input type="file" id="imagen" name="multipartFile"
+                    accept="image/*">
+                </div>
+                <div id="botones" class="mt-4">
+                  <button type="submit" id="boton-guardar">Guardar Cambios</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="informacion-basica">
+              <div id="desplegable" class="desplegable">
+                <div id="cabecera" class="cabecera d-flex align-items-center">
+                  <h2 class="flex-grow-1 text-center m-0">Información Básica</h2>
+                  <img id="flecha" class="flecha me-5 ms-auto"
+                    src="./img/flecha.png" alt="Flecha">
+                </div>
+                <div id="detalles" class="detalles p-0">
+                  <form method="POST"
+                    th:action="@{/cliente/modificar/__${usuario.id}__}"
+                    id="formBasica" class="formulario" th:object="${usuario}">
+                    <div th:if="${errorBasica}" class="alert alert-danger" role="alert">
+                      <p th:text="${errorBasica}"></p> 
+                    </div>
+                    <input hidden name="id" th:value="${usuario.id}">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}"
+                      th:value="${usuario.nombre}">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}"
+                      th:value="${usuario.email}" autocomplete="off">
+                    <button type="submit" id="boton-guardar2">Actualizar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="informacion-direccion">
+              <div id="desplegable-direccion" class="desplegable">
+                <div id="cabecera-direccion"
+                  class="cabecera d-flex align-items-center">
+                  <h2 class="flex-grow-1 text-center m-0">Direccion</h2>
+                  <img id="flecha-direccion" class="flecha me-5 ms-auto"
+                    src="./img/flecha.png" alt="Flecha">
+                </div>
+                <div id="detalles-direccion" class="detalles p-0">
+                  <div id="tabla">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center" scope="col">Localidad</th>
+                          <th class="text-center" scope="col">Provincia</th>
+                          <th class="text-center" scope="col">Calle</th>
+                          <th class="text-center" scope="col">Numero</th>
+                          <th class="text-center" scope="col">Modificar</th>
+                          <th class="text-center" scope="col">Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody th:each="direccion : ${usuario.direcciones}">
+                        <tr>
+                          <td class="text-center"
+                            th:text="${direccion.localidad}"></td>
+                          <td class="text-center"
+                            th:text="${direccion.provincia}"></td>
+                          <td class="text-center" th:text="${direccion.calle}"></td>
+                          <td class="text-center" th:text="${direccion.numero}"></td>
+                          <td class="text-center">
+                            <a href="#formDireccion" class="enlaceModificar"
+                              th:attr="onclick=|mostrarFormularioModificar('${direccion.localidad}','${direccion.provincia}','${direccion.calle}','${direccion.numero}','${direccion.id}')|">
+                              <img src="./img/edit.png" alt="imagen edit" />
+                            </a>
+                          </td>
+                          <td class="text-center">
+                            <form th:action="@{/direccion/eliminar/__${usuario.id}__/__${direccion.id}__}" method="POST">
+                              <button type="submit" class="enlaceEliminar">
+                                <img src="./img/delete.png" alt="imagen delete" />
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="button" id="btnDireccion"
+                    th:attr="onclick=|mostrarFormularioRegistro('${usuario.id}')|">Agregar
+                      Dirección</button>
+                  </div>             
+                </div>
+              </div>
+            </div>
+
+            <div id="desplegable-contrasena"
+              class="desplegable rounded-modificar-abajo">
+              <div id="cabecera-contrasena"
+                class="cabecera d-flex align-items-center">
+                <h2 class="flex-grow-1 text-center m-0">Administrar Contraseñas</h2>
+                <img id="flecha-contrasena" class="flecha me-5 ms-auto"
+                  src="./img/flecha.png" alt="Flecha">
+              </div>
+              <div id="detalles-contrasena" class="detalles p-0">
+                <div th:if="${errorPassword}" class="alert alert-danger" role="alert">
+                  <p th:text="${errorPassword}"></p> 
+                </div>
+                <form method="POST" th:action="@{/cliente/modificarPassword/__${usuario.id}__}" id="formContrasena" class="formulario">
+                  <input hidden name="id" th:value="${usuario.id}">
+                  <label for="passwordActual">Contraseña Actual:</label>
+                  <input type="password" id="passwordActual"
+                    name="passwordActual">
+
+                  <label for="nuevaPassword">Nueva Contraseña:</label>
+                  <input type="password" id="nuevaPassword"
+                    name="nuevaPassword">
+
+                  <label for="repetirPassword">Repetir Nueva Contraseña:</label>
+                  <input type="password" id="repetirPassword"
+                    name="repetirPassword">
+                  <button type="submit" id="boton-guardar4">Actualizar Password</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+          <div class="col col-sm-1 col-md col-lg"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/borrar.js"></script>
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

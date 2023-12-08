@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="/fragments/head :: head" </head></head>
+
+  <body class="bg-gradient"
+    style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+
+    <header th:replace="/fragments/header :: header" </header></header>
+
+    <main id="main-content">
+      <div
+        class="text-white titulo-modificar w-100 d-flex justify-content-center align-items-center">
+        <h1>
+          Registrar Profesiones
+        </h1>
+      </div>
+      <div class="container-fluid p-0 mt-5 g-0 contenedor-modificar">
+        <div class="row p-0 m-0 no-gutters w-100">
+          <div class="col col-sm-1 col-md col-lg"></div>
+          <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+            <div id="detalles-direccion">
+              <fieldset class="mb-3">
+                <div>
+                  <form th:action="@{/profesion/registrar}" method="POST"
+                    class="w100">
+                    <label for="inputProfesion" class="mb-1">Profesion</label>
+                    <input th:value="${nombre}" type="text"
+                      class="form-control mb-3" name="nombre"
+                      id="inputProfesion">
+                    <div th:replace="/fragments/exitoError :: div" </div></div>
+                    <button type="submit" class="btn btn-primary mt-3 btnProfesion">
+                      Registrar Profesion </button>
+                  </form>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="col col-sm-1 col-md col-lg"></div>
+        </div>
+      </main>
+
+      <div><footer th:replace="/fragments/footer :: footer" </footer></div>
+        <script src="../../js/color-modes.js"></script>
+        <script src="../../js/borrar.js"></script>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+      </body>
+    </html>

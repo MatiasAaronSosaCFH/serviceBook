@@ -6,6 +6,7 @@ import com.servicebook.models.Direccion;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
+import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
 import com.servicebook.service.ProveedorService;
@@ -24,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,6 +39,9 @@ public class PortalController {
 
   @Autowired
   private ProveedorService proveedorService;
+  
+  @Autowired
+  private DireccionService direccionService;
 
   @GetMapping
   public String dashboard(ModelMap map) {
@@ -57,31 +62,22 @@ public class PortalController {
   @GetMapping("/inicio")
   public String inicio(HttpSession session, ModelMap model) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-
-    if (usuario.getRole().toString().equals("USER")) {
-
-      Cliente cliente = (Cliente) session.getAttribute("usuariosession");
-
-      model.addAttribute("usuario", cliente);
-
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId(); 
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          model.addAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
+        model.addAttribute("usuario", proveedor);
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        model.addAttribute("usuario", admin);
+      }
     }
 
-    if (usuario.getRole().toString().equals("PROVEEDOR")) {
-
-      Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-
-      model.addAttribute("usuario", proveedor);
-
-    }
-
-    if (usuario.getRole().toString().equals("ADMIN")) {
-
-      Cliente admin = (Cliente) session.getAttribute("usuariosession");
-
-      model.addAttribute("usuario", admin);
-
-    }
-    
     model.addAttribute("proveedores", proveedorService.findByAlta());
     return "inicio.html";
   }
@@ -149,4 +145,29 @@ public class PortalController {
     return "redirect:/";
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
+  @GetMapping("/modificar")
+  public String modificar(HttpSession session, ModelMap model) {
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId(); 
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          model.addAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
+        model.addAttribute("usuario", proveedor);
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        model.addAttribute("usuario", admin);
+      }
+    }
+
+    return "modificar.html";
+
+  }
+ 
 }

@@ -1,7 +1,9 @@
 package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
+import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
+import com.servicebook.models.Proveedor;
 import com.servicebook.models.dtos.DireccionDtoRecibido;
 import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.DireccionRepository;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.servicebook.repository.ProveedorRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +31,7 @@ public class DireccionService {
   private ClienteRepository clienteRepository;
 
   @Transactional
-  public void registrar(String calle, String numero, String localidad, String provincia) throws MiException {
+  public void registrar(Long idUsuario, String calle, String numero, String localidad, String provincia) throws MiException {
 
     validar(calle, numero, localidad, provincia);
 
@@ -38,6 +41,23 @@ public class DireccionService {
     direccion.setNumero(numero);
     direccion.setLocalidad(localidad);
     direccion.setProvincia(provincia);
+
+    Optional<Cliente> resCliente = clienteRepository.buscarPorId(idUsuario);
+    Optional<Proveedor> resProveedor = proveedorRepository.buscarPorId(idUsuario);
+
+    if (resCliente.isPresent()) {
+
+      Cliente cliente = resCliente.get();
+      direccion.getClientes().add(cliente);
+      cliente.getDirecciones().add(direccion);
+
+    } else if (resProveedor.isPresent()) {
+
+      Proveedor proveedor = resProveedor.get();
+      direccion.getProveedores().add(proveedor);
+      proveedor.getDirecciones().add(direccion);
+
+    }
 
     direccionRepository.save(direccion);
 
@@ -53,6 +73,13 @@ public class DireccionService {
       direccionRepository.deleteById(id);
 
     }
+
+  }
+
+  @Transactional
+  public void eliminarPorCliente(Long idCliente, Long idDireccion) {
+
+    direccionRepository.deleteClientesDirecciones(idCliente, idDireccion);
 
   }
 
@@ -84,62 +111,58 @@ public class DireccionService {
 
     Optional<Direccion> respuesta = direccionRepository.findById(id);
 
-        if (respuesta.isPresent()) {
-            
-           direccionRepository.baja(id);
-          
-        } else {
-        
-          throw new MiException("No existe la dirección con el id " + id);
-        
-        }
+    if (respuesta.isPresent()) {
+
+      direccionRepository.baja(id);
+
+    } else {
+
+      throw new MiException("No existe la dirección con el id " + id);
+
+    }
 
   }
-  
+
   @Transactional
   public void alta(Long id) throws MiException {
 
     Optional<Direccion> respuesta = direccionRepository.findById(id);
 
-        if (respuesta.isPresent()) {
-            
-           direccionRepository.alta(id);
-          
-        } else {
-        
-          throw new MiException("No existe la dirección con el id " + id);
-        
-        }
+    if (respuesta.isPresent()) {
+
+      direccionRepository.alta(id);
+
+    } else {
+
+      throw new MiException("No existe la dirección con el id " + id);
+
+    }
 
   }
-  
+
   @Transactional
   public void modificar(Long id, String calle, String numero, String localidad, String provincia) throws MiException {
 
-    Direccion direccion = buscarPorId(id);
+    validar(calle, numero, localidad, provincia);
 
-    direccion.setCalle(calle);
-    direccion.setLocalidad(localidad);
-    direccion.setNumero(numero);
-    direccion.setProvincia(provincia);
+    Optional<Direccion> direccionResp = direccionRepository.buscarPorId(id);
 
-    direccionRepository.save(direccion);
+    if (direccionResp.isPresent()) {
+
+      Direccion direccion = direccionResp.get();
+      
+      direccion.setCalle(calle);
+      direccion.setLocalidad(localidad);
+      direccion.setNumero(numero);
+      direccion.setProvincia(provincia);
+      
+      direccionRepository.save(direccion);
+
+    }
 
   }
 
   public void validar(String calle, String numero, String localidad, String provincia) throws MiException {
-
-    if (calle.trim().isEmpty() || calle == null) {
-
-      throw new MiException("La calle no puede ser nula o estar vacía");
-
-    }
-
-    if (numero.trim().isEmpty() || numero == null) {
-
-      throw new MiException("El número no puede ser nulo o estar vacío");
-
-    }
 
     if (localidad.trim().isEmpty() || localidad == null) {
 
@@ -153,17 +176,45 @@ public class DireccionService {
 
     }
 
+    if (calle.trim().isEmpty() || calle == null) {
+
+      throw new MiException("La calle no puede ser nula o estar vacía");
+
+    }
+
+    if (numero.trim().isEmpty() || numero == null) {
+
+      throw new MiException("El número no puede ser nulo o estar vacío");
+
+    }
   }
 
-  public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion){
+  public Direccion transformarDtoRecibido(DireccionDtoRecibido direccion) {
     Direccion dire = new Direccion();
     dire.setProvincia(direccion.provincia());
     dire.setNumero(direccion.numero());
     dire.setCalle(direccion.calle());
     dire.setAlta(true);
     dire.setLocalidad(direccion.localidad());
-    if(direccion.role().equalsIgnoreCase("USER")) dire.setCliente(clienteRepository.buscarPorId(direccion.usuario()).orElse(null));
-    else dire.setProveedor(proveedorRepository.buscarPorId(direccion.usuario()).orElse(null));
+
+    List<Cliente> clientes = new ArrayList<>();
+    List<Proveedor> proveedores = new ArrayList<>();
+
+    if (direccion.role().equalsIgnoreCase("USER")) {
+      Cliente cliente = clienteRepository.buscarPorId(direccion.usuario()).orElse(null);
+      if (cliente != null) {
+        clientes.add(cliente);
+      }
+    } else {
+      Proveedor proveedor = proveedorRepository.buscarPorId(direccion.usuario()).orElse(null);
+      if (proveedor != null) {
+        proveedores.add(proveedor);
+      }
+    }
+
+    dire.setClientes(clientes);
+    dire.setProveedores(proveedores);
+
     return dire;
   }
 }

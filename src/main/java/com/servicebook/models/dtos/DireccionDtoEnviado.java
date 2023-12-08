@@ -3,6 +3,7 @@ package com.servicebook.models.dtos;
 
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Usuario;
+import java.util.List;
 
 
 public record DireccionDtoEnviado(Long id,
@@ -10,7 +11,7 @@ public record DireccionDtoEnviado(Long id,
 								String numero,
 								String localidad,
 								String provincia,
-								Long usuario
+								List<Usuario> usuarios
 								) {
 	public DireccionDtoEnviado(Direccion direccion){
 		this(direccion.getId(),
@@ -18,6 +19,6 @@ public record DireccionDtoEnviado(Long id,
 			direccion.getNumero(),
 			direccion.getLocalidad(),
 			direccion.getProvincia(),
-			direccion.orElse().getId());
+			direccion.getUsuarios());
 	}
 }

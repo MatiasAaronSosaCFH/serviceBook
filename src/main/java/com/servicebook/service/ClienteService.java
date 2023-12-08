@@ -4,6 +4,7 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Proveedor;
+import com.servicebook.models.dtos.ClienteDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.ProveedorRepository;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,58 +35,53 @@ public class ClienteService implements UserDetailsService {
 
   @Autowired
   private ProveedorRepository proveedorRepository;
-
+  
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+   
   public Cliente findById(Long id) {
     return clienteRepository.findById(id).orElse(null);
   }
 
   public Cliente findByEmail(String email) {
+
 	     return clienteRepository.findByEmail(email).orElse(null);
 
   }
-  
-  public List<Cliente> findAll(){
-	  return clienteRepository.findAll();
-  }
-  
-  public void cambiarEstado(Long id){
-	  Optional<Cliente> respuesta = clienteRepository.findById(id);
-	if (respuesta.isPresent()) {
-		Boolean estado = respuesta.get().getAlta();
-		Cliente cliente = respuesta.get();
 
-		cliente.setAlta(!estado);
-
-		clienteRepository.save(cliente);
-	}
+  public List<Cliente> findAll() {
+    return clienteRepository.findAll();
   }
-	
-    public void rotarRol(Long id){
-	
-	Optional<Cliente> respuesta = clienteRepository.findById(id);
-	if (respuesta.isPresent()) {
-			Role role = respuesta.get().getRole();
-		Cliente cliente = respuesta.get();
-		
-		System.out.println("r0:" + cliente.getRole());
-		if (role.equals(Role.USER)) {
-			cliente.setRole(Role.PROVEEDOR);
-			System.out.println(role);
-			System.out.println("ru" + cliente.getRole());
-		} 
-		if (role.equals(Role.PROVEEDOR)) {
-			cliente.setRole(Role.ADMIN);
-			System.out.println(role);
-			System.out.println("rp:" + cliente.getRole());
-		}
-		if(role.equals(Role.ADMIN)) {
-			cliente.setRole(Role.USER);
-			System.out.println(role);
-			System.out.println("ra:" + cliente.getRole());
-		}
-		clienteRepository.save(cliente);
-	}
-}
+
+  public void cambiarEstado(Long id) {
+    Optional<Cliente> respuesta = clienteRepository.findById(id);
+    if (respuesta.isPresent()) {
+      Boolean estado = respuesta.get().getAlta();
+      Cliente cliente = respuesta.get();
+
+      cliente.setAlta(!estado);
+
+      clienteRepository.save(cliente);
+    }
+  }
+
+  public void rotarRol(Long id) {
+
+    Optional<Cliente> respuesta = clienteRepository.findById(id);
+    if (respuesta.isPresent()) {
+      Role role = respuesta.get().getRole();
+      Cliente cliente = respuesta.get();
+
+      if (role.equals(Role.USER)) {
+        cliente.setRole(Role.PROVEEDOR);
+      }
+      if (role.equals(Role.PROVEEDOR)) {
+        cliente.setRole(Role.USER);
+      }
+
+      clienteRepository.save(cliente);
+    }
+  }
 
   public void crearCliente(String email, String nombre, String password, String password2) throws MiException {
     validar(email, nombre, password, password2);
@@ -99,11 +96,12 @@ public class ClienteService implements UserDetailsService {
 
     clienteRepository.save(cliente);
   }
-  
+
   @Transactional
   public void modificarCliente(Long id, String email, String nombre, String password, String password2) throws MiException {
 
-    Cliente cliente = new Cliente() {};
+    Cliente cliente = new Cliente() {
+    };
 
     Optional<Cliente> respuesta = clienteRepository.buscarPorId(id);
 
@@ -125,10 +123,11 @@ public class ClienteService implements UserDetailsService {
 
     clienteRepository.save(cliente);
   }
-  
+
   @Transactional
   public void bajaCliente(Long id) {
-    Cliente cliente = new Cliente() {};
+    Cliente cliente = new Cliente() {
+    };
 
     Optional<Cliente> respuesta = clienteRepository.findById(id);
 
@@ -142,7 +141,7 @@ public class ClienteService implements UserDetailsService {
   }
 
   public void validar(String email, String nombre, String password, String password2) throws MiException {
-    
+
     if (nombre.isEmpty()) {
       throw new MiException("el nombre no puede ser nulo o estar vacio");
     }
@@ -156,6 +155,90 @@ public class ClienteService implements UserDetailsService {
     }
     if (!password.equals(password2)) {
       throw new MiException("las contraseñas ingresadas deben ser iguales");
+    }
+
+  }
+
+  @Transactional
+  public ClienteDtoEnviado obtenerClienteConDirecciones(Long clienteId) {
+    Cliente cliente = clienteRepository.findById(clienteId).orElse(null);
+    if (cliente != null) {
+      return new ClienteDtoEnviado(cliente);
+    }
+    return null;
+  }
+
+  @Transactional
+  public void modificar(Long id, Cliente clienteActualizado) throws MiException {
+
+    Optional<Cliente> clienteResp = clienteRepository.buscarPorId(id);
+
+    if (clienteResp.isPresent()) {
+
+      Cliente cliente = clienteResp.get();
+      
+      if(clienteActualizado.getNombre().trim().isEmpty()){
+        
+          throw new MiException("El nombre no puede estar vacío");
+        
+      }
+
+      if(clienteActualizado.getEmail().trim().isEmpty()){
+        
+          throw new MiException("El email no puede estar vacío");
+        
+        }
+      
+      if (clienteActualizado.getNombre() != null) {
+        cliente.setNombre(clienteActualizado.getNombre());
+      }
+      if (clienteActualizado.getEmail() != null) {
+        cliente.setEmail(clienteActualizado.getEmail());
+      }
+      if (clienteActualizado.getAlta() != null) {
+        cliente.setAlta(clienteActualizado.getAlta());
+      }
+      if (clienteActualizado.getRole() != null) {
+        cliente.setRole(clienteActualizado.getRole());
+      }
+      if (clienteActualizado.getFoto() != null) {
+        cliente.setFoto(clienteActualizado.getFoto());
+      }
+      if (clienteActualizado.getPassword() != null) {
+        cliente.setPassword(clienteActualizado.getPassword());
+      }
+
+      clienteRepository.save(cliente);
+
+    }
+
+  }
+
+  public void modificarPassword(Long id, String passwordActual, String nuevaPassword, String repetirPassword) throws MiException {
+    Optional<Cliente> clienteResp = clienteRepository.buscarPorId(id);
+
+    if (clienteResp.isPresent()) {
+
+      Cliente cliente = clienteResp.get();
+
+      if (!passwordEncoder.matches(passwordActual, cliente.getPassword())) {
+        throw new MiException("Ingresó una contraseña incorrecta");
+      }
+
+      if(nuevaPassword.length() < 6 || repetirPassword.length() < 6 ){
+      
+        throw new MiException("La contraseña no puede tener menos de 6 caracteres");
+      
+      }
+      
+      if (!nuevaPassword.equals(repetirPassword)) {
+        throw new MiException("Las contraseñas nuevas no coinciden");
+      }
+
+      // Actualizar la contraseña
+      cliente.setPassword(passwordEncoder.encode(nuevaPassword));
+      clienteRepository.save(cliente);
+
     }
 
   }
@@ -186,7 +269,7 @@ public class ClienteService implements UserDetailsService {
     Proveedor proveedor = proveedorRepository.findByEmail(email).orElse(null);
 
     if (proveedor != null) {
-      
+
       List<GrantedAuthority> permisos = new ArrayList<>();
 
       GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + proveedor.getRole().toString());
@@ -200,9 +283,9 @@ public class ClienteService implements UserDetailsService {
       session.setAttribute("usuariosession", proveedor);
 
       return new User(proveedor.getEmail(), proveedor.getPassword(), permisos);
-      
+
     }
-    
+
     return null;
 
   }

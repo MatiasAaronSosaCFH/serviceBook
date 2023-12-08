@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -32,14 +33,24 @@ public class Proveedor extends Usuario {
     
     @Column(name="precio_por_hora")
     private Integer precioPorHora;
-
-    @OneToOne
-    @JoinColumn(name = "foto_id", referencedColumnName = "id")
-    private FotoUsuario foto;
-     
+   
     @Column(name = "disponible")
     private Boolean disponible;
-    
+	 
+     @Column(name = "aprobacion")
+    private Boolean aprobacion;   
+	  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedor")
     private List<Trabajo> trabajosRealizados;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedor")
+    private List<FotoProveedor> fotos = new ArrayList<>();
+    
+    @ManyToMany
+    @JoinTable(
+        name = "proveedores_direcciones",
+        joinColumns = @JoinColumn(name = "proveedor_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "direccion_id", referencedColumnName = "id")
+    )
+    private List<Direccion> direcciones = new ArrayList<>();
 }

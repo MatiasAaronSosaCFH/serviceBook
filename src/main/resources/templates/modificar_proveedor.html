@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-bs-theme="auto"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <head th:replace="/fragments/head :: head" </head></head>
+
+  <body>
+
+    <div th:if="${exito}">
+      <script th:inline="javascript">
+        $(document).ready(function () {
+            var exito = /*[[${exito}]]*/ null;
+    
+            if (exito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: /*[[${exito}]]*/ '',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+      </script>
+    </div>
+
+    <div th:if="${error}">
+      <script th:inline="javascript">
+        $(document).ready(function () {
+            var exito = /*[[${error}]]*/ null;
+    
+            if (exito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: /*[[${exito}]]*/ '',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+      </script>
+    </div>
+
+    
+
+    <header th:replace="/fragments/header :: header" </header></header>
+
+    <div id="deleteModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeDeleteModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
+          cuenta?</h5>
+        <form th:action="@{/cliente/bajaCliente/__${usuario.id}__}"
+          method="POST" class="d-flex flex-column">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center">
+            <label for="habilitar" class="mb-1 text-white">Habilitar Botón</label>
+            <input type="checkbox" id="habilitar" name="habilitar">
+          </div>
+          <button type="submit" id="btnEliminar" class="mb-4 mt-4 btn" disabled>Si,
+            eliminar</button>
+          <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <main id="main-content" class="mb-5 me-0">
+
+      <div
+        class="text-white titulo-modificar w-100 d-flex justify-content-center align-items-center">
+        <h1>
+          Solicitud de alta como Proveedor
+        </h1>
+      </div>
+      <div class="container-fluid p-0 m-0 g-0 contenedor-modificar">
+        <div class="row p-0 m-0 no-gutters w-100">
+          <div class="col col-sm-1 col-md col-lg"></div>
+          <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+            <div
+              class="foto-usuario mt-5 d-flex justify-content-center align-items-center rounded-modificar-arriba">
+              <form action="/imagenes/upload" method="POST"
+                enctype="multipart/form-data">
+                <div id="foto-perfil">  
+                  <div id="camara" class="icono">
+                    <i class="fas fa-camera fa-lg"></i>
+                  </div>
+                  <div id="perfil-foto" class="foto-perfil">
+                    <img
+                    th:src="${usuario.foto != null} ? ${usuario.foto.url} : '../../img/usuario-de-perfil.png'"
+                    alt="Foto de perfil" id="imagen-perfil">
+                  </div>
+                  <input type="file" id="imagen" name="multipartFile"
+                    accept="image/*">
+                </div>
+                <div id="botones" class="mt-4">
+                  <button type="submit" id="boton-guardar">Guardar Cambios</button>
+                </div>
+              </form>
+              <div class="mt-4 badge bg-warning text-dark mb-3" th:text="${usuario.role}">rol</div>
+            </div>
+
+            <div id="detalles-direccion" class="mt-5">
+              <form method="POST" th:action="@{/proveedor/registrar/__${usuario.id}__}"  class="rounded-modificar-abajo formulario2" enctype="multipart/form-data">
+                <div class="d-flex justify-content-end">
+                  <p class="me-1 fw-bold">Fecha de Alta:</p>
+                  <p class="fw-bold" th:text="${usuario.fechaDeAlta}" type="date">fecha</p> 
+                </div>
+                 
+                <input hidden name="id" th:value="${usuario.id}">
+                <label for="nombre" class="mb-1">Nombre</label>
+                <input readonly th:value="${usuario.nombre}" type="text" class="form-control mb-3" name="nombre">
+                <label for="email" class="mb-1">Email</label>
+                <input readonly th:value="${usuario.email}" type="email" class="form-control mb-3" name="email">
+                   
+                <label for="emailDeContacto" class="mb-1">Email de contacto</label>
+                <input type="email" class="form-control mb-3" name="emailDeContacto">
+                <label for="numeroDeContacto" class="mb-1">Numero de contacto</label>
+                <input type="text" class="form-control mb-3" name="numeroDeContacto">
+                
+                <label for="profesiones" class="mb-1">Profesiones</label>
+                <select class="mb-3" id="selectedOptions" name="profesiones" multiple="multiple" th:field="*{profesiones}">
+                  <option th:each="option : ${profesiones}" 
+                          th:value="${option.nombre}" 
+                          th:text="${option.nombre}">
+                  </option>
+                </select>
+                <label for="presentacion" class="mb-1">Presentacion</label>
+                <textarea type="text" class="form-control presentacion mb-3" name="presentacion"></textarea>
+                <label for="precioPorHora" class="mb-1">Precio por hora</label>
+                <input type="number" class="form-control mb-3" name="precioPorHora">
+                <div class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
+                  <span>Disponible</span>
+                  <input class="disponible" type="checkbox" name="disponible"/>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <input name="imagenes" type="file" multiple />
+                </div>
+                <button class="mt-5" type="submit" id="boton-guardar3">Guardar Cambios</button>
+              </form>
+            </div>
+          </div>
+          <div class="col col-sm-1 col-md col-lg"></div>
+        </div>
+      </div> 
+    </main>
+    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/borrar.js"></script>
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

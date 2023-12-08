@@ -9,7 +9,20 @@
 
 body {
   background-color: #dcdcdc;
+  display: grid;
   font-family: Lato, Helvetica, sans-serif;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+:root {
+  --bs-gutter-x: 0 !important;
+  --bs-gutter-y: 0 !important;
+}
+
+.row {
+  --bs-gutter-x: 0 !important;
+  --bs-gutter-y: 0 !important;
 }
 
 .dropdown-toggle::after {
@@ -394,6 +407,279 @@ footer {
 
 .card-footer button {
   border-radius: 20px;
+}
+
+.titulo-modificar {
+  background-color: #00b6cd;
+  height: 200px;
+}
+
+.desplegable {
+  border: 1px solid #ccc;
+  overflow: hidden;
+  transition: transform 0.3s;
+  width: 100%;
+}
+
+.cabecera {
+  background-color: #ccc;
+  color: #000000;
+  cursor: pointer;
+  height: 120px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.flecha {
+  height: 20px;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+  width: 20px; 
+}
+
+.detalles {
+  border-top: 1px solid #ccc;
+  display: none;
+  padding: 10px;
+}
+
+.detalles input {
+  margin-bottom: 10px;
+  width: 100%; 
+}
+
+.detalles.active {
+  display: block;
+}
+
+.flecha.active {
+  transform: rotate(180deg);
+}
+
+@keyframes caidaDesdeArriba {
+  0% { opacity: 0; transform: translateY(-100%); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.formulario {
+  animation: caidaDesdeArriba 0.5s ease-in-out; 
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.formulario2 {
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.foto-usuario {
+  background-color: #ccc;
+  height: 320px;
+}
+
+.rounded-modificar-arriba {
+  border-radius: 40px 40px 0px 0px;
+}
+
+.rounded-modificar-abajo {
+  border-radius: 0px 0px 40px 40px;
+}
+
+.foto-usuario {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+}
+
+#foto-perfil {
+  display: inline-block;
+  position: relative;
+}
+
+#foto-perfil img {
+  border-radius: 50%; 
+  height: 150px;
+  width: 150px; 
+}
+
+#foto-perfil .fa-camera {
+  background-color: #fff; 
+  border-radius: 50%;
+  bottom: 0;
+  padding: 5px;  
+  position: absolute;
+  right: 0;
+}
+
+.imagen-perfil-miniatura {
+  border-radius: 50%;
+}
+
+#foto-perfil:hover::before {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  color: #fff;
+  content: 'CAMBIAR \A FOTO';
+  display: flex;
+  font-size: 0.6rem;
+  font-weight: bold;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  top: 0;
+  white-space: pre;
+  width: 100%;
+}
+
+#imagen {
+  display: none;
+}
+
+#botones {
+  display: flex;
+  gap: 1rem;
+}
+
+#boton-modificar,
+#boton-guardar {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+
+#boton-modificar {
+  background-color: #3498db;
+  color: #fff;
+}
+
+#boton-guardar2, #boton-guardar3, #boton-guardar4 {
+  background-color: #2ecc71;
+  color: #fff;
+  margin: 25px 15%;
+  width: 70%;
+}
+
+#boton-guardar {
+  background-color: #2ecc71;
+  color: #fff;
+  min-width: 150px;
+}
+
+.contenedor-modificar input {
+  margin: 2px auto;
+  width: 70%;
+}
+
+.contenedor-modificar label {
+  margin: 2px 15%;
+}
+
+#btnDireccion {
+  background-color: rgb(57, 57, 248);
+  color: #fff;
+  margin: 25px 15%;
+  width: 70%;
+}
+
+.enlaceModificar img {
+  height: 20px;
+  width: 20px;
+}
+
+.enlaceEliminar img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.enlaceEliminar {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  outline: none;
+  padding: 0;
+  width: 20px;
+}
+
+select {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.presentacion {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.contenedor-disponible {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.disponible {
+  margin-left: 2px !important;
+  width: 6% !important;
+}
+
+select[multiple] {
+  padding: 5px;
+}
+
+select[multiple]:hover {
+  cursor: pointer; 
+}
+
+select[multiple]:focus {
+  border-color:  #00b6cd; 
+}
+
+.btnProfesion {
+  margin-left: 15%;
+  width: 70%;
+}
+
+.home {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0; 
+}
+
+.home img {
+  height: 23px;
+}
+
+.logo-admin {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.logo-admin img {
+  height: 23px;
+}
+
+td img {
+  height: 20px;
+}
+
+td {
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media (max-width: 576px) {
