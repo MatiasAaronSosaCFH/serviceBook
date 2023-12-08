@@ -5,6 +5,7 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.enums.Role;
+import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.ProveedorService;
 import java.util.List;
@@ -26,22 +27,22 @@ public class AdminController {
 ClienteService clienteService;
 @Autowired
 ProveedorService proveedorService;
+@Autowired
+ProveedorRepository proveedorRepository;
 
 @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_PERIODISTA')")
 @GetMapping("/proveedor/lista")
 public String panelAdminListaNoticias(ModelMap modelo, HttpSession session){
-	List<Cliente> clientes = clienteService.findAll();
-	modelo.addAttribute("clientes", clientes);
-	List<Proveedor> proveedores = proveedorService.findByAlta();
-	modelo.addAttribute("proveedores", proveedores);
+	modelo.put("usuario", session.getAttribute("usuariosession"));
+	modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());
+
 	return "proveedor_list.html";
 }
 
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @GetMapping("/cliente/lista")
 public String listaPeriodistas(ModelMap modelo, HttpSession session) {
-	Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-	modelo.put("usuario", usuario);
+	modelo.put("usuario", session.getAttribute("usuariosession"));
 	List<Cliente> clientes = clienteService.findAll();
 	modelo.addAttribute("clientes", clientes);
 	return "cliente_list.html";
@@ -49,8 +50,7 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 
 	@GetMapping("/cambiarEstado/{id}")
 	public String cambiarEstado(@PathVariable Long id, ModelMap modelo, HttpSession session){
-		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-		modelo.put("usuario", usuario);	
+	modelo.put("usuario", session.getAttribute("usuariosession"));
 		
 		modelo.put("cliente", clienteService.findById(id));
 		clienteService.cambiarEstado(id);
@@ -58,13 +58,11 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 			modelo.addAttribute("clientes", clientes);		
 		return "cliente_list.html";
 	}
-        
+
+	
 	@GetMapping("/rotarRol/{id}")
 	public String rotarRol(@PathVariable Long id, ModelMap modelo, HttpSession session){
-		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-		modelo.put("usuario", usuario);
-		
-		
+	modelo.put("usuario", session.getAttribute("usuariosession"));
 		modelo.put("cliente", clienteService.findById(id));
 		clienteService.rotarRol(id);
 		Role role = clienteService.findById(id).getRole();
@@ -82,12 +80,52 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 			}
 		return "cliente_list.html";
 	}	
+	
+	@GetMapping("/proveedorEstado/{id}")
+	public String proveedorCambiarEstado(@PathVariable Long id, ModelMap modelo, HttpSession session){
+	modelo.put("usuario", session.getAttribute("usuariosession"));
+		
+		modelo.put("proveedor", proveedorRepository.findById(id));
+		proveedorService.cambiarEstado(id);
+			List<Proveedor> proveedores = proveedorRepository.listarProveedoresTodo();
+			modelo.addAttribute("proveedores", proveedores);
+			//modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());
+		return "proveedor_list.html";
+	}	
+	
+	@GetMapping("/proveedorDisponible/{id}")
+	public String proveedorDisponible(@PathVariable Long id, ModelMap modelo, HttpSession session){
+	modelo.put("usuario", session.getAttribute("usuariosession"));
+		
+		modelo.put("proveedor", proveedorService.findById(id));
+		proveedorService.cambiarDisponible(id);
+		modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());	
+		return "proveedor_list.html";
+	}
+	
 
+	@GetMapping("/proveedorRotarRol/{id}")
+	public String proveedorRotarRol(@PathVariable Long id, ModelMap modelo, HttpSession session){
+	modelo.put("usuario", session.getAttribute("usuariosession"));
+		modelo.put("proveedor", proveedorRepository.findById(id));
+		proveedorService.rotarRol(id);
+		modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());	
+		return "proveedor_list.html";
+	}	
+
+	@GetMapping("/proveedorAprobar/{id}")
+	public String proveedorAprobar(@PathVariable Long id, ModelMap modelo, HttpSession session){
+	modelo.put("usuario", session.getAttribute("usuariosession"));
+		modelo.put("proveedor", proveedorRepository.findById(id));
+		proveedorService.aprobar(id);
+		modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());	
+		return "proveedor_list.html";
+	}
+	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/perfil/{id}")
 	public String modificarPerfil(@PathVariable Long id, ModelMap modelo, HttpSession session){
-		Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-		modelo.put("usuario", usuario);
+		modelo.put("usuario", session.getAttribute("usuariosession"));
 		Cliente cliente = clienteService.findById(id);
 		modelo.put("cliente", cliente);
 		modelo.addAttribute("roles", Role.values() );
@@ -97,7 +135,7 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 	 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/perfil/{id}")
-	public String modificarPerfil(@PathVariable Long id, @RequestParam String email,@RequestParam String nombre,@RequestParam String password, @RequestParam String password2, ModelMap modelo){
+	public String modificarPerfil(@PathVariable Long id, @RequestParam String email,@RequestParam String nombre,@RequestParam String password, @RequestParam String password2, ModelMap modelo, HttpSession session){
 		
 		try {
 			Cliente cliente = clienteService.findById(id);
@@ -107,6 +145,7 @@ public String listaPeriodistas(ModelMap modelo, HttpSession session) {
 			return "redirect:/admin/cliente/lista";
 			
 		} catch (MiException ex) {
+			modelo.put("usuario", session.getAttribute("usuariosession"));
 			Cliente cliente = clienteService.findById(id);
 			modelo.put("cliente", cliente);
 			modelo.addAttribute("roles", Role.values() );

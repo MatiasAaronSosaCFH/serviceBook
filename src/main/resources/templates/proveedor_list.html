@@ -1,71 +1,113 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <head th:replace="/fragments/head :: head" </head> </head>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="/fragments/head :: head" </head> </head>
 
-  <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+    <body>
 
-    <header th:replace="/fragments/header :: header" </header></header>
+        <header th:replace="/fragments/header :: header" </header></header>
 
-  <main id="main-content">
-    
-    <h1 class="fw-light bienvenido">Clientes ServiceBook</h1>
-    <div class="container-fluid m-5 contenedor">
-    <!-- <div><div th:replace="/fragments/exitoError :: div" </div></div>                  -->
+        <main id="main-content">
 
-      <table class="table table-dark table-hover">
-          <thead class="table-dark">
-              <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Fecha de Alta</th>
-                  <th scope="col">Rol</th>
-                  <th scope="col">Alta</th>                  
-                  <th scope="col">Cambiar Estado</th>
-                  <th scope="col">Cambiar Rol</th>
-                  <th scope="col" sec:authorize="hasRole('ADMIN')">Modificar</th>
-              </tr>
-          </thead>
-          <tbody th:each="cliente : ${clientes}">
-              <tr>
-                  <td th:text="${cliente.id}"></td>
-                  <td th:text="${cliente.email}"></td>
-                  <!-- <td ><a><img th.if="${usuario.imagen != null}" class="logo" th:src="@{/imagen/perfil/__${usuario.id}__}" ></a></td> -->
-                  <td th:text="${cliente.nombre}"></td>
-                  <td th:text="${cliente.fechaDeAlta}"></td>
-                  <td th:text="${cliente.role}"></td>
-                  <td th:text="${cliente.alta}"></td>
-                  <td><a th:href="@{/admin/cambiarEstado/__${cliente.id}__}" class="button-link">Alta/Baja</a></td>
-                  <td >
-                      <!-- <form class="formulario" th:action="@{/admin/perfil/rol/__${usuario.id}__}" method="POST" enctype="multipart/form-data">
-                          <div class="d-flex justify-content-center">
-                              <div class="input-group w-auto">
-                                  <input hidden th:value="${usuario.id}" type="text" class="form-control" name="id">                    
-                                  <input hidden th:value="${usuario.nombreUsuario}" type="text" class="form-control" name="nombreUsuario" placeholder="nombre de usuario">
-                                  <select name="rol" id="" sec:authorize="hasRole('ADMIN')" >
-                                      <option th:text="${usuario.rol}"></option>
-                                      <option>USER</option>
-                                      <option>ADMIN</option>
-                                      <option>PERIODISTA</option>
-                                  </select>
-                                  <input hidden th:value="${archivo}" type="file" class="form-control" name="archivo" >
-                                  <input hidden th:value="${usuario.password}" type="password" class="form-control" name="password" placeholder="password al menos 6 digitos">
-                                  <input hidden th:value="${usuario.password}" type="password" class="form-control" name="password2" placeholder="reingrese password">
-                              </div>
-                              <button type="submit" class="btn btn-primary"> Cambiar Rol </button>
-                          </div>
-                          
-                      </form>  -->
-                      <a th:href="@{/admin/rotarRol/__${cliente.id}__}" class="button-link" >Rotar Rol</a>
-                  </td>
-                  <td ><a th:href="@{/admin/perfil/__${cliente.id}__}"  class="button-link" > Modificar</a></td>
-              </tr>
-          </tbody>
-      </table>
-  </div>
-  </main>
+            <div class="container-fluid m-0 p-0 g-0 w-100 contenedor">
+                <div class="row p-0 m-0 g-0 w-100">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <!-- <div><div th:replace="/fragments/exitoError :: div" </div></div>                  -->
+                        <div class="table_header">
+                            <h1 class="py-5 mb-1 text-center">Proveedores ServiceBook</h1>
+                            <!-- <select name id>
+                                <option value selected>Tipo</option>
+                                <option value>Tipo1</option>
+                                <option value>Tipo2</option>
+                            </select>
+                            <div class="input_search">
+                                <input type="search" placeholder="Buscar" />
+                                <i class="bi bi-search" id="search"></i>
+                            </div> -->
+                        </div>
+                        <table class="table table-bordered table-striped-columns border-primary table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" scope="col">Id</th>
+                                    <th class="text-center" scope="col">Email</th>
+                                    <th class="text-center" scope="col">Nombre</th>
+                                    <th class="text-center" scope="col">Fecha de Alta</th>
+                                    <th class="text-center" scope="col">Rol</th>
+                                    <th class="text-center" scope="col">Alta</th>
+                                    <th class="text-center" scope="col">Disponible</th>
+                                    <th class="text-center" scope="col">Aprobacion</th>
+                                    <th class="text-center" scope="col">Cambiar Rol</th>
+                                    <th class="text-center" scope="col">Cambiar Estado</th>
+                                    <th class="text-center" scope="col">Cambiar Disponible</th>
+                                    <th class="text-center" scope="col">Aprobar</th>
+                                    <th class="text-center" scope="col">Editar</th>
+                                    <th class="text-center" scope="col">Ver</th>
+                                </tr>
+                            </thead>
+                            <tbody th:each="proveedor : ${proveedores}">
+                                <tr>
+                                    <td class="text-center" th:text="${proveedor.id}"></td>
+                                    <td class="text-center" th:text="${proveedor.email}"></td>
+                                    <!-- <td ><a><img th.if="${usuario.imagen != null}" class="logo" th:src="@{/imagen/perfil/__${proveedor.id}__}" ></a></td> -->
+                                    <td class="text-center" th:text="${proveedor.nombre}"></td>
+                                    <td class="text-center" th:text="${proveedor.fechaDeAlta}"></td>
+                                    <td class="text-center" th:text="${proveedor.role}"></td>
+                                    <td class="text-center" th:text="${proveedor.alta}" ></td>
+                                    <td class="text-center" th:text="${proveedor.disponible}"></td>
+                                    <td class="text-center" th:text="${proveedor.aprobacion}"></td>
+                                    <td>
+                                        <a
+                                            th:href="@{/admin/proveedorRotarRol/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/refresh.png" alt="actualizar rol">
+                                        </a>
+                                    </td>
+                                    <td><a
+                                            th:href="@{/admin/proveedorEstado/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/refresh.png" alt="actualizar estado">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a
+                                            th:href="@{/admin/proveedorDisponible/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/refresh.png" alt="actualizar disponible">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a
+                                            th:href="@{/admin/proveedorAprobar/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/edit.png" alt="actualizar aprobar">
+                                        </a>
+                                    </td>
+                                    <td><a
+                                            th:href="@{/admin/perfil/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/edit.png" alt="editar perfil">
+                                        </a>
+                                    </td>
+                                    <td><a
+                                        th:href="@{/admin/perfil/__${proveedor.id}__}"
+                                        class="button-link d-flex justify-content-center">
+                                        <img src="../../img/edit.png" alt="Ver perfil">
+                                    </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
 
-  <div><footer th:replace="/fragments/footer :: footer" </footer></div>
-  <script src="../static/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        </main>
+
+        <div><footer th:replace="/fragments/footer :: footer" </footer></div>
+            <script src="../../js/color-modes.js"></script>
+            <script src="../../js/borrar.js"></script>
+            <script src="../../js/bootstrap.bundle.min.js"></script>
+        </body>
+    </html>
