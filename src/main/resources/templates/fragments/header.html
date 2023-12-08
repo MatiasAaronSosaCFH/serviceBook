@@ -87,7 +87,7 @@
                       id="perfilDirecto"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
                       th:if="${#httpServletRequest.getRequestURI() != '/'}"
-                      th:text="'Hola, ' + ${usuario.nombre}"></li>
+                      th:text="'Hola, ' + ${usuario?.nombre}"></li>
                     <div class="me-md-3 me-1"
                       id="perfilDropdown"
                       sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')">
@@ -97,7 +97,7 @@
                             role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">.
                             <img
-                              th:src="${usuario.foto != null} ? ${usuario.foto.url} : '../../img/usuario-de-perfil.png'"
+                              th:src="${usuario?.foto != null} ? ${usuario?.foto?.url} : '../../img/usuario-de-perfil.png'"
                               alt="foto perfil" class="imagen-perfil-miniatura">
                           </a>
                           <ul class="dropdown-menu dropdown-menu-end">
