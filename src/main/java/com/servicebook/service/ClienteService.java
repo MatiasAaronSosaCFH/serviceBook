@@ -45,8 +45,8 @@ public class ClienteService implements UserDetailsService {
 
   public Cliente findByEmail(String email) {
 
-    return clienteRepository.findByEmail(email).orElse(null);
-    //return clienteRepository.findByEmail(email);
+	     return clienteRepository.findByEmail(email).orElse(null);
+
   }
 
   public List<Cliente> findAll() {
