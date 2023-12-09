@@ -56,8 +56,8 @@ private ProveedorRepository proveedorRepository;
          if (entry == null) {
         
           redirectAttributes.addFlashAttribute("error", "Imagen Nula"); 
-           
-          return "redirect:/modificar";        
+//            return "redirect:/modificar";             
+          return "modificar.html";        
         }
         
         Map resultado = cloudinaryService.subirFoto(multipartFile);
@@ -78,10 +78,10 @@ private ProveedorRepository proveedorRepository;
           //clienteService.modificarFoto(cliente);
         
         } 
-     
         
         redirectAttributes.addFlashAttribute("exito", "imagen registrada con éxtio!");
-        return "redirect:/modificar";
+//        return "redirect:/modificar";
+          return "modificar.html";    
     }
 
 //    @DeleteMapping("/delete/{id}")

@@ -13,9 +13,18 @@ import java.util.List;
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
+    @Query("SELECT p FROM Proveedor p ")
+    List<Proveedor> listarProveedoresTodo();
+	 
     @Query("SELECT p FROM Proveedor p WHERE p.alta = true")
-    List<Proveedor> listarProveedores();
-
+    List<Proveedor> listarProveedoresAlta();
+	 
+    @Query("SELECT p FROM Proveedor p WHERE p.alta = false")
+    List<Proveedor> listarProveedoresBaja();	
+	 
+    @Query("SELECT p FROM Proveedor p WHERE p.aprobacion = false")
+    List<Proveedor> listarProveedoresAprobacion();
+	 
     List<Proveedor> findByProfesionesNombre(String nombreProfesion);
 
     @Query("SELECT p FROM Proveedor p JOIN p.trabajosRealizados t WHERE t.id = :trabajoId")
