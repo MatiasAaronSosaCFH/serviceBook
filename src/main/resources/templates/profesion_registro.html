@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <head th:replace="/fragments/head :: head" </head></head>
+  <th:head th:replace="./fragments/head.html :: head"></th:head>
 
-  <body class="bg-gradient"
-    style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+  <body>
 
-    <header th:replace="/fragments/header :: header" </header></header>
+    <th:header th:replace="./fragments/header.html :: header"></th:header>
+
+    <div id="deleteModal"
+      class="modal">
+      <div class="modal-content">
+        <div class="mb-2">
+          <span class="d-flex justify-content-end close"
+            onclick="closeDeleteModal()">&times;</span>
+          <h2 class="d-flex justify-content-center">ServiceBook</h2>
+        </div>
+        <hr>
+        <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
+          cuenta?</h5>
+        <form th:action="@{/usuario/baja/__${usuario.id}__}"
+          method="POST" class="d-flex flex-column">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center">
+            <label for="habilitar" class="mb-1 text-white">Habilitar Botón</label>
+            <input type="checkbox" id="habilitar" name="habilitar">
+          </div>
+          <button type="submit" id="btnEliminar" class="mb-4 mt-4 btn" disabled>Si,
+            eliminar</button>
+          <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
+        </form>
+      </div>
+    </div>
 
     <main id="main-content">
       <div
@@ -20,6 +44,7 @@
           <div class="col col-sm-1 col-md col-lg"></div>
           <div class="col-12 col-sm-10 col-md-8 col-lg-6">
             <div id="detalles-direccion">
+              <th:div class="mensajeExitoError" th:replace="./fragments/exitoError.html :: div"></th:div>
               <fieldset class="mb-3">
                 <div>
                   <form th:action="@{/profesion/registrar}" method="POST"
@@ -28,8 +53,8 @@
                     <input th:value="${nombre}" type="text"
                       class="form-control mb-3" name="nombre"
                       id="inputProfesion">
-                    <div th:replace="/fragments/exitoError :: div" </div></div>
-                    <button type="submit" class="btn btn-primary mt-3 btnProfesion">
+                    <button type="submit"
+                      class="btn btn-primary mt-3 btnProfesion">
                       Registrar Profesion </button>
                   </form>
                 </div>
@@ -40,9 +65,9 @@
         </div>
       </main>
 
-      <div><footer th:replace="/fragments/footer :: footer" </footer></div>
-        <script src="../../js/color-modes.js"></script>
-        <script src="../../js/borrar.js"></script>
-        <script src="../../js/bootstrap.bundle.min.js"></script>
-      </body>
-    </html>
+      <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
+      <script src="../../js/color-modes.js"></script>
+      <script src="../../js/borrar.js"></script>
+      <script src="../../js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

@@ -1,11 +1,13 @@
 package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
+import com.servicebook.models.Admin;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
 import com.servicebook.models.enums.Role;
+import com.servicebook.repository.AdminRepository;
 import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.ProveedorRepository;
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class ClienteService implements UserDetailsService {
 
   @Autowired
   private ProveedorRepository proveedorRepository;
+  
+  @Autowired
+  private AdminRepository adminRepository;
   
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -248,7 +253,7 @@ public class ClienteService implements UserDetailsService {
 
     Cliente cliente = clienteRepository.findByEmail(email).orElse(null);
 
-    if (cliente != null) {
+    if (cliente != null && cliente.getAlta()) {
 
       List<GrantedAuthority> permisos = new ArrayList<>();
 
@@ -268,7 +273,7 @@ public class ClienteService implements UserDetailsService {
 
     Proveedor proveedor = proveedorRepository.findByEmail(email).orElse(null);
 
-    if (proveedor != null) {
+    if (proveedor != null && proveedor.getAlta()) {
 
       List<GrantedAuthority> permisos = new ArrayList<>();
 
@@ -283,6 +288,26 @@ public class ClienteService implements UserDetailsService {
       session.setAttribute("usuariosession", proveedor);
 
       return new User(proveedor.getEmail(), proveedor.getPassword(), permisos);
+
+    }
+    
+    Admin admin = adminRepository.findByEmail(email).orElse(null);
+
+    if (admin != null && admin.getAlta()) {
+
+      List<GrantedAuthority> permisos = new ArrayList<>();
+
+      GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + admin.getRole().toString());
+
+      permisos.add(p);
+
+      ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+      HttpSession session = attr.getRequest().getSession();
+
+      session.setAttribute("usuariosession", admin);
+
+      return new User(admin.getEmail(), admin.getPassword(), permisos);
 
     }
 

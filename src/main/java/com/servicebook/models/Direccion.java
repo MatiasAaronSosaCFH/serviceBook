@@ -37,10 +37,10 @@ public class Direccion {
   @Column(name = "alta")
   private Boolean alta = true;
 
-  @ManyToMany(mappedBy = "direcciones", cascade = CascadeType.REMOVE)
+  @ManyToMany(mappedBy = "direcciones",cascade = CascadeType.REMOVE)
   private List<Proveedor> proveedores = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "direcciones", cascade = CascadeType.REMOVE)
+  @ManyToMany(mappedBy = "direcciones",cascade = CascadeType.REMOVE)
   private List<Cliente> clientes = new ArrayList<>();
 
   public List<Usuario> getUsuarios() {

@@ -1,6 +1,6 @@
 package com.servicebook.controller;
 
-import com.servicebook.models.Cliente;
+import com.servicebook.models.Admin;
 import com.servicebook.service.ProfesionService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/profesion")
@@ -21,20 +22,20 @@ public class ProfesionController {
   @GetMapping("/registrar")
   public String crearProfesion(HttpSession session, ModelMap map) {
 
-    Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-    map.addAttribute("usuario", usuario);
+    Admin admin = (Admin) session.getAttribute("usuariosession");
+    map.addAttribute("usuario", admin);
     return "profesion_registro.html";
   }
 
   @PostMapping("/registrar")
-  public String crearProfesion(@RequestParam String nombre, ModelMap map) {
+  public String crearProfesion(@RequestParam String nombre, RedirectAttributes redirectAttributes) {
     try {
       profesionService.crearProfesion(nombre);
-      map.addAttribute("exito", "Se registro la profesión correctamente!");
+      redirectAttributes.addFlashAttribute("exito", "Se registro la profesión correctamente!");
     } catch (Exception e) {
-      map.addAttribute("error", "Error: no se pudo registrar la profesión");
+      redirectAttributes.addFlashAttribute("error", "Error: no se pudo registrar la profesión");
     }
-    return "redirect:registrar";
+    return "redirect:/profesion/registrar";
 
   }
 

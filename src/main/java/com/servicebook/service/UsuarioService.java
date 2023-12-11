@@ -5,27 +5,15 @@
 package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
-import com.servicebook.models.Direccion;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.enums.Role;
-import com.servicebook.repository.ClienteRepository;
-import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.UsuarioRepository;
 
 import java.util.*;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class UsuarioService {
@@ -114,20 +102,21 @@ public class UsuarioService {
   }
 
   @Transactional
-  public void bajaUsuario(Long id) {
-    Usuario usuario = new Usuario() {};
+  public void baja(Long id) {
+    Usuario usuario = new Usuario() {
+    };
 
     Optional<Usuario> respuesta = usuarioRepository.findById(id);
 
     if (respuesta.isPresent()) {
       usuario = respuesta.get();
-      usuario.setAlta(Boolean.FALSE);
+      usuario.setAlta(false);
 
       usuarioRepository.save(usuario);
 
     }
   }
-
+  
   public List<Usuario> listarUsuarios() {
     List<Usuario> usuarios = new ArrayList();
     usuarios = usuarioRepository.findAll();

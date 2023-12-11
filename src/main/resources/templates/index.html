@@ -5,7 +5,7 @@
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   
-  <head th:replace="/fragments/head :: head" </head></head>
+  <th:head th:replace="./fragments/head.html :: head"></th:head>
 
   <body>
 
@@ -50,7 +50,7 @@
       </script>
     </div>
 
-    <header th:replace="/fragments/header :: header" </header></header>
+    <th:header th:replace="./fragments/header.html :: header"></th:header>
 
     <div id="loginModal"
       class="modal">
@@ -200,8 +200,8 @@
               <div class="tarjeta">
                 <div th:each="proveedor : ${proveedores}">
                   <div class="card m-0 p-0">
-                    <!-- <img th:src="${proveedor?.foto?.url}" class="card-img-top"
-                      alt="Imagen del proveedor"> -->
+                    <img th:src="${proveedor?.foto?.url}" class="card-img-top"
+                      alt="Imagen del proveedor">
                     <div class="card-body">
                       <div class="badge bg-warning text-dark mb-3">Electricista</div>
                       <h5 th:text="${proveedor.nombre}"
@@ -219,7 +219,7 @@
       </section>
     </main>
 
-    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+    <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
 
     <script src="../../js/color-modes.js"></script>
     <script src="../../js/registro-login.js"></script>

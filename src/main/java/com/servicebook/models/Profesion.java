@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +24,6 @@ public class Profesion {
     private String nombre;
     @Column(name = "alta")
     private Boolean alta = true;
-    @ManyToMany
-    @JoinColumn(name = "proveedor_profesion_id", referencedColumnName = "id")
-    private List<Proveedor> proveedores;
+    @ManyToMany(mappedBy = "profesiones", cascade = CascadeType.REMOVE)
+    private List<Proveedor> proveedores = new ArrayList<>();
 }

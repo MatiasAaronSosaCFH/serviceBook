@@ -38,5 +38,8 @@ public interface ProfesionRepository extends JpaRepository<Profesion, Long> {
     @Query("UPDATE Profesion p SET p.alta = false WHERE p.id = :id AND p.alta = false")
     void darBaja(@Param("id") Long id);
 
-
+    List<Profesion> findByNombreIn(List<String> nombres);
+    
+    Profesion findByNombre(String nombre);
+    
 }

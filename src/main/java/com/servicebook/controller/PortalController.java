@@ -1,11 +1,13 @@
 package com.servicebook.controller;
 
 import com.servicebook.exception.MiException;
+import com.servicebook.models.Admin;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
+import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
@@ -16,16 +18,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.Entity;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -70,10 +64,13 @@ public class PortalController {
           model.addAttribute("usuario", clienteDto);
         }
       } else if (usuario.getRole() == Role.PROVEEDOR) {
-        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-        model.addAttribute("usuario", proveedor);
+        Long proveedorId = usuario.getId();
+        ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
+        if (proveedorDto != null) {
+          model.addAttribute("usuario", proveedorDto);
+        }
       } else if (usuario.getRole() == Role.ADMIN) {
-        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        Admin admin = (Admin) session.getAttribute("usuariosession");
         model.addAttribute("usuario", admin);
       }
     }
@@ -158,10 +155,13 @@ public class PortalController {
           model.addAttribute("usuario", clienteDto);
         }
       } else if (usuario.getRole() == Role.PROVEEDOR) {
-        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-        model.addAttribute("usuario", proveedor);
+        Long proveedorId = usuario.getId();
+        ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
+        if(proveedorDto != null) {
+          model.addAttribute("usuario", proveedorDto);
+        }
       } else if (usuario.getRole() == Role.ADMIN) {
-        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        Admin admin = (Admin) session.getAttribute("usuariosession");
         model.addAttribute("usuario", admin);
       }
     }

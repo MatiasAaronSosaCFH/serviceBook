@@ -83,6 +83,13 @@ public class DireccionService {
 
   }
 
+  @Transactional
+  public void eliminarPorProveedor(Long idProveedor, Long idDireccion) {
+
+    direccionRepository.deleteProveedoresDirecciones(idProveedor, idDireccion);
+
+  }
+
   @Transactional(readOnly = true)
   public Page<Direccion> listado(Pageable paginacion) {
 
@@ -150,12 +157,12 @@ public class DireccionService {
     if (direccionResp.isPresent()) {
 
       Direccion direccion = direccionResp.get();
-      
+
       direccion.setCalle(calle);
       direccion.setLocalidad(localidad);
       direccion.setNumero(numero);
       direccion.setProvincia(provincia);
-      
+
       direccionRepository.save(direccion);
 
     }

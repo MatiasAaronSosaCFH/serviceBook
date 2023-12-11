@@ -5,7 +5,7 @@
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-  <head th:replace="/fragments/head :: head" </head></head>
+  <th:head th:replace="./fragments/head.html :: head"></th:head>
 
   <body>
 
@@ -97,7 +97,7 @@
       </script>
     </div>
 
-    <header th:replace="/fragments/header :: header" </header></header>
+    <th:header th:replace="./fragments/header.html :: header"></th:header>
 
     <div id="deleteModal"
       class="modal">
@@ -110,7 +110,7 @@
         <hr>
         <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
           cuenta?</h5>
-        <form th:action="@{/cliente/bajaCliente/__${usuario.id}__}"
+        <form th:action="@{/usuario/baja/__${usuario.id}__}"
           method="POST" class="d-flex flex-column">
           <div
             class="d-flex flex-column justify-content-center align-items-center">
@@ -158,7 +158,35 @@
               </form>
             </div>
 
-            <div class="informacion-basica">
+            <div class="informacion-basica" sec:authorize="hasAnyRole('ADMIN')">
+              <div id="desplegable" class="desplegable">
+                <div id="cabecera" class="cabecera d-flex align-items-center">
+                  <h2 class="flex-grow-1 text-center m-0">Información Básica</h2>
+                  <img id="flecha" class="flecha me-5 ms-auto"
+                    src="./img/flecha.png" alt="Flecha">
+                </div>
+                <div id="detalles" class="detalles p-0">
+                  <form method="POST"
+                    th:action="@{/admin/modificar/__${usuario.id}__}"
+                    id="formBasica" class="formulario" th:object="${usuario}">
+                    <div th:if="${errorBasica}" class="alert alert-danger"
+                      role="alert">
+                      <p th:text="${errorBasica}"></p>
+                    </div>
+                    <input hidden name="id" th:value="${usuario.id}">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}"
+                      th:value="${usuario.nombre}">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}"
+                      th:value="${usuario.email}" autocomplete="off">
+                    <button type="submit" id="boton-guardar6">Actualizar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="informacion-basica" sec:authorize="hasAnyRole('USER')">
               <div id="desplegable" class="desplegable">
                 <div id="cabecera" class="cabecera d-flex align-items-center">
                   <h2 class="flex-grow-1 text-center m-0">Información Básica</h2>
@@ -169,8 +197,9 @@
                   <form method="POST"
                     th:action="@{/cliente/modificar/__${usuario.id}__}"
                     id="formBasica" class="formulario" th:object="${usuario}">
-                    <div th:if="${errorBasica}" class="alert alert-danger" role="alert">
-                      <p th:text="${errorBasica}"></p> 
+                    <div th:if="${errorBasica}" class="alert alert-danger"
+                      role="alert">
+                      <p th:text="${errorBasica}"></p>
                     </div>
                     <input hidden name="id" th:value="${usuario.id}">
                     <label for="nombre">Nombre:</label>
@@ -185,7 +214,61 @@
               </div>
             </div>
 
-            <div class="informacion-direccion">
+            <div class="informacion-basica"
+              sec:authorize="hasAnyRole('PROVEEDOR')">
+              <div id="desplegable" class="desplegable">
+                <div id="cabecera" class="cabecera d-flex align-items-center">
+                  <h2 class="flex-grow-1 text-center m-0">Información Básica</h2>
+                  <img id="flecha" class="flecha me-5 ms-auto"
+                    src="./img/flecha.png" alt="Flecha">
+                </div>
+                <div id="detalles" class="detalles p-0">
+                  <form method="POST"
+                    th:action="@{/proveedor/modificar/__${usuario.id}__}"
+                    id="formBasica" class="formulario" th:object="${usuario}">
+                    <div th:if="${errorBasica}" class="alert alert-danger"
+                      role="alert">
+                      <p th:text="${errorBasica}"></p>
+                    </div>
+                    <input hidden name="id" th:value="${usuario.id}">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}"
+                      th:value="${usuario.nombre}">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}"
+                      th:value="${usuario.email}" autocomplete="off">
+                    <label for="emailDeContacto">Email de contacto</label>
+                    <input type="email" id="emailDeContacto"
+                      th:field="*{emailDeContacto}"
+                      th:value="${usuario.emailDeContacto}">
+                    <label for="numeroDeContacto">Numero de contacto</label>
+                    <input type="text" id="numeroDeContacto"
+                      th:field="*{numeroDeContacto}"
+                      th:value="${usuario.numeroDeContacto}">
+
+                    <label for="presentacion">Presentacion</label>
+                    <textarea type="text" id="presentacion"
+                      th:field="*{presentacion}"
+                      th:value="${usuario.presentacion}"></textarea>
+                    <label for="precioPorHora">Precio por hora</label>
+                    <input type="number" id="precioPorHora"
+                      th:field="*{precioPorHora}"
+                      th:value="usuario.precioPorHora">
+                    <div
+                      class="d-flex justify-content-start align-items-center contenedor-disponible">
+                      <span>Disponible</span>
+                      <input type="checkbox" id="disponible" th:field="*{disponible}"
+                        th:value="${usuario.disponible}"/>
+                    </div>
+
+                    <button type="submit" id="boton-guardar5">Actualizar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="informacion-direccion"
+              sec:authorize="hasAnyRole('USER', 'PROVEEDOR')">
               <div id="desplegable-direccion" class="desplegable">
                 <div id="cabecera-direccion"
                   class="cabecera d-flex align-items-center">
@@ -221,7 +304,9 @@
                             </a>
                           </td>
                           <td class="text-center">
-                            <form th:action="@{/direccion/eliminar/__${usuario.id}__/__${direccion.id}__}" method="POST">
+                            <form
+                              th:action="@{/direccion/eliminar/__${usuario.id}__/__${direccion.id}__}"
+                              method="POST">
                               <button type="submit" class="enlaceEliminar">
                                 <img src="./img/delete.png" alt="imagen delete" />
                               </button>
@@ -231,15 +316,16 @@
                       </tbody>
                     </table>
                     <button type="button" id="btnDireccion"
-                    th:attr="onclick=|mostrarFormularioRegistro('${usuario.id}')|">Agregar
+                      th:attr="onclick=|mostrarFormularioRegistro('${usuario.id}')|">Agregar
                       Dirección</button>
-                  </div>             
+                  </div>
                 </div>
               </div>
             </div>
 
             <div id="desplegable-contrasena"
-              class="desplegable rounded-modificar-abajo">
+              class="desplegable rounded-modificar-abajo"
+              sec:authorize="hasAnyRole('USER', 'PROVEEDOR', 'ADMIN')">
               <div id="cabecera-contrasena"
                 class="cabecera d-flex align-items-center">
                 <h2 class="flex-grow-1 text-center m-0">Administrar Contraseñas</h2>
@@ -247,10 +333,13 @@
                   src="./img/flecha.png" alt="Flecha">
               </div>
               <div id="detalles-contrasena" class="detalles p-0">
-                <div th:if="${errorPassword}" class="alert alert-danger" role="alert">
-                  <p th:text="${errorPassword}"></p> 
+                <div th:if="${errorPassword}" class="alert alert-danger"
+                  role="alert">
+                  <p th:text="${errorPassword}"></p>
                 </div>
-                <form method="POST" th:action="@{/cliente/modificarPassword/__${usuario.id}__}" id="formContrasena" class="formulario">
+                <form method="POST"
+                  th:action="@{/cliente/modificarPassword/__${usuario.id}__}"
+                  id="formContrasena" class="formulario">
                   <input hidden name="id" th:value="${usuario.id}">
                   <label for="passwordActual">Contraseña Actual:</label>
                   <input type="password" id="passwordActual"
@@ -274,7 +363,7 @@
       </div>
     </main>
 
-    <footer th:replace="/fragments/footer :: footer" </footer></footer>
+    <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
     <script src="../../js/color-modes.js"></script>
     <script src="../../js/borrar.js"></script>
     <script src="../../js/bootstrap.bundle.min.js"></script>

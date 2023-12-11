@@ -72,4 +72,9 @@ public interface DireccionRepository extends JpaRepository<Direccion, Long> {
   @Transactional
   @Query(value = "DELETE FROM clientes_direcciones WHERE cliente_id = :clienteId AND direccion_id = :direccionId", nativeQuery = true)
   void deleteClientesDirecciones(Long clienteId, Long direccionId);
+  
+  @Modifying
+  @Transactional
+  @Query(value = "DELETE FROM proveedores_direcciones WHERE proveedor_id = :proveedorId AND direccion_id = :direccionId", nativeQuery = true)
+  void deleteProveedoresDirecciones(Long proveedorId, Long direccionId);
 }

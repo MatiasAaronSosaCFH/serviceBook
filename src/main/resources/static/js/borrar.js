@@ -14,6 +14,10 @@ function closeDeleteModal() {
   modal.classList.remove("align-items-center");
 }
 
+document.getElementById("btnCancelar").addEventListener("click", function () {
+  closeDeleteModal();
+});
+
 document
   .getElementById("enlace-borrar")
   .addEventListener("click", openDeleteModal);
@@ -326,3 +330,11 @@ function insertarError(error){
   );
 
 }
+
+$(document).ready(function() {
+  $('#selectedOptions').select2({
+    placeholder: 'Selecciona profesiones',
+    allowClear: true,
+    dropdownParent: $('#customDropdownParent')
+  });
+});

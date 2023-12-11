@@ -561,7 +561,7 @@ footer {
   color: #fff;
 }
 
-#boton-guardar2, #boton-guardar3, #boton-guardar4 {
+#boton-guardar2, #boton-guardar3, #boton-guardar4, #boton-guardar5, #boton-guardar6 {
   background-color: #2ecc71;
   color: #fff;
   margin: 25px 15%;
@@ -680,6 +680,24 @@ td {
   color: black;
   font-size: 18px;
   font-weight: bold;
+}
+
+.select2-container {
+  margin-bottom: 20px !important;
+  margin-left: 15% !important;
+  width: 70% !important;
+}
+
+#customDropdownParent ul {
+  text-align: center !important;
+}
+
+#customDropdownParent {
+  position: relative !important;
+}
+
+.select2-container--open {
+  left: 0 !important;
 }
 
 @media (max-width: 576px) {

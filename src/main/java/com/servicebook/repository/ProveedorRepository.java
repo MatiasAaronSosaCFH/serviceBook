@@ -94,4 +94,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
                           @Param("id") Long id);
     
     
+   @Query(value = "SELECT COUNT(*) FROM proveedores WHERE email = :email", nativeQuery = true) 
+   Integer existeEmail(@Param("email") String email);
 }
