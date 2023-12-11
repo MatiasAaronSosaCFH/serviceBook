@@ -46,7 +46,6 @@ public class FotoService {
     public Foto convertirDtoRecibido(FotoDtoRecibido foto){
         Foto fotoFinal = new Foto();
         fotoFinal.setFotoId(foto.fotoId());
-        fotoFinal.setTrabajo(trabajoRepository.buscarPorId(foto.trabajo()).orElse(null));
         fotoFinal.setAlta(true);
         fotoFinal.setUrl(foto.url());
         fotoFinal.setNombre(foto.nombre());
@@ -56,7 +55,7 @@ public class FotoService {
     public List<Foto> convertirDtoRecibido(List<FotoDtoRecibido> foto){
         List<Foto> fotosFinales = foto.stream().map(Foto::new).toList();
         Trabajo trabajo = trabajoRepository.buscarPorId(foto.get(0).trabajo()).orElse(null);
-        fotosFinales.forEach(foto1 -> foto1.setTrabajo(trabajo));
+        //fotosFinales.forEach(foto1 -> foto1.setTrabajo(trabajo));
 
         return fotosFinales;
     }
