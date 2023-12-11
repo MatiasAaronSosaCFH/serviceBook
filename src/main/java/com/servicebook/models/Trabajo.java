@@ -1,7 +1,6 @@
 package com.servicebook.models;
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,9 +37,6 @@ public class Trabajo{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="calificacion_id", referencedColumnName = "id")
     private Calificacion calificacion;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
-//    private List<Foto> fotos;
     
     @Column(name="aceptacion_cliente")
     private Boolean estaAceptadoCliente;
@@ -60,4 +56,7 @@ public class Trabajo{
     @Column(name="alta")
     private Boolean alta = true;
     
+    
+    //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
+    //    private List<Foto> fotos;
 }

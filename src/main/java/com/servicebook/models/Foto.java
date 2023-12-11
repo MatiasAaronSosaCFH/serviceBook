@@ -28,9 +28,9 @@ public class Foto {
     @Column(name = "url")
     private String url;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trabajo_id", referencedColumnName = "id")
-    private Trabajo trabajo;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "trabajo_id", referencedColumnName = "id")
+//    private Trabajo trabajo;
     @Column(name = "alta")
     private Boolean alta;
     @Column(name = "foto_id")
