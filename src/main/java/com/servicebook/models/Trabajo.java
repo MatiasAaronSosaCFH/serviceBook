@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,8 +39,23 @@ public class Trabajo{
     @JoinColumn(name="calificacion_id", referencedColumnName = "id")
     private Calificacion calificacion;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
-    private List<Foto> fotos;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
+//    private List<Foto> fotos;
+    
+    @Column(name="aceptacion_cliente")
+    private Boolean estaAceptadoCliente;
+    
+    @Column(name="titulo_trabajo")
+    private String tituloTrabajo;
+    
+    @Column(name="descripcion_trabajo")
+    private String descripcionTrabajo;
+    
+    @Column(name="fecha_trabajo")
+    private Date fechaTrabajo;
+    
+    @Column(name="horas_trabajo")
+    private Integer horasTrabajo;
     
     @Column(name="alta")
     private Boolean alta = true;

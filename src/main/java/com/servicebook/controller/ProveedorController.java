@@ -1,9 +1,13 @@
 package com.servicebook.controller;
 
+import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.FotoProveedor;
 import com.servicebook.models.Profesion;
 import com.servicebook.models.Proveedor;
+import com.servicebook.models.Usuario;
+import com.servicebook.models.dtos.ClienteDtoEnviado;
+import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.repository.ProfesionRepository;
 import com.servicebook.repository.ProveedorRepository;
@@ -15,12 +19,19 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import com.servicebook.service.CloudinaryService;
 import com.servicebook.service.FotoProveedorService;
+import com.servicebook.service.ProfesionService;
+import java.util.ArrayList;
+import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import static org.hibernate.bytecode.BytecodeLogging.LOGGER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +55,10 @@ public class ProveedorController {
   private ProveedorRepository proveedorRepository;
   @Autowired
   private ProfesionRepository profesionRepository;
+  @Autowired
+  private ClienteService clienteService;
+  @Autowired
+  private ProfesionService profesionService;
 
   @GetMapping
   public String inicioIndex(ModelMap map) {
@@ -73,35 +88,66 @@ public class ProveedorController {
     return "index.html";
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR', 'ROLE_ADMIN')")
+  @PreAuthorize("hasAnyRole('ROLE_USER')")
   @GetMapping("/registrar/{id}")
-  public String registrarProveedor(HttpSession session, ModelMap map) {
+  public String registrarProveedor(HttpSession session, ModelMap model, RedirectAttributes redirectAttributes) {
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
-    Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-    map.addAttribute("usuario", usuario);
-    System.out.println(usuario.getAlta().toString() + usuario.getRole() + usuario.getFoto());
-    map.addAttribute("roles", Role.values());
-    List<Profesion> profesiones = profesionRepository.listarProfesiones();
-    map.addAttribute("profesiones", profesiones);
-    return "modificar_proveedor.html";
+    if (usuario != null && !proveedorService.verificarSiExisteEmail(usuario.getEmail())) {
+
+      Long clienteId = usuario.getId();
+      ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+      if (clienteDto != null) {
+        model.addAttribute("usuario", clienteDto);
+        model.addAttribute("roles", Role.values());
+        List<Profesion> profesiones = profesionRepository.listarProfesiones();
+        model.addAttribute("profesiones", profesiones);
+      }
+
+      return "registrar_proveedor.html";
+
+    } else {
+      Long clienteId = usuario.getId();
+      ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+      if (clienteDto != null) {
+        redirectAttributes.addFlashAttribute("usuario", clienteDto);
+        redirectAttributes.addFlashAttribute("error", "Ya envió una solicitud para ser proveedor");
+      }
+      return "redirect:/inicio";
+    }
+
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR', 'ROLE_ADMIN')")
+  @PreAuthorize("hasAnyRole('ROLE_USER')")
   @PostMapping("/registrar/{id}")
   public String registrarProveedor(@PathVariable Long id,
           @RequestParam String emailDeContacto,
           @RequestParam String numeroDeContacto,
-          @RequestParam(required = false) List<Profesion> profesiones,
           @RequestParam String presentacion,
           @RequestParam Integer precioPorHora,
-          @RequestParam Boolean disponible,
+          @RequestParam(required = false) Boolean disponible,
           @RequestParam("imagenes") MultipartFile[] imagenes,
           ModelMap map,
-          RedirectAttributes redirectAttributes) {
+          RedirectAttributes redirectAttributes,
+          HttpServletRequest request) {
 
     map.addAttribute("roles", Role.values());
 
     try {
+      LOGGER.info("Comienzo del método registrarProveedor");
+      
+      String[] profesionesArray = request.getParameterValues("profesionesSeleccionadas");
+      
+      
+      List<String> profesionesSeleccionadas = Arrays.asList(profesionesArray);
+
+      List<Profesion> profesiones = new ArrayList<>();
+
+      for (String profesionSeleccionada : profesionesSeleccionadas) {
+        Profesion profesion = profesionService.obtenerProfesionPorNombre(profesionSeleccionada);
+        profesiones.add(profesion);
+      }
+
       // Crear el proveedor y obtener la instancia
       Proveedor proveedor = proveedorService.crearProveedor(id, emailDeContacto, numeroDeContacto, profesiones, presentacion, precioPorHora, disponible);
 
@@ -110,7 +156,8 @@ public class ProveedorController {
         BufferedImage entry = ImageIO.read(imagen.getInputStream());
 
         if (entry == null) {
-          return "redirect:/proveedor/registrar/" + id + "?error=imagen_nula";
+          redirectAttributes.addFlashAttribute("error", "La imagen es nula");
+          return "redirect:/proveedor/registrar/id";
         }
 
         Map resultado = cloudinaryService.subirFoto(imagen);
@@ -127,12 +174,42 @@ public class ProveedorController {
       // Guardar el proveedor con las imágenes asociadas
       proveedorRepository.save(proveedor);
 
+      redirectAttributes.addFlashAttribute("exito", "Solicitud enviada correctamente!");
+
       // Redireccionar a la página de éxito o a donde sea necesario
+      LOGGER.info("Fin del método registrarProveedor");
       return "redirect:/inicio";
     } catch (Exception ex) {
       // Manejar errores y redirigir con mensajes de error
-      return "redirect:/proveedor/registrar/" + id + "?error=" + ex.getMessage();
+      redirectAttributes.addFlashAttribute("error", ex.getMessage());
+      return "redirect:/proveedor/registrar/id";
     }
+  }
+
+  @PreAuthorize("hasAnyRole('ROLE_PROVEEDOR')")
+  @PostMapping("/modificar/{id}")
+  public String modificar(@PathVariable Long id, @ModelAttribute Proveedor proveedor, RedirectAttributes redirectAttributes, HttpSession session) {
+
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+    if (usuario != null) {
+      Long proveedorId = usuario.getId();
+      ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
+      if (proveedorDto != null) {
+        redirectAttributes.addFlashAttribute("usuario", proveedorDto);
+      }
+    }
+
+    try {
+      proveedorService.modificar(id, proveedor);
+      redirectAttributes.addFlashAttribute("exito", "Proveedor modificado correctamente");
+    } catch (MiException ex) {
+      redirectAttributes.addFlashAttribute("errorBasica", ex.getMessage());
+      redirectAttributes.addFlashAttribute("nombre", proveedor.getNombre());
+      redirectAttributes.addFlashAttribute("email", proveedor.getEmail());
+      return "redirect:/modificar";
+    }
+    return "redirect:/modificar";
   }
 
 }

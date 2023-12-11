@@ -6,9 +6,11 @@ import com.servicebook.models.Direccion;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
+import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
+import com.servicebook.service.ProveedorService;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +41,9 @@ public class DireccionController {
 
   @Autowired
   private ClienteService clienteService;
+
+  @Autowired
+  private ProveedorService proveedorService;
 
   @GetMapping("/listado")
   public String listado(@RequestParam(required = false, defaultValue = "1") int page,
@@ -103,8 +108,8 @@ public class DireccionController {
 
   }
 
-  @PostMapping("/eliminar/{idCliente}/{idDireccion}")
-  public String bajaDireccion(@PathVariable Long idCliente, @PathVariable Long idDireccion ,RedirectAttributes redirectAttributes, HttpSession session) {
+  @PostMapping("/eliminar/{idUsuario}/{idDireccion}")
+  public String bajaDireccion(@PathVariable Long idUsuario, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes, HttpSession session) {
 
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
@@ -115,20 +120,25 @@ public class DireccionController {
         if (clienteDto != null) {
           redirectAttributes.addFlashAttribute("usuario", clienteDto);
         }
+        try {
+          direccionService.eliminarPorCliente(clienteId, idDireccion);
+          redirectAttributes.addFlashAttribute("exito", "La dirección fue eliminada correctamente");
+        } catch (Exception e) {
+          redirectAttributes.addFlashAttribute("errorDireccion", e.getMessage());
+        }
       } else if (usuario.getRole() == Role.PROVEEDOR) {
-        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-        redirectAttributes.addFlashAttribute("usuario", proveedor);
-      } else if (usuario.getRole() == Role.ADMIN) {
-        Cliente admin = (Cliente) session.getAttribute("usuariosession");
-        redirectAttributes.addFlashAttribute("usuario", admin);
+        Long proveedorId = usuario.getId();
+        ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
+        if (proveedorDto != null) {
+          redirectAttributes.addFlashAttribute("usuario", proveedorDto);
+        }
+        try {
+          direccionService.eliminarPorProveedor(proveedorId, idDireccion);
+          redirectAttributes.addFlashAttribute("exito", "La dirección fue eliminada correctamente");
+        } catch (Exception e) {
+          redirectAttributes.addFlashAttribute("errorDireccion", e.getMessage());
+        }
       }
-    }
-    
-    try {
-      direccionService.eliminarPorCliente(idCliente, idDireccion);
-      redirectAttributes.addFlashAttribute("exito", "La dirección fue eliminada correctamente");
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorDireccion", e.getMessage());
     }
 
     return "redirect:/modificar";
@@ -136,7 +146,7 @@ public class DireccionController {
   }
 
   @PostMapping("/modificar/{id}")
-  public String modificar(@PathVariable Long id, @RequestParam String localidad, @RequestParam String provincia, @RequestParam String calle , @RequestParam String numero, RedirectAttributes redirectAttributes, HttpSession session) {
+  public String modificar(@PathVariable Long id, @RequestParam String localidad, @RequestParam String provincia, @RequestParam String calle, @RequestParam String numero, RedirectAttributes redirectAttributes, HttpSession session) {
 
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
@@ -155,7 +165,7 @@ public class DireccionController {
         redirectAttributes.addFlashAttribute("usuario", admin);
       }
     }
-    
+
     try {
       direccionService.modificar(id, calle, numero, localidad, provincia);
       redirectAttributes.addFlashAttribute("exito", "La dirección fue modificada correctamente");
@@ -172,5 +182,5 @@ public class DireccionController {
     return "redirect:/modificar";
 
   }
-  
+
 }

@@ -11,7 +11,7 @@ public record ClienteDtoEnviado(Long id,
                                 FotoUsuario foto,
                                 String email,
                                 List<DireccionDtoEnviado> direcciones,
-                                Date fechaAlta,
+                                Date fechaDeAlta,
                                 String role,
                                 List<TrabajoDtoEnviado> trabajos){
 

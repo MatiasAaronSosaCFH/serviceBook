@@ -76,7 +76,6 @@ public class TrabajoService {
         trabajoFinal.setProveedor(proveedorRepository.buscarPorId(trabajo.proveedor()).orElse(null));
         trabajoFinal.setTerminoCliente(trabajo.terminoCliente());
         trabajoFinal.setTerminoProveedor(trabajo.terminoProveedor());
-        trabajoFinal.setFotos(fotoService.convertirDtoRecibido(trabajo.fotos()));
         return trabajoFinal;
     }
 }

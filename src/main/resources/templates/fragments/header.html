@@ -58,7 +58,8 @@
                     class="col-lg-6 col-md-6 d-flex flex-column flex-md-row justify-content-md-end justify-content-center align-items-center mb-3 mb-md-0">
                     <div class="me-md-3 me-1"
                       id="perfilDropdown2"
-                      sec:authorize="hasAnyRole('ADMIN')">
+                      sec:authorize="hasAnyRole('ADMIN')"
+                      th:if="${#httpServletRequest.getRequestURI() != '/'}">
                       <ul class="navbar-nav mb-lg-0">
                         <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle p-0 logo-admin" href="#"
@@ -70,8 +71,10 @@
                           </a>
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item"
-                                href="/admin/cliente/lista">Panel de Control</a></li>
-                            <li><a class="dropdown-item"
+                                href="/admin/cliente/lista">Panel de Clientes</a></li>
+                                <li><a class="dropdown-item"
+                                  href="/admin/proveedor/lista">Panel de Proveedores</a></li>
+                              <li><a class="dropdown-item"
                                 href="/profesion/registrar" sec:authorize="hasAnyRole('ADMIN')">
                                 Registrar Profesion</a></li>
                           </ul>
@@ -90,7 +93,8 @@
                       th:text="'Hola, ' + ${usuario?.nombre}"></li>
                     <div class="me-md-3 me-1"
                       id="perfilDropdown"
-                      sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')">
+                      sec:authorize="hasAnyRole('ADMIN','USER','PROVEEDOR')"
+                      th:if="${#httpServletRequest.getRequestURI() != '/'}">
                       <ul class="navbar-nav mb-lg-0">
                         <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle p-0" href="#"

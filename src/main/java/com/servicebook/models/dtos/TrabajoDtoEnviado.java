@@ -13,8 +13,7 @@ public record TrabajoDtoEnviado (Long id,
 								ClienteDtoEnviado cliente,
 								Boolean terminoCliente,
 								Boolean terminoProveedor,
-								Integer calificacion,
-								List<FotoDtoEnviado> fotos
+								Integer calificacion
 								){
 
 	public TrabajoDtoEnviado(Trabajo trabajo) {
@@ -23,8 +22,7 @@ public record TrabajoDtoEnviado (Long id,
 			new ClienteDtoEnviado(trabajo.getCliente()),
 			trabajo.getTerminoCliente(),
 			trabajo.getTerminoProveedor(),
-			trabajo.getCalificacion().getEstrellas().getNumero(),
-			trabajo.getFotos().stream().map(FotoDtoEnviado::new).toList()
+			trabajo.getCalificacion().getEstrellas().getNumero()
 		);
 	}
 }

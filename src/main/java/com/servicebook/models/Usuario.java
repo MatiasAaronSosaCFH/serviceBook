@@ -37,4 +37,7 @@ public abstract class Usuario {
 	protected Boolean alta = true;
 	@Column(name = "password")
 	protected String password;
+        @OneToOne
+        @JoinColumn(name = "foto_id", referencedColumnName = "id")
+        private FotoUsuario foto;
 }

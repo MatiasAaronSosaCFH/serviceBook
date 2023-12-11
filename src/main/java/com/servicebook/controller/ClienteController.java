@@ -1,12 +1,15 @@
 package com.servicebook.controller;
 
 import com.servicebook.exception.MiException;
+import com.servicebook.models.Admin;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
 import com.servicebook.models.enums.Role;
+import com.servicebook.service.AdminService;
 import com.servicebook.service.ClienteService;
+import com.servicebook.service.ProveedorService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ClienteController {
 
   @Autowired
-  ClienteService clienteService;
+  private ClienteService clienteService;
+
+  @Autowired
+  private ProveedorService proveedorService;
+
+  @Autowired
+  private AdminService adminService;
 
   @GetMapping("/busqueda")
   public String buscarCliente(@RequestParam @NotBlank Long id, ModelMap model) {
@@ -83,24 +92,17 @@ public class ClienteController {
 //    }
 //    return "redirect:/inicio";
 //  }
+  @PreAuthorize("hasAnyRole('ROLE_USER')")
   @PostMapping("/modificar/{id}")
   public String modificar(@PathVariable Long id, @ModelAttribute Cliente cliente, RedirectAttributes redirectAttributes, HttpSession session) {
 
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
 
     if (usuario != null) {
-      if (usuario.getRole() == Role.USER) {
-        Long clienteId = usuario.getId();
-        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
-        if (clienteDto != null) {
-          redirectAttributes.addFlashAttribute("usuario", clienteDto);
-        }
-      } else if (usuario.getRole() == Role.PROVEEDOR) {
-        Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
-        redirectAttributes.addFlashAttribute("usuario", proveedor);
-      } else if (usuario.getRole() == Role.ADMIN) {
-        Cliente admin = (Cliente) session.getAttribute("usuariosession");
-        redirectAttributes.addFlashAttribute("usuario", admin);
+      Long clienteId = usuario.getId();
+      ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+      if (clienteDto != null) {
+        redirectAttributes.addFlashAttribute("usuario", clienteDto);
       }
     }
 
@@ -114,15 +116,6 @@ public class ClienteController {
       return "redirect:/modificar";
     }
     return "redirect:/modificar";
-  }
-
-  @GetMapping("/modificar/{id}")
-  public String modificar(@PathVariable Long id, ModelMap model) {
-
-    Cliente cliente = clienteService.findById(id);
-    model.addAttribute("cliente", cliente);
-    return "perfil.html";
-
   }
 
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR', 'ROLE_ADMIN')")
@@ -167,25 +160,46 @@ public class ClienteController {
         if (clienteDto != null) {
           redirectAttributes.addFlashAttribute("usuario", clienteDto);
         }
+        try {
+          clienteService.modificarPassword(id, passwordActual, nuevaPassword, repetirPassword);
+          redirectAttributes.addFlashAttribute("exito", "Contraseña actualizada exitosamente.");
+        } catch (MiException ex) {
+          redirectAttributes.addFlashAttribute("errorPassword", ex.getMessage());
+          redirectAttributes.addFlashAttribute("passwordActual", passwordActual);
+          redirectAttributes.addFlashAttribute("nuevaPassword", nuevaPassword);
+          redirectAttributes.addFlashAttribute("repetirPassword", repetirPassword);
+
+          return "redirect:/modificar";
+        }
       } else if (usuario.getRole() == Role.PROVEEDOR) {
         Proveedor proveedor = (Proveedor) session.getAttribute("usuariosession");
         redirectAttributes.addFlashAttribute("usuario", proveedor);
+        try {
+          proveedorService.modificarPassword(id, passwordActual, nuevaPassword, repetirPassword);
+          redirectAttributes.addFlashAttribute("exito", "Contraseña actualizada exitosamente.");
+        } catch (MiException ex) {
+          redirectAttributes.addFlashAttribute("errorPassword", ex.getMessage());
+          redirectAttributes.addFlashAttribute("passwordActual", passwordActual);
+          redirectAttributes.addFlashAttribute("nuevaPassword", nuevaPassword);
+          redirectAttributes.addFlashAttribute("repetirPassword", repetirPassword);
+
+          return "redirect:/modificar";
+        }
       } else if (usuario.getRole() == Role.ADMIN) {
-        Cliente admin = (Cliente) session.getAttribute("usuariosession");
+        Admin admin = (Admin) session.getAttribute("usuariosession");
         redirectAttributes.addFlashAttribute("usuario", admin);
+        try {
+          adminService.modificarPassword(id, passwordActual, nuevaPassword, repetirPassword);
+          redirectAttributes.addFlashAttribute("exito", "Contraseña actualizada exitosamente.");
+        } catch (MiException ex) {
+          redirectAttributes.addFlashAttribute("errorPassword", ex.getMessage());
+          redirectAttributes.addFlashAttribute("passwordActual", passwordActual);
+          redirectAttributes.addFlashAttribute("nuevaPassword", nuevaPassword);
+          redirectAttributes.addFlashAttribute("repetirPassword", repetirPassword);
+
+          return "redirect:/modificar";
+        }
       }
-    }
-
-    try {
-      clienteService.modificarPassword(id, passwordActual, nuevaPassword, repetirPassword);
-      redirectAttributes.addFlashAttribute("exito", "Contraseña actualizada exitosamente.");
-    } catch (MiException ex) {
-      redirectAttributes.addFlashAttribute("errorPassword", ex.getMessage());
-      redirectAttributes.addFlashAttribute("passwordActual", passwordActual);
-      redirectAttributes.addFlashAttribute("nuevaPassword", nuevaPassword);
-      redirectAttributes.addFlashAttribute("repetirPassword", repetirPassword);
-
-      return "redirect:/modificar";
     }
 
     return "redirect:/modificar";

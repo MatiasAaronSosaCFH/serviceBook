@@ -23,10 +23,14 @@ public class Proveedor extends Usuario {
     
     @Column(name = "numero_de_contacto", nullable = false)
     private String numeroDeContacto;
-    
+      
     @ManyToMany
-    @JoinColumn(name = "proveedor_profesion_id", referencedColumnName = "id")
-    private List<Profesion> profesiones;
+    @JoinTable(
+        name = "proveedores_profesiones",
+        joinColumns = @JoinColumn(name = "proveedor_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "profesion_id", referencedColumnName = "id")
+    )
+    private List<Profesion> profesiones = new ArrayList<>();
     
     @Column(name="presentacion")
     private String presentacion;
