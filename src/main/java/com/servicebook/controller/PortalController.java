@@ -4,14 +4,17 @@ import com.servicebook.exception.MiException;
 import com.servicebook.models.Admin;
 import com.servicebook.models.Cliente;
 import com.servicebook.models.Direccion;
+import com.servicebook.models.FotoProveedor;
 import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ClienteDtoEnviado;
+import com.servicebook.models.dtos.ProveedorConFotosDto;
 import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
 import com.servicebook.service.ProveedorService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,16 +38,34 @@ public class PortalController {
 
   @Autowired
   private ProveedorService proveedorService;
-  
+
   @Autowired
   private DireccionService direccionService;
 
-  @GetMapping
-  public String dashboard(ModelMap map) {
+//  @GetMapping
+//  public String dashboard(ModelMap map) {
+//
+//    List<ProveedorConFotosDto> proveedores = proveedorService.obtenerProveedoresConFotos();
+//    map.addAttribute("proveedores", proveedores);
+//    return "index.html";
+//  }
+@GetMapping("/")
+  public String dashboard(
+      @RequestParam(name = "page", defaultValue = "0") int page,
+      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
+      ModelMap map) {
 
-    map.addAttribute("proveedores", proveedorService.findByAlta());
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
+
+    map.addAttribute("proveedores", proveedoresPage.getContent());
+    map.addAttribute("currentPage", proveedoresPage.getNumber());
+    map.addAttribute("totalPages", proveedoresPage.getTotalPages());
+
     return "index.html";
   }
+
+
+
 
   @GetMapping("/perfil")
   public String retornarPerfil(ModelMap model) {
@@ -54,11 +77,13 @@ public class PortalController {
 
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
   @GetMapping("/inicio")
-  public String inicio(HttpSession session, ModelMap model) {
+  public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
+      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
+      ModelMap model) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
-        Long clienteId = usuario.getId(); 
+        Long clienteId = usuario.getId();
         ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
         if (clienteDto != null) {
           model.addAttribute("usuario", clienteDto);
@@ -75,7 +100,12 @@ public class PortalController {
       }
     }
 
-    model.addAttribute("proveedores", proveedorService.findByAlta());
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
+
+    model.addAttribute("proveedores", proveedoresPage.getContent());
+    model.addAttribute("currentPage", proveedoresPage.getNumber());
+    model.addAttribute("totalPages", proveedoresPage.getTotalPages());
+    
     return "inicio.html";
   }
 
@@ -149,7 +179,7 @@ public class PortalController {
 
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
-        Long clienteId = usuario.getId(); 
+        Long clienteId = usuario.getId();
         ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
         if (clienteDto != null) {
           model.addAttribute("usuario", clienteDto);
@@ -157,7 +187,7 @@ public class PortalController {
       } else if (usuario.getRole() == Role.PROVEEDOR) {
         Long proveedorId = usuario.getId();
         ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
-        if(proveedorDto != null) {
+        if (proveedorDto != null) {
           model.addAttribute("usuario", proveedorDto);
         }
       } else if (usuario.getRole() == Role.ADMIN) {
@@ -169,5 +199,5 @@ public class PortalController {
     return "modificar.html";
 
   }
- 
+
 }

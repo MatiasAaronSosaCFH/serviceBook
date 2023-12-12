@@ -2,17 +2,32 @@ package com.servicebook.service;
 
 import com.servicebook.exception.MiException;
 import com.servicebook.models.Cliente;
+import com.servicebook.models.FotoProveedor;
 import com.servicebook.models.Profesion;
 import com.servicebook.models.Proveedor;
+import com.servicebook.models.dtos.ProveedorConFotosDto;
 import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
 import com.servicebook.repository.ClienteRepository;
+import com.servicebook.repository.FotoProveedorRepository;
+import com.servicebook.repository.ProfesionRepository;
 import com.servicebook.repository.ProveedorRepository;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.EntityNotFoundException;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +40,11 @@ public class ProveedorService {
   @Autowired
   private ClienteRepository clienteRepository;
   @Autowired
-  private FotoUsuarioService fotoUsuarioService;
+  private FotoProveedorRepository fotoProveedorRepository;
   @Autowired
   private PasswordEncoder passwordEncoder;
+  @Autowired
+  private ProfesionRepository profesionRepository;
 
   public List<Proveedor> findByAlta() {
 
@@ -131,12 +148,12 @@ public class ProveedorService {
     proveedor.setPrecioPorHora(precioPorHora);
 
     proveedor.setAprobacion(false);
-    if(disponible != null){
+    if (disponible != null) {
       proveedor.setDisponible(true);
     } else {
       proveedor.setDisponible(false);
     }
-    
+
     proveedorRepository.save(proveedor);
 
     return proveedor;
@@ -220,42 +237,88 @@ public class ProveedorService {
         proveedor.setPassword(proveedorActualizado.getPassword());
       }
 
-      if(proveedorActualizado.getEmailDeContacto() != null){
+      if (proveedorActualizado.getEmailDeContacto() != null) {
         proveedor.setEmailDeContacto(proveedorActualizado.getEmailDeContacto());
       }
-      
-      if(proveedorActualizado.getNumeroDeContacto() != null){
+
+      if (proveedorActualizado.getNumeroDeContacto() != null) {
         proveedor.setNumeroDeContacto(proveedorActualizado.getNumeroDeContacto());
       }
-      
-      if(proveedorActualizado.getPresentacion() != null){
+
+      if (proveedorActualizado.getPresentacion() != null) {
         proveedor.setPresentacion(proveedorActualizado.getPresentacion());
       }
-      
-      if(proveedorActualizado.getPrecioPorHora() != null){
+
+      if (proveedorActualizado.getPrecioPorHora() != null) {
         proveedor.setPrecioPorHora(proveedorActualizado.getPrecioPorHora());
       }
-      
-      if(proveedorActualizado.getDisponible() != null){
+
+      if (proveedorActualizado.getDisponible() != null) {
         proveedor.setDisponible(proveedorActualizado.getDisponible());
       }
-      
+
       proveedorRepository.save(proveedor);
 
     }
 
   }
-  
-  public Boolean verificarSiExisteEmail(String email){
-  
+
+  public Boolean verificarSiExisteEmail(String email) {
+
     Integer cantidad = proveedorRepository.existeEmail(email);
-    
-    if(cantidad == 0){
-    
+
+    if (cantidad == 0) {
+
       return false;
+
+    } else {
+      return true;
+    }
+
+  }
+
+  public Page<ProveedorConFotosDto> obtenerProveedoresConFotos(int page, int pageSize) {
+    PageRequest pageable = PageRequest.of(page, pageSize);
+    Page<Proveedor> proveedoresPage = proveedorRepository.listarProveedores(pageable);
     
-    } else return true;
-    
+    return proveedoresPage.map(proveedor -> {
+      Long idProveedor = proveedor.getId();
+      ProveedorConFotosDto nuevoProveedor = new ProveedorConFotosDto();
+      nuevoProveedor.setId(idProveedor);
+      nuevoProveedor.setNombre(proveedor.getNombre());
+      nuevoProveedor.setPresentacion(proveedor.getPresentacion());
+      nuevoProveedor.setProfesiones(findProfesionesByProveedorId(idProveedor));
+      nuevoProveedor.setFotos(findFotosByProveedorId(idProveedor));
+      return nuevoProveedor;
+    });
+  }
+  
+  public List<Profesion> findProfesionesByProveedorId(Long proveedorId) {
+    List<BigInteger> profesionIds = proveedorRepository.findProfesionesByProveedorId(proveedorId);
+    List<Profesion> profesiones = new ArrayList<>();
+
+    for (BigInteger profesionId : profesionIds) {
+      Optional<Profesion> profesionResp = profesionRepository.buscarPorId(((Number) profesionId).longValue());
+      if (profesionResp.isPresent()) {
+        profesiones.add(profesionResp.get());
+      }
+    }
+
+    return profesiones;
+  }
+  
+  public List<FotoProveedor> findFotosByProveedorId(Long proveedorId) {
+    List<BigInteger> fotosIds = proveedorRepository.findFotosByProveedorId(proveedorId);
+    List<FotoProveedor> fotos = new ArrayList<>();
+
+    for (BigInteger fotoId : fotosIds) {
+      Optional<FotoProveedor> fotoResp = fotoProveedorRepository.buscarFotoPorId(((Number) fotoId).longValue());
+      if (fotoResp.isPresent()) {
+        fotos.add(fotoResp.get());
+      }
+    }
+
+    return fotos;
   }
 
 }

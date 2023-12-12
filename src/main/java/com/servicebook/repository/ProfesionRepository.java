@@ -18,7 +18,7 @@ public interface ProfesionRepository extends JpaRepository<Profesion, Long> {
     List<Profesion> listarProfesiones();
 
     @Query("SELECT p FROM Profesion p WHERE p.alta = true AND p.id = :id")
-    Optional<Profesion> buscarPorIdDelProovedor(@Param("id") Long id);
+    List<Profesion> buscarProfesionesPorIdDelProovedor(@Param("id") Long id);
 
     @Query("SELECT p FROM Profesion p WHERE p.nombre = :nombre")
     List<Profesion> buscarProfesion(@Param("nombre") String nombre);
@@ -41,5 +41,8 @@ public interface ProfesionRepository extends JpaRepository<Profesion, Long> {
     List<Profesion> findByNombreIn(List<String> nombres);
     
     Profesion findByNombre(String nombre);
+    
+    @Query("SELECT p FROM Profesion p WHERE p.alta = true AND p.id =:id")
+    Optional<Profesion> buscarPorId(@Param("id") Long id);
     
 }
