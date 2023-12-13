@@ -54,6 +54,10 @@ public class ClienteService implements UserDetailsService {
     //return clienteRepository.findByEmail(email);
   }
 
+  public Cliente getOne(Long idCliente){
+	  return clienteRepository.getOne(idCliente);
+  }  
+  
   public List<Cliente> findAll() {
     return clienteRepository.findAll();
   }

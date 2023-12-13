@@ -26,10 +26,13 @@ public class TrabajoService {
 
     @Autowired
     private ClienteRepository clienteRepository;
-
+    @Autowired
+    private ClienteService  clienteService;
     @Autowired
     private ProveedorRepository proveedorRepository;
     @Autowired
+    private ProveedorService proveedorService;
+	 @Autowired
     private CalificacionRepository calificacionRepository;
     @Autowired
     private CalificacionService calificacionService;
@@ -39,15 +42,33 @@ public class TrabajoService {
 	 
     @Transactional
     public void crearTrabajo(Long idCliente, Long idProveedor, String tituloTrabajo, String descripcionTrabajo) {
-        Optional<Cliente> respuestaCliente = clienteRepository.buscarPorId(idCliente);
-        Optional<Proveedor> respuestaProveedor = proveedorRepository.buscarPorId(idProveedor);
-        Trabajo trabajo = new Trabajo();
-        trabajo.setCliente(respuestaCliente.orElse(new Cliente()));
-        trabajo.setProveedor(respuestaProveedor.orElse(new Proveedor()));
-	
+		 System.out.println("idcli: " +idCliente +" idprov: " + idProveedor +" titulo: "+ tituloTrabajo + " desc: " + descripcionTrabajo);
+		 Proveedor proveedor = new Proveedor();
+		proveedor = proveedorService.getOne(idProveedor);
+		 
+ 		 System.out.println("prov: " );		  
+
+		 Cliente cliente = new Cliente();
+		 cliente = clienteService.getOne(idCliente);
+
+
+		 System.out.println("cliente: " );		  
+
+		 Trabajo trabajo = new Trabajo();
+        trabajo.setCliente(cliente);
+        trabajo.setProveedor(proveedor);
+//		 System.out.println("trabajo:" + trabajo.toString());
 	trabajo.setTituloTrabajo(tituloTrabajo);
 	trabajo.setDescripcionTrabajo(new Date() + ":\n "+ descripcionTrabajo);
 	trabajo.setAlta(Boolean.TRUE);
+	trabajo.setEstaAceptadoCliente(Boolean.FALSE);
+	trabajo.setFechaTrabajo(new Date());
+	trabajo.setHorasTrabajo(0);
+	trabajo.setTerminoCliente(Boolean.FALSE);
+	trabajo.setTerminoProveedor(Boolean.FALSE);
+	trabajo.setCalificacion(null);
+
+//			 System.out.println("trabajo1:" + trabajo.toString());
 	trabajoRepository.save(trabajo);
     }
 	 

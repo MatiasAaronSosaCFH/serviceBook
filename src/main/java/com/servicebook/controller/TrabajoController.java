@@ -1,7 +1,10 @@
 package com.servicebook.controller;
 
 import com.servicebook.models.Cliente;
+import com.servicebook.models.Proveedor;
 import com.servicebook.models.Trabajo;
+import com.servicebook.models.Usuario;
+import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.TrabajoRepository;
 import com.servicebook.service.TrabajoService;
 import java.util.List;
@@ -24,6 +27,8 @@ public class TrabajoController {
     private TrabajoService trabajoService;
     @Autowired
     private TrabajoRepository trabajoRepository;
+	@Autowired
+    private ProveedorRepository proveedorRepository;
 	 
     @GetMapping("/lista")
     public String listar(ModelMap model) {
@@ -32,7 +37,7 @@ public class TrabajoController {
         return "/lista";
     }
 
-@GetMapping("Cliente/{id}")
+@GetMapping("/Cliente/{id}")
 public String trabajoCliente(@PathVariable Long id, HttpSession session, ModelMap modelo){
 	 modelo.put("usuario", session.getAttribute("usuariosession"));
 	  List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorCliente(id);
@@ -41,7 +46,7 @@ public String trabajoCliente(@PathVariable Long id, HttpSession session, ModelMa
 	
 }
 
-@GetMapping("Proveedor/{id}")
+@GetMapping("/Proveedor/{id}")
 public String trabajoProveedor(@PathVariable Long id, HttpSession session, ModelMap modelo){
 	 modelo.put("usuario", session.getAttribute("usuariosession"));
 	  List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorProveedor(id);
@@ -51,21 +56,22 @@ public String trabajoProveedor(@PathVariable Long id, HttpSession session, Model
 }
 
 //revisar para crear trabajo.
-@GetMapping("crearTrabajo")
-public String crearTrabajo(HttpSession session, ModelMap modelo){
+@GetMapping("/crearTrabajo/{idProveedor}")
+public String crearTrabajo(@PathVariable Long idProveedor, HttpSession session, ModelMap modelo){
 	 modelo.put("usuario", session.getAttribute("usuariosession"));
-	 Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-	  List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());   //rervisar si funciona el id
-	modelo.addAttribute("trabajos", trabajos);
+
+	 Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
+	 modelo.put("proveedor",proveedor);
+
 	return "cliente_vista.html";
 
 }
 
-@PostMapping("crearTrabajo/{idProveedor}")
-public String crearTrabajo(@RequestParam Long idProveedor, @RequestParam Long idCliente, @RequestParam String titullTrabajo, @RequestParam String descripcionTrabajo, HttpSession session, ModelMap modelo){
+@PostMapping("/crearTrabajo")
+public String crearTrabajo(@RequestParam Long idProveedor, @RequestParam Long idCliente, @RequestParam String tituloTrabajo, @RequestParam String descripcionTrabajo, HttpSession session, ModelMap modelo){
+	trabajoService.crearTrabajo(idCliente, idProveedor, tituloTrabajo, descripcionTrabajo);
 	 modelo.put("usuario", session.getAttribute("usuariosession"));
-	 Cliente usuario = (Cliente) session.getAttribute("usuariosession");
-	  List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());
+	 List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorCliente(idCliente);
 	modelo.addAttribute("trabajos", trabajos);
 	return "cliente_vista.html";
 
