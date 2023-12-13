@@ -338,3 +338,9 @@ $(document).ready(function() {
     dropdownParent: $('#customDropdownParent')
   });
 });
+
+setTimeout(function() {
+  $('#carouselExample').carousel({
+      interval: 5000
+  });
+}, 3000);

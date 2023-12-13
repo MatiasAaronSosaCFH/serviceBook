@@ -71,4 +71,6 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
                           @Param("proveedor")Long proveedor,
                           @Param("cliente")Long cliente,
                           @Param("id")Long id);
+	 
+	 
 }

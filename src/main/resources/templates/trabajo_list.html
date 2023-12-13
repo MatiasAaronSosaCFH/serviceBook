@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:head th:replace="./fragments/head.html :: head"></th:head>
+
+    <body>
+
+        <th:header th:replace="./fragments/header.html :: header"></th:header>
+
+        <main id="main-content">
+
+            <div class="container-fluid m-0 p-0 g-0 w-100 contenedor">
+                <div class="row p-0 m-0 g-0 w-100">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <!-- <div><div th:replace="/fragments/exitoError :: div" </div></div>                  -->
+                        <div class="table_header">
+                            <h1 class="py-5 mb-1 text-center">Trabajos ServiceBook</h1>
+
+                        </div>
+                        <table class="table table-bordered table-striped-columns border-primary table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" scope="col">Id</th>
+                                    <th class="text-center" scope="col">Cliente</th>
+                                    <th class="text-center" scope="col">Proveedor</th>
+                                    <th class="text-center" scope="col">Titulo</th>
+                                    <th class="text-center" scope="col">Fecha</th>
+                                    <th class="text-center" scope="col">Horas</th>
+                                    <th class="text-center" scope="col">Alta/Baja</th>
+                                    <th class="text-center" scope="col">Costo Estimado</th>
+                                    <th class="text-center" scope="col">Aceptacion Cliente</th>
+                                    <th class="text-center" scope="col">Termino Proveedor</th>
+                                    <th class="text-center" scope="col">Termino Cliente</th>
+                                    <th class="text-center" scope="col">Calificacion</th>
+                                    <th class="text-center" scope="col">Descripcion</th>
+
+
+                                    <!-- <th class="text-center" scope="col">Aprobar</th>
+                                    <th class="text-center" scope="col">Editar</th>
+                                    <th class="text-center" scope="col">Ver</th> -->
+                                </tr>
+                            </thead>
+                            <tbody th:each="trabajo : ${trabajos}">
+                                <tr>
+                                    <td class="text-center" th:text="${trabajo.id}"></td>
+                                    <td class="text-center" th:text="${trabajo.cliente.id}"></td>
+                                    <td class="text-center" th:text="${trabajo.proveedor.id}"></td>
+                                    <td class="text-center" th:text="${trabajo.tituloTrabajo}"></td>
+                                    <td class="text-center" th:text="${trabajo.fechaTrabajo}"></td>
+                                    <td class="text-center" th:text="${trabajo.horasTrabajo}" ></td>
+                                    <td class="text-center" th:text="${trabajo.alta}"></td>
+                                    <td class="text-center" th:value=#>costo=horasXPrecio</td>
+                                    <td class="text-center" th:text="${trabajo.estaAceptadoCliente}"></td>
+                                    <td class="text-center" th:text="${trabajo.terminoProveedor}"></td>
+                                    <td class="text-center" th:text="${trabajo.terminoCliente}"></td>
+                                    <td class="text-center" th:text="${trabajo.calificaion}"></td>
+                                    <td class="text-center" th:text="${trabajo.Descripcion}"></td>
+
+
+                                    <!-- <td>
+                                        <a
+                                            th:href="@{/admin/proveedorAprobar/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/edit.png" alt="actualizar aprobar">
+                                        </a>
+                                    </td>
+                                    <td><a
+                                            th:href="@{/admin/perfil/__${proveedor.id}__}"
+                                            class="button-link d-flex justify-content-center">
+                                            <img src="../../img/edit.png" alt="editar perfil">
+                                        </a>
+                                    </td>
+                                    <td><a
+                                        th:href="@{/admin/perfil/__${proveedor.id}__}"
+                                        class="button-link d-flex justify-content-center">
+                                        <img src="../../img/edit.png" alt="Ver perfil">
+                                    </a>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+        </main>
+
+        <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
+            <script src="../../js/color-modes.js"></script>
+            <script src="../../js/borrar.js"></script>
+            <script src="../../js/bootstrap.bundle.min.js"></script>
+        </body>
+    </html>
