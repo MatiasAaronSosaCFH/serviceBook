@@ -52,7 +52,7 @@ public class PortalController {
 @GetMapping("/")
   public String dashboard(
       @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
+      @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
       ModelMap map) {
 
     Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
@@ -78,7 +78,7 @@ public class PortalController {
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
   @GetMapping("/inicio")
   public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
+      @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
       ModelMap model) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     if (usuario != null) {

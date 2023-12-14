@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <div th:if="${error != null}" class="card text-white bg-danger mb-3 messageError" style="max-width: 70%; max-height: 100px; margin-left: 15%;">
         <div class="card-body" style="max-width: 70%; max-height: 100px; margin-left: 15%;">
             <h5 class="card-tittle">Error !</h5>
@@ -10,5 +10,27 @@
             <h5 class="card-tittle">Exito !</h5>
             <p class="card-text" th:text="${exito}"> </p>
         </div>
+    </div>
+</div> -->
+<div>
+    <div th:if="${exito != null}" id="toastrExito"
+        class="toastr success flex-column justify-content-center align-items-center">
+        <h5 class="card-tittle">Exito !</h5>
+        <p class="card-text" th:text="${exito}"></p>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                openToastrExito();
+            });
+        </script>
+    </div>
+    <div th:if="${error != null}" id="toastrError"
+        class="toastr error flex-column justify-content-center align-items-center">
+        <h5 class="card-tittle">Error !</h5>
+        <p class="card-text" th:text="${error}"></p>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                openToastrError();
+            });
+        </script>
     </div>
 </div>

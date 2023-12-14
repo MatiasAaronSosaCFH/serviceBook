@@ -1,0 +1,10 @@
+<div th:if="${exito != null}" id="toastrExito"
+        class="toastr success flex-column justify-content-center align-items-center">
+        <h5 class="card-tittle">Exito !</h5>
+        <p class="card-text" th:text="${exito}"></p>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                openToastrExito();
+            });
+        </script>
+    </div>
