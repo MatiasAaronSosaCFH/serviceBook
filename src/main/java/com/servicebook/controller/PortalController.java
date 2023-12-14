@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,9 +40,6 @@ public class PortalController {
   @Autowired
   private ProveedorService proveedorService;
 
-  @Autowired
-  private DireccionService direccionService;
-
 //  @GetMapping
 //  public String dashboard(ModelMap map) {
 //
@@ -49,11 +47,11 @@ public class PortalController {
 //    map.addAttribute("proveedores", proveedores);
 //    return "index.html";
 //  }
-@GetMapping("/")
+  @GetMapping("/")
   public String dashboard(
-      @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
-      ModelMap map) {
+          @RequestParam(name = "page", defaultValue = "0") int page,
+          @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+          ModelMap map) {
 
     Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
 
@@ -63,9 +61,6 @@ public class PortalController {
 
     return "index.html";
   }
-
-
-
 
   @GetMapping("/perfil")
   public String retornarPerfil(ModelMap model) {
@@ -78,8 +73,8 @@ public class PortalController {
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
   @GetMapping("/inicio")
   public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
-      ModelMap model) {
+          @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+          ModelMap model, @RequestParam(required = false) Long idProveedor) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
@@ -105,10 +100,25 @@ public class PortalController {
     model.addAttribute("proveedores", proveedoresPage.getContent());
     model.addAttribute("currentPage", proveedoresPage.getNumber());
     model.addAttribute("totalPages", proveedoresPage.getTotalPages());
-    
+
+    if (idProveedor != null) {
+      Proveedor proveedor = proveedorService.findById(idProveedor);
+      model.addAttribute("prov", proveedor);
+      model.addAttribute("verificacion", "verificado");
+    }
+
     return "inicio.html";
   }
 
+//  @GetMapping("/inicio/{idProveedor}")
+//  public String crearTrabajo(@PathVariable Long idProveedor, HttpSession session, ModelMap modelo) {
+//    modelo.addAttribute("usuario", session.getAttribute("usuariosession"));
+//    Proveedor proveedor = proveedorService.findById(idProveedor);
+//    modelo.addAttribute("proveedor", proveedor);
+//    modelo.addAttribute("verificacion", "verificado");
+//    System.out.println("enviados");
+//    return "inicio.html";
+//  }
   @GetMapping("/template")
   public String template(ModelMap map) {
 

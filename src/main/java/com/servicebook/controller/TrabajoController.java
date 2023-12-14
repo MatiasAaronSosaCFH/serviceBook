@@ -74,7 +74,6 @@ public String crearTrabajo(@RequestParam Long idProveedor, @RequestParam Long id
 	 List<Trabajo> trabajos = trabajoRepository.buscarTrabajoPorCliente(idCliente);
 	modelo.addAttribute("trabajos", trabajos);
 	return "cliente_vista.html";
-
 }
 
 

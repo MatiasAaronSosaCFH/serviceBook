@@ -291,6 +291,7 @@ public class ProveedorService {
       nuevoProveedor.setId(idProveedor);
       nuevoProveedor.setNombre(proveedor.getNombre());
       nuevoProveedor.setPresentacion(proveedor.getPresentacion());
+      nuevoProveedor.setPrecioPorHora(proveedor.getPrecioPorHora());
       nuevoProveedor.setProfesiones(findProfesionesByProveedorId(idProveedor));
       nuevoProveedor.setFotos(findFotosByProveedorId(idProveedor));
       return nuevoProveedor;

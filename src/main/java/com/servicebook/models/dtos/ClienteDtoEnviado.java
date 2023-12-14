@@ -12,13 +12,11 @@ public record ClienteDtoEnviado(Long id,
                                 String email,
                                 List<DireccionDtoEnviado> direcciones,
                                 Date fechaDeAlta,
-                                String role,
-                                List<TrabajoDtoEnviado> trabajos){
+                                String role){
 
     public ClienteDtoEnviado(Cliente cliente){
         this(cliente.getId(), cliente.getNombre(), cliente.getFoto(), cliente.getEmail(),
                 cliente.getDirecciones().stream().map(DireccionDtoEnviado::new).toList(),
-                cliente.getFechaDeAlta(),cliente.getRole().toString(),
-                cliente.getTrabajosPedidos().stream().map(TrabajoDtoEnviado::new).toList());
+                cliente.getFechaDeAlta(),cliente.getRole().toString());
     }
 }

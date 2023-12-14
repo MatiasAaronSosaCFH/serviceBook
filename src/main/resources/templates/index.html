@@ -17,22 +17,7 @@
       </script>
     </div>
 
-    <div th:if="${exito}">
-      <script th:inline="javascript">
-        $(document).ready(function () {
-            var exito = /*[[${exito}]]*/ null;
-    
-            if (exito) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: /*[[${exito}]]*/ '',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-      </script>
-    </div>
+    <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
 
     <div th:if="${error != null}">
       <script th:inline="javascript">
@@ -138,7 +123,7 @@
 
     <main id="main-content">
       <div class="w-100 tarjeta-carousel row g-0 p-0">
-        <div class="col-lg-5">
+        <div class="col-lg-3">
           <section id="carousel">
             <div id="carouselExampleFade"
               class="carousel slide carousel-fade" data-bs-ride="carousel"
@@ -146,15 +131,15 @@
               <div class="carousel-inner">
                 <div class="carousel-item active">
                   <img src="./img/paseadoras de perros.jpg"
-                    class="d-block w-100"
+                    class="d-block"
                     alt="imagen paseadoras de perros">
                 </div>
                 <div class="carousel-item">
-                  <img src="./img/electricista.jpg" class="d-block w-100"
+                  <img src="./img/electricista.jpg" class="d-block"
                     alt="imagen electricista">
                 </div>
                 <div class="carousel-item">
-                  <img src="./img/plomero.jpg" class="d-block w-100"
+                  <img src="./img/plomero.jpg" class="d-block"
                     alt="imagen plomero">
                 </div>
               </div>
@@ -172,7 +157,7 @@
           </section>
         </div>
         <div
-          class="col-lg-7 d-flex justify-content-center align-items-center p-3">
+          class="col-lg-9 p-3 d-flex align-items-center justify-content-center">
           <div class="text-center text-white">
             <h1>
               Bienvenido a ServiceBook <br />
@@ -192,85 +177,102 @@
         </div>
       </div>
 
-      <section class="cards mt-5 mb-5">
-        <h2 class="text-center mb-5">Encuentra a tus Expertos Locales</h2>
-        <div class="container-fluid m-0 p-0 g-0">
+      <section id="tarjetas" class="pb-5 pt-5">
+        <div class="container-fluid p-0 g-0 mb-5">
+          <h5 class="section-title h1">Encuentra a tus Expertos Locales</h5>
           <div class="row g-0 p-0 m-0 w-100">
-            <div class="col-1 col-md-1"></div>
-            <div class="col-10 col-md-10">
-              <div class="tarjeta">
-                <div class="row g-0 p-0 m-0 w-100">
-                  <div class="card card-container col-xs-12 col-sm-6 col-md-4 col-xl-3"
-                    th:each="proveedor, iterStat : ${proveedores}">
-                    <section id="carousel2">
-                      <div id="carouselExample"
-                        class="carousel slide" data-bs-ride="carousel"
-                        data-bs-interval="5000">
-                        <div class="carousel-inner">
-                          <div class="carousel-item"
-                            th:each="foto, fotoIterStat : ${proveedor.fotos}"
-                            th:classappend="${fotoIterStat.index eq 0} ? 'active' : ''">
-                            <img th:src="${foto.url}"
-                              th:alt="${foto.nombre}"
-                              class="d-block w-100">
+            <div class="col-xs-8 col-sm-6 col-lg-4 col-xl-3" 
+            th:each="proveedor, iterStat : ${proveedores}">
+              <div class="image-flip">
+                <div class="mainflip">
+                  <div class="frontside">
+                    <div class="card">
+                      <div class="card-body text-center">
+                        <div class="carousel slide mb-3" data-bs-ride="carousel"
+                          data-bs-interval="5000">
+                          <div class="carousel-inner">
+                            <div class="carousel-item"
+                              th:each="foto, fotoIterStat : ${proveedor.fotos}"
+                              th:classappend="${fotoIterStat.index eq 0} ? 'active' : ''">
+                              <img th:src="${foto.url}" th:alt="${foto.nombre}"
+                                class="img-fluid">
+                            </div>
                           </div>
+                          <button class="carousel-control-prev" type="button"
+                            data-bs-target="#carouselExampleFade"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"
+                              aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </button>
+                          <button class="carousel-control-next" type="button"
+                            data-bs-target="#carouselExampleFade"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"
+                              aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                          </button>
                         </div>
-                        <button class="carousel-control-prev" type="button"
-                          data-bs-target="#carouselExampleFade"
-                          data-bs-slide="prev">
-                          <span class="carousel-control-prev-icon"
-                            aria-hidden="true"></span>
-                          <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button"
-                          data-bs-target="#carouselExampleFade"
-                          data-bs-slide="next">
-                          <span class="carousel-control-next-icon"
-                            aria-hidden="true"></span>
-                          <span class="visually-hidden">Next</span>
-                        </button>
+                        <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
+                        <span
+                          th:each="profesion, profesioniterStat : ${proveedor.profesiones}">
+                          <span class="badge bg-warning text-dark mb-3"
+                            th:text="${profesion.nombre}"></span>
+                        </span>
+                        <div>
+                          <p th:text="'$' + ${proveedor.precioPorHora} + '/hora'"></p>
+                        </div>
+                        <div>
+                          <a href="#" class="btn btn-primary btn-sm"><i
+                            class="fa fa-plus"></i></a>
+                        </div>
                       </div>
-                    </section>
-                    <div class="card-body">
-                      <span
-                        th:each="profesion, profesioniterStat : ${proveedor.profesiones}">
-                        <span class="badge bg-warning text-dark mb-3"
-                          th:text="${profesion.nombre}"></span>
-                      </span>
-                      <h5 th:text="${proveedor.nombre}"
-                        class="card-title text-center mb-3"></h5>
-                      <p class="card-text card-description text-center"
-                        th:text="${proveedor.presentacion}"></p>
+                    </div>
+                  </div>
+                  <div class="backside w-100">
+                    <div class="card">
+                      <div class="card-body text-center mt-4">
+                        <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
+                        <p class="card-text card-description text-center"
+                          th:text="${proveedor.presentacion}"></p>
+                        <ul class="list-inline">
+
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-1 col-md-1"></div>
             </div>
           </div>
-        </section>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item" th:unless="${currentPage == 0}">
-              <a class="page-link" th:href="@{'/?page=' + (${currentPage} - 1)}">Previous</a>
-            </li>
-            <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
-              th:class="${pageNumber == currentPage ? 'active' : ''}">
-              <a class="page-link" th:href="@{'/?page=' + ${pageNumber}}"
-                th:text="${pageNumber + 1}"></a>
-            </li>
-            <li class="page-item" th:unless="${currentPage == totalPages - 1}">
-              <a class="page-link" th:href="@{'/?page=' + (${currentPage} + 1)}">Next</a>
-            </li>
-          </ul>
-        </nav>
+        </div>
+        <div class="d-flex justify-content-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" th:unless="${currentPage == 0}">
+                <a class="page-link"
+                  th:href="@{'/?page=' + ${currentPage - 1}}">Anterior</a>
+              </li>
+              <li
+                th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                th:class="${pageNumber == currentPage ? 'active' : ''}">
+                <a class="page-link" th:href="@{'/?page=' + ${pageNumber}}"
+                  th:text="${pageNumber + 1}"></a>
+              </li>
+              <li class="page-item"
+                th:unless="${currentPage == totalPages - 1}">
+                <a class="page-link"
+                  th:href="@{'/?page=' + ${currentPage + 1}}">Siguiente</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+    </main>
+    <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
 
-      </main>
-
-      <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
-
-      <script src="../../js/color-modes.js"></script>
-      <script src="../../js/registro-login.js"></script>
-      <script src="../../js/bootstrap.bundle.min.js"></script>
-    </body>
-  </html>
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/registro-login.js"></script>
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -48,8 +49,8 @@ public class Trabajo{
     @Column(name="titulo_trabajo")
     private String tituloTrabajo;
     
-    @Column(name="descripcion_trabajo")
-    private String descripcionTrabajo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
+    private List<Mensaje> mensajes = new ArrayList<>();
     
     @Column(name="fecha_trabajo")
     private Date fechaTrabajo;
