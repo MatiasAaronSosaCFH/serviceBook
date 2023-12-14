@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <th:head th:replace="./fragments/head.html :: head"></th:head>
+
+  <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
+
+    <th:header th:replace="./fragments/header.html :: header"></th:header>
+  <main id="main-content">
+    
+    <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
+
+    <h1 class="fw-light bienvenido">Cliente ServiceBook</h1>
+
+    <div class="container-fluid m-5 contenedor">
+      <form class="formulario" th:action="@{/trabajo/crearTrabajo}" method="POST" enctype="multipart/form-data">
+          <div class="form-group my-3">
+              <label class="mb-2">Usuario Id</label>
+              <b th:text="${usuario.id}"></b></label><br>
+              <input hidden  th:value="${usuario.id}" type="text" class="form-control" name="idCliente">                    
+              <label class="mb-2">Proveedor Id</label>
+              <b th:text="${proveedor.nombre}"></b></label><br>
+              <input hidden th:value="${proveedor.id}" type="text" class="form-control" name="idProveedor">                    
+              <label class="mb-2">Titulo</label>
+              <input type="text" class="form-control" name="tituloTrabajo" placeholder="titulo del trabajo">
+              <label class="mb-2">Descripcion </label>
+              <textarea class="form-control" name="descripcionTrabajo" placeholder="describa brevemente el trabajo"></textarea>
+              
+          </div>
+          <!-- <div><div th:replace="/fragments/exitoError :: div" </div></div>                  -->
+          <button type="submit" class="btn btn-primary mt-3"> Enviar Datos </button>
+      </form>            
+
+  </div>
+
+  </main>
+
+  <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
+  <script src="./js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

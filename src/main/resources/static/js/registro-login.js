@@ -52,4 +52,18 @@ document
   .getElementById("btnVolver")
   .addEventListener("click", volverLoginModal);
 
+function openContactarModal() {
+  let modal = document.getElementById("contactarModal");
+  modal.style.display = "block";
+  modal.classList.add("d-flex");
+  modal.classList.add("justify-content-center");
+  modal.classList.add("align-items-center");
+}
 
+function closeContactarModal() {
+  let modal = document.getElementById("contactarModal");
+  modal.style.display = "none";
+  modal.classList.remove("d-flex");
+  modal.classList.remove("justify-content-center");
+  modal.classList.remove("align-items-center");
+}

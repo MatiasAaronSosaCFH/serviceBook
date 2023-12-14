@@ -23,6 +23,7 @@ public class ProveedorConFotosDto {
   private Long id;
   private String nombre;
   private String presentacion;
+  private Integer precioPorHora;
   private List<FotoProveedor> fotos;
   private List<Profesion> profesiones;
 

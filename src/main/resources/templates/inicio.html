@@ -9,6 +9,17 @@
 
   <body>
 
+    <div th:if="${verificacion != null}">
+      <script th:inline="javascript">
+        $(document).ready(function () {
+          openContactarModal();
+        });
+      </script>
+    </div>
+    <div th:if="${verificacion != null}">
+      <th:div th:replace="./fragments/contactar.html :: div"></th:div>
+    </div>
+
     <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
 
     <th:header th:replace="./fragments/header.html :: header"></th:header>
@@ -34,55 +45,6 @@
             quiero darme de baja</button>
           <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
         </form>
-      </div>
-    </div>
-
-    <div id="contactarModal"
-      class="modal">
-      <div class="modal-content">
-        <div class="mb-2">
-          <span class="d-flex justify-content-end close"
-            onclick="closeContactarModal()">&times;</span>
-          <h2 class="d-flex justify-content-center">ServiceBook</h2>
-        </div>
-        <hr>
-        <h5 class="text-center mb-3 mt-3">Registro</h5>
-        <form action="/registrar" method="POST"
-          class="d-flex flex-column">
-          <div th:if="${error}" class="alert alert-danger" role="alert">
-            <p th:text="${error}"></p>
-          </div>
-          <input
-            autocomplete="off"
-            placeholder="Nombre"
-            class="input-field mb-3"
-            type="text"
-            name="nombre"
-            id="nombre" />
-          <input
-            autocomplete="off"
-            placeholder="email@ejemplo.com"
-            class="input-field mb-3"
-            type="email"
-            name="email"
-            id="email" />
-          <input
-            autocomplete="off"
-            placeholder="Contraseña"
-            class="input-field mb-3"
-            type="password"
-            name="password"
-            id="password" />
-          <input
-            autocomplete="off"
-            placeholder="Repetir Contraseña"
-            class="input-field mb-3"
-            type="password"
-            name="password2"
-            id="password2" />
-          <button type="submit">Registrarse</button>
-        </form>
-        <a href="#" id="btnVolver" class="bottomLink mt-3 mb-3 text-end">Volver</a>
       </div>
     </div>
 
@@ -193,13 +155,21 @@
                   </div>
                   <div class="backside w-100">
                     <div class="card">
-                      <div class="card-body text-center mt-4 d-flex flex-column justify-content-between">
+                      <div
+                        class="card-body text-center mt-4 d-flex flex-column justify-content-between">
                         <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
                         <p class="card-text card-description text-center"
                           th:text="${proveedor.presentacion}"></p>
-                        <div class="d-inline">
-                          <a href="#"
-                            class="btn btn-contactar">Contactar</a>
+                        <div>
+                          <form action="/inicio" method="GET" class="d-inline">
+                            <input hidden name="idProveedor"
+                              th:value="${proveedor.id}">
+                            <button type="submit" class="btn btn-contactar">
+                              Contactar
+                            </button>
+                          </form>
+                          <!-- <a th:href="@{'/inicio/' + ${proveedor.id}}"
+                            class="btn btn-contactar">Contactar</a> -->
                           <a href="#" class="btn btn-ver-mas">Ver
                             Más</a>
                         </div>
@@ -221,7 +191,8 @@
               <li
                 th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                 th:class="${pageNumber == currentPage ? 'active' : ''}">
-                <a class="page-link" th:href="@{'/inicio?page=' + ${pageNumber}}"
+                <a class="page-link"
+                  th:href="@{'/inicio?page=' + ${pageNumber}}"
                   th:text="${pageNumber + 1}"></a>
               </li>
               <li class="page-item"
@@ -238,6 +209,7 @@
     <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
 
     <script src="../../js/color-modes.js"></script>
+    <script src="../../js/registro-login.js"></script>
     <script src="../../js/borrar.js"></script>
     <script src="../../js/bootstrap.bundle.min.js"></script>
   </body>

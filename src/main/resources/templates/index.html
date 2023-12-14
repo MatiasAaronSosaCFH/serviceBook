@@ -220,6 +220,9 @@
                             th:text="${profesion.nombre}"></span>
                         </span>
                         <div>
+                          <p th:text="'$' + ${proveedor.precioPorHora} + '/hora'"></p>
+                        </div>
+                        <div>
                           <a href="#" class="btn btn-primary btn-sm"><i
                             class="fa fa-plus"></i></a>
                         </div>

@@ -1,5 +1,6 @@
 package com.servicebook.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -22,10 +24,12 @@ public class Trabajo{
     private Long id; 
 
     @ManyToOne(fetch = FetchType.LAZY)
+	@ToString.Exclude
     @JoinColumn(name="proveedor_id", nullable=false)
     private Proveedor proveedor;
 
     @ManyToOne(fetch = FetchType.LAZY)
+	 @ToString.Exclude
     @JoinColumn(name="cliente_id", nullable=false)
     private Cliente cliente;
 
@@ -45,8 +49,8 @@ public class Trabajo{
     @Column(name="titulo_trabajo")
     private String tituloTrabajo;
     
-    @Column(name="descripcion_trabajo")
-    private String descripcionTrabajo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trabajo")
+    private List<Mensaje> mensajes = new ArrayList<>();
     
     @Column(name="fecha_trabajo")
     private Date fechaTrabajo;

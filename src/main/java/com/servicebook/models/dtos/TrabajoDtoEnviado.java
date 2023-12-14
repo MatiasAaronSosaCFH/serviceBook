@@ -10,7 +10,6 @@ import java.util.List;
 
 public record TrabajoDtoEnviado (Long id,
 								Proveedor proveedor,
-								ClienteDtoEnviado cliente,
 								Boolean terminoCliente,
 								Boolean terminoProveedor,
 								Integer calificacion
@@ -19,7 +18,6 @@ public record TrabajoDtoEnviado (Long id,
 	public TrabajoDtoEnviado(Trabajo trabajo) {
 		this(trabajo.getId(),
 			trabajo.getProveedor(),
-			new ClienteDtoEnviado(trabajo.getCliente()),
 			trabajo.getTerminoCliente(),
 			trabajo.getTerminoProveedor(),
 			trabajo.getCalificacion().getEstrellas().getNumero()

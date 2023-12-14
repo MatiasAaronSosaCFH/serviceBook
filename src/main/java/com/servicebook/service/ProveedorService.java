@@ -51,6 +51,10 @@ public class ProveedorService {
     return proveedorRepository.listarProveedoresAlta();
   }
 
+  public Proveedor getOne(Long idProveedor){
+	  return proveedorRepository.getOne(idProveedor);
+  }
+  
   public void save(Proveedor proveedor) {
     proveedorRepository.save(proveedor);
   }
@@ -287,6 +291,7 @@ public class ProveedorService {
       nuevoProveedor.setId(idProveedor);
       nuevoProveedor.setNombre(proveedor.getNombre());
       nuevoProveedor.setPresentacion(proveedor.getPresentacion());
+      nuevoProveedor.setPrecioPorHora(proveedor.getPrecioPorHora());
       nuevoProveedor.setProfesiones(findProfesionesByProveedorId(idProveedor));
       nuevoProveedor.setFotos(findFotosByProveedorId(idProveedor));
       return nuevoProveedor;

@@ -104,7 +104,7 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
 //  @Query(value = "SELECT CAST(p.id AS SIGNED) AS proveedor_id, p.nombre, p.presentacion, f.id AS foto_id FROM proveedores p LEFT JOIN foto_proveedor f ON p.id = f.proveedor_id", nativeQuery = true)
 //  List<Object[]> findAllProveedoresConFotos();
-  @Query("SELECT p FROM Proveedor p")
+  @Query("SELECT p FROM Proveedor p WHERE p.alta = true")
   Page<Proveedor> listarProveedores(Pageable pageable);
 
   @Query(value = "SELECT p.id FROM profesiones p "

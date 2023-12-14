@@ -12,7 +12,7 @@
         </div>
     </div>
 </div> -->
-<div>
+<!-- <div>
     <div th:if="${exito != null}" id="toastrExito"
         class="toastr success flex-column justify-content-center align-items-center">
         <h5 class="card-tittle">Exito !</h5>
@@ -30,6 +30,36 @@
         <script th:inline="javascript">
             $(document).ready(function () {
                 openToastrError();
+            });
+        </script>
+    </div>
+</div> -->
+<div>
+    <div th:if="${exito != null}">
+        <script th:inline="javascript">
+            let exito = /*[[${exito}]]*/ null;
+            $(document).ready(function () {
+                Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: exito,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            });
+        </script>
+    </div>
+    <div th:if="${error != null}">
+        <script th:inline="javascript">
+            let error = /*[[${error}]]*/ null;
+            $(document).ready(function () {
+                Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: error,
+                showConfirmButton: false,
+                timer: 1500
+            });
             });
         </script>
     </div>
