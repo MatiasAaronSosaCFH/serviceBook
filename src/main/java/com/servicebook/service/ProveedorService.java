@@ -51,6 +51,10 @@ public class ProveedorService {
     return proveedorRepository.listarProveedoresAlta();
   }
 
+  public Proveedor getOne(Long idProveedor){
+	  return proveedorRepository.getOne(idProveedor);
+  }
+  
   public void save(Proveedor proveedor) {
     proveedorRepository.save(proveedor);
   }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -22,10 +23,12 @@ public class Trabajo{
     private Long id; 
 
     @ManyToOne(fetch = FetchType.LAZY)
+	@ToString.Exclude
     @JoinColumn(name="proveedor_id", nullable=false)
     private Proveedor proveedor;
 
     @ManyToOne(fetch = FetchType.LAZY)
+	 @ToString.Exclude
     @JoinColumn(name="cliente_id", nullable=false)
     private Cliente cliente;
 

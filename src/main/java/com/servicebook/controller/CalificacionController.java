@@ -1,5 +1,6 @@
 package com.servicebook.controller;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import com.servicebook.exception.MiException;
 import com.servicebook.models.enums.Estrellas;
 import com.servicebook.service.CalificacionService;
@@ -47,7 +48,7 @@ public class CalificacionController {
         return "modificarCalifcacion.html";
     }
     
-    @PostMapping("/modificarCalifcacion/{id}")
+    /*@PostMapping("/modificarCalifcacion/{id}")
     public String modificarCalifcacion(@PathVariable Long id, @RequestParam String descripcion ,
             @PathVariable Estrellas estrella ){
        
@@ -56,6 +57,6 @@ public class CalificacionController {
        
         
         return "modificarCalifcacion.html";
-    }
+    }*/
     
 }
