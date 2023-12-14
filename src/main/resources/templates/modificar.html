@@ -9,22 +9,7 @@
 
   <body>
 
-    <div th:if="${exito != null}">
-      <script th:inline="javascript">
-        $(document).ready(function () {
-            var exito = /*[[${exito}]]*/ null;
-    
-            if (exito) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: /*[[${exito}]]*/ '',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-      </script>
-    </div>
+    <th:div th:replace="./fragments/exito.html :: div"></th:div>
 
     <div th:if="${errorBasica != null}">
       <script th:inline="javascript">

@@ -9,39 +9,18 @@
 
   <body>
 
-    <div th:if="${exito}">
+    <div th:if="${verificacion != null}">
       <script th:inline="javascript">
         $(document).ready(function () {
-            var exito = /*[[${exito}]]*/ null;
-    
-            if (exito) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: /*[[${exito}]]*/ '',
-                    confirmButtonText: 'OK'
-                });
-            }
+          openContactarModal();
         });
       </script>
     </div>
+    <div th:if="${verificacion != null}">
+      <th:div th:replace="./fragments/contactar.html :: div"></th:div>
+    </div>
 
-    <div th:if="${error}">
-      <script th:inline="javascript">
-          $(document).ready(function () {
-              var error = /*[[${error}]]*/ null;
-  
-              if (error) {
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Error',
-                      text: /*[[${error}]]*/ '',
-                      confirmButtonText: 'OK'
-                  });
-              }
-          });
-      </script>
-  </div>
+    <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
 
     <th:header th:replace="./fragments/header.html :: header"></th:header>
     <div id="deleteModal"
@@ -55,7 +34,7 @@
         <hr>
         <h5 class="text-center mb-3 mt-3">¿Está seguro que desea dar de baja su
           cuenta?</h5>
-        <!-- <form th:action="@{/usuario/baja/__${usuario.id}__}"
+        <form th:action="@{/usuario/baja/__${usuario.id}__}"
           method="POST" class="d-flex flex-column">
           <div
             class="d-flex flex-column justify-content-center align-items-center">
@@ -63,16 +42,15 @@
             <input type="checkbox" id="habilitar" name="habilitar">
           </div>
           <button type="submit" id="btnEliminar" class="mb-4 mt-4 btn" disabled>Si,
-            eliminar</button>
+            quiero darme de baja</button>
           <button type="button" id="btnCancelar" class="mb-4 btn">Cancelar</button>
-        </form> -->
+        </form>
       </div>
     </div>
 
     <main id="main-content">
       <div class="w-100 tarjeta-carousel row g-0 p-0">
-        <div class="col-lg-5">
-          
+        <div class="col-lg-3">
           <section id="carousel">
             <div id="carouselExampleFade"
               class="carousel slide carousel-fade" data-bs-ride="carousel"
@@ -80,15 +58,15 @@
               <div class="carousel-inner">
                 <div class="carousel-item active">
                   <img src="./img/paseadoras de perros.jpg"
-                    class="d-block w-100"
+                    class="d-block"
                     alt="imagen paseadoras de perros">
                 </div>
                 <div class="carousel-item">
-                  <img src="./img/electricista.jpg" class="d-block w-100"
+                  <img src="./img/electricista.jpg" class="d-block"
                     alt="imagen electricista">
                 </div>
                 <div class="carousel-item">
-                  <img src="./img/plomero.jpg" class="d-block w-100"
+                  <img src="./img/plomero.jpg" class="d-block"
                     alt="imagen plomero">
                 </div>
               </div>
@@ -106,13 +84,13 @@
           </section>
         </div>
         <div
-          class="col-lg-7 d-flex justify-content-center align-items-center p-3">
+          class="col-lg-9 p-3 d-flex align-items-center justify-content-center">
           <div class="text-center text-white">
             <h1>
               Bienvenido a ServiceBook <br />
               Tu plataforma de servicios en línea
             </h1>
-            <p class="lead d-flex flex-wrap">
+            <p class="lead d-flex flex-wrap text-white">
               ServiceBook conecta a personas con habilidades y servicios únicos
               con aquellos que buscan ayuda en el hogar, ofreciendo una amplia
               variedad de servicios, desde limpieza hasta cuidado de mascotas.
@@ -126,43 +104,104 @@
         </div>
       </div>
 
-      <section class="cards mt-5 mb-5">
-        <h2 class="text-center mb-5">Encuentra a tus Expertos Locales</h2>
-        <div class="container-fluid m-0 p-0 g-0">
+      <section id="tarjetas" class="pb-5 pt-5">
+        <div class="container-fluid p-0 g-0 mb-5">
+          <h5 class="section-title h1">Encuentra a tus Expertos Locales</h5>
           <div class="row g-0 p-0 m-0 w-100">
-            <div class="col-1 col-md-1"></div>
-            <div class="col-10 col-md-10">
-              <div class="tarjeta">
-                <div th:each="proveedor : ${proveedores}">
-                  <div class="card m-0 p-0">
-                    <img th:src="${proveedor.foto.url}" class="card-img-top"
-                      alt="Imagen del proveedor">
-                    <div class="card-body">
-                      <div class="badge bg-warning text-dark mb-3">Electricista</div>
-                      <h5 th:text="${proveedor.nombre}"
-                        class="card-title text-center mb-3"></h5>
-                      <p class="card-text card-description text-center"
-                        th:text="${proveedor.presentacion}"></p>
-                    </div>
-                    <div class="card-footer">
-                      <div
-                        class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <button
-                            type="button"
-                            class="btn btn-sm btn-outline-secondary">
-                            Contactar
+            <div class="col-xs-8 col-sm-6 col-lg-4 col-xl-3"
+              th:each="proveedor, iterStat : ${proveedores}">
+              <div class="image-flip">
+                <div class="mainflip">
+                  <div class="frontside">
+                    <div class="card">
+                      <div class="card-body text-center">
+                        <div class="carousel slide mb-3" data-bs-ride="carousel"
+                          data-bs-interval="5000">
+                          <div class="carousel-inner">
+                            <div class="carousel-item"
+                              th:each="foto, fotoIterStat : ${proveedor.fotos}"
+                              th:classappend="${fotoIterStat.index eq 0} ? 'active' : ''">
+                              <img th:src="${foto.url}" th:alt="${foto.nombre}"
+                                class="img-fluid">
+                            </div>
+                          </div>
+                          <button class="carousel-control-prev" type="button"
+                            data-bs-target="#carouselExampleFade"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"
+                              aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </button>
+                          <button class="carousel-control-next" type="button"
+                            data-bs-target="#carouselExampleFade"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"
+                              aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
                           </button>
                         </div>
-                        <small class="stars">☆☆☆</small>
+                        <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
+                        <span
+                          th:each="profesion, profesioniterStat : ${proveedor.profesiones}">
+                          <span class="badge bg-warning text-dark mb-3"
+                            th:text="${profesion.nombre}"></span>
+                        </span>
+                        <div>
+                          <a href="#" class="btn btn-primary btn-sm"><i
+                              class="fa fa-plus"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="backside w-100">
+                    <div class="card">
+                      <div
+                        class="card-body text-center mt-4 d-flex flex-column justify-content-between">
+                        <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
+                        <p class="card-text card-description text-center"
+                          th:text="${proveedor.presentacion}"></p>
+                        <div>
+                          <form action="/inicio" method="GET" class="d-inline">
+                            <input hidden name="idProveedor"
+                              th:value="${proveedor.id}">
+                            <button type="submit" class="btn btn-contactar">
+                              Contactar
+                            </button>
+                          </form>
+                          <!-- <a th:href="@{'/inicio/' + ${proveedor.id}}"
+                            class="btn btn-contactar">Contactar</a> -->
+                          <a href="#" class="btn btn-ver-mas">Ver
+                            Más</a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-1 col-md-1"></div>
           </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" th:unless="${currentPage == 0}">
+                <a class="page-link"
+                  th:href="@{'/inicio?page=' + ${currentPage - 1}}">Anterior</a>
+              </li>
+              <li
+                th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                th:class="${pageNumber == currentPage ? 'active' : ''}">
+                <a class="page-link"
+                  th:href="@{'/inicio?page=' + ${pageNumber}}"
+                  th:text="${pageNumber + 1}"></a>
+              </li>
+              <li class="page-item"
+                th:unless="${currentPage == totalPages - 1}">
+                <a class="page-link"
+                  th:href="@{'/inicio?page=' + ${currentPage + 1}}">Siguiente</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </section>
     </main>
@@ -170,6 +209,7 @@
     <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
 
     <script src="../../js/color-modes.js"></script>
+    <script src="../../js/registro-login.js"></script>
     <script src="../../js/borrar.js"></script>
     <script src="../../js/bootstrap.bundle.min.js"></script>
   </body>

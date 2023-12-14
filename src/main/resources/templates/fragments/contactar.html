@@ -1,0 +1,33 @@
+<div id="contactarModal"
+  class="modal">
+  <div class="modal-content">
+    <div class="mb-2">
+      <span class="d-flex justify-content-end close"
+        onclick="closeContactarModal()">&times;</span>
+      <h4 class="d-flex justify-content-center"
+        th:text="'Envía un mensaje a ' + ${prov.nombre} + ' para contratarlo'"></h4>
+    </div>
+    <hr>
+    <h5 class="text-center mb-3 mt-3">Formulario de contacto</h5>
+    <form action="/trabajo/crearTrabajo" method="POST"
+      class="d-flex flex-column">
+      <input hidden name="idProveedor" th:value="${prov.id}">
+      <input hidden name="idCliente" th:value="${usuario.id}">
+      <label for="tituloTrabajo" class="mb-1">Título</label>
+      <input
+        autocomplete="off"
+        class="input-field mb-3"
+        type="text"
+        name="tituloTrabajo"
+        id="tituloTrabajo" />
+      <label for="descripcionTrabajo" class="mb-1">Descripción</label>
+      <textarea
+        type="text"
+        class="form-control mb-3"
+        name="descripcionTrabajo"
+        id="descripcionTrabajo">
+      </textarea>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>

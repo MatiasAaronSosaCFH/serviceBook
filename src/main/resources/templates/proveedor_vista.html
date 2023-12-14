@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <th:head th:replace="./fragments/head.html :: head"></th:head>
+  <head th:replace="/fragments/head :: head" </head></head>
+
   <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
 
-  <th:header th:replace="./fragments/header.html :: header"></th:header>
+    <svg th:replace="/fragments/svg :: svg" </svg></svg>
+    <header th:replace="/fragments/header :: header" </header></header>
 
   <main id="main-content">
     
@@ -11,7 +13,7 @@
 
   </main>
 
-  <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
+  <div><footer th:replace="/fragments/footer :: footer" </footer></div>
   <script src="./js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
