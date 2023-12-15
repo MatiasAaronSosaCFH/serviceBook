@@ -7,13 +7,19 @@ import com.servicebook.models.Trabajo;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.enums.Role;
 import com.servicebook.models.enums.TipoMensaje;
+import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.MensajeRepository;
 import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.repository.TrabajoRepository;
+import com.servicebook.service.ClienteService;
+import com.servicebook.service.ProveedorService;
 import com.servicebook.service.TrabajoService;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +38,12 @@ public class TrabajoController {
   private TrabajoRepository trabajoRepository;
   @Autowired
   private ProveedorRepository proveedorRepository;
+    @Autowired
+  private ProveedorService proveedorService;
+	   @Autowired
+  private ClienteRepository clienteRepository;
+    @Autowired
+  private ClienteService clienteService;
   @Autowired
   private MensajeRepository mensajeRepository;
 
@@ -66,10 +78,10 @@ public class TrabajoController {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     modelo.put("usuario", usuario);
       System.out.println("\n+\n+\n");
-//    Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
-//    modelo.put("proveedor", proveedor);
+	Proveedor proveedor = proveedorService.findByEmail(usuario.getEmail());
+	modelo.put("proveedor", proveedor);
     List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());
-    modelo.addAttribute("trabajos", trabajosCliente);
+    modelo.addAttribute("trabajosCliente", trabajosCliente);
     return "cliente_vista.html";
 
   }
@@ -82,7 +94,7 @@ public class TrabajoController {
     Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
     modelo.put("proveedor", proveedor);
     List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());
-    modelo.addAttribute("trabajos", trabajosCliente);
+    modelo.addAttribute("trabajosCliente", trabajosCliente);
     
     Trabajo trabajo = trabajoRepository.findById(idTrabajo).orElse(null);
     modelo.addAttribute("trabajo", trabajo);
@@ -95,6 +107,43 @@ public class TrabajoController {
     return "cliente_vista.html";
   }
 
+  //revisar para crear trabajo.
+  @GetMapping("/listaProveedor")
+  public String listaProveedor(HttpSession session, ModelMap modelo) {
+	Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+	modelo.put("usuario", usuario);
+	Proveedor proveedor = proveedorService.findByEmail(usuario.getEmail());
+	modelo.put("proveedor", proveedor);
+	       System.out.println("\n+\n+\n" + usuario.getId() + "prov: " + proveedor.getId());
+    List<Trabajo> trabajosProveedor = trabajoRepository.buscarTrabajoPorProveedor(proveedor.getId());
+    modelo.addAttribute("trabajosProveedor", trabajosProveedor);
+    return "proveedor_vista.html";
+  }
+  
+    @PostMapping("/listaProveedor")
+  public String verProveedor(@RequestParam Long idCliente, @RequestParam Long idTrabajo, HttpSession session, ModelMap modelo) {
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+    modelo.put("usuario", usuario);
+	Proveedor proveedor = proveedorService.findByEmail(usuario.getEmail());
+	modelo.put("proveedor", proveedor);
+	
+    Cliente cliente = clienteRepository.findById(idCliente).orElse(null);
+    modelo.put("cliente", cliente);
+    List<Trabajo> trabajosProveedor = trabajoRepository.buscarTrabajoPorProveedor(proveedor.getId());
+    modelo.addAttribute("trabajosProveedor", trabajosProveedor);
+    
+    Trabajo trabajo = trabajoRepository.findById(idTrabajo).orElse(null);
+    modelo.addAttribute("trabajo", trabajo);
+    
+   List<Mensaje> mensajes = mensajeRepository.buscarMensajesPorTrabajo(idTrabajo);
+   modelo.addAttribute("mensajes", mensajes);
+    
+    modelo.addAttribute("verificacion", "verificado");
+    
+    return "proveedor_vista.html";
+  }
+  
+  
   @PostMapping("/crearTrabajo")
   public String crearTrabajo(@RequestParam Long idProveedor, @RequestParam Long idCliente, @RequestParam String tituloTrabajo, @RequestParam(required = false) String descripcionTrabajo, HttpSession session, ModelMap modelo) {
     trabajoService.crearTrabajo(idCliente, idProveedor, tituloTrabajo, descripcionTrabajo);
@@ -108,6 +157,45 @@ public class TrabajoController {
     return "cliente_vista.html";
   }
   
+  @PostMapping("/agendarTrabajo/{id}")
+  public String agendarTrabajo(@RequestParam Long idProveedor, @RequestParam Long idCliente, @RequestParam String tituloTrabajo, @RequestParam(required = false) String descripcionTrabajo, @RequestParam Integer horasTrabajo, @RequestParam Date fechaTrabajo, HttpSession session, ModelMap modelo) {
+    trabajoService.agendarTrabajo(idCliente, tituloTrabajo, descripcionTrabajo, fechaTrabajo, horasTrabajo);
+    modelo.put("usuario", session.getAttribute("usuariosession"));
+    Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
+    modelo.put("proveedor", proveedor);
+    List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(idCliente);
+    modelo.addAttribute("trabajos", trabajosCliente);
+//    List<Trabajo> trabajosProveedor = trabajoRepository.buscarTrabajoPorProveedor(idProveedor);
+//    modelo.addAttribute("trabajosProveedor", trabajosProveedor);
+    return "cliente_vista.html";
+  }
+  
+    @PostMapping("/modificarTrabajo")
+  public String modificarTrabajo(@RequestParam Long id, @RequestParam Long idCliente, @RequestParam Long idProveedor, @RequestParam(required=false) String tituloTrabajo, @RequestParam(required=false) Boolean alta, @RequestParam(required=false) Boolean estaAceptadoCliente, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaTrabajo, @RequestParam(required=false) Integer horasTrabajo, @RequestParam(required=false) Boolean terminoCliente, @RequestParam(required=false) Boolean terminoProveedor, HttpSession session, ModelMap modelo) {
+
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+	 modelo.put("usuario", usuario);
+
+	 modelo.put("cliente", clienteRepository.findById(idCliente).orElse(null));
+	 modelo.put("proveedor", proveedorRepository.findById(idProveedor).orElse(null));
+
+    trabajoService.modificarTrabajo(id, idCliente, idProveedor, tituloTrabajo, alta, estaAceptadoCliente, fechaTrabajo, horasTrabajo, terminoCliente, terminoProveedor);
+	 
+
+	 if (usuario.getRole().equals(Role.USER)) {
+		      List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(idCliente);
+    modelo.addAttribute("trabajosCliente", trabajosCliente);
+			    return "cliente_vista.html";
+		 } else {
+	  	  
+			      List<Trabajo> trabajosProveedor = trabajoRepository.buscarTrabajoPorProveedor(idProveedor);
+    modelo.addAttribute("trabajosProveedor", trabajosProveedor);
+			    return "proveedor_vista.html";
+		 }
+
+  }
+  
+  
   @PostMapping("/enviarMensaje")
   public String enviarMensaje(@RequestParam Long idProveedor, @RequestParam Long idTrabajo, @RequestParam String mensaje, HttpSession session, ModelMap modelo) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
@@ -116,7 +204,7 @@ public class TrabajoController {
     Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
     modelo.put("proveedor", proveedor);
     List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());
-    modelo.addAttribute("trabajos", trabajosCliente);
+    modelo.addAttribute("trabajosCliente", trabajosCliente);
     
     Trabajo trabajo = trabajoRepository.findById(idTrabajo).orElse(null);
     modelo.addAttribute("trabajo", trabajo);
@@ -135,6 +223,36 @@ public class TrabajoController {
     return "cliente_vista.html";
   }
 
+  @PostMapping("/enviarMensajeProveedor")
+  public String enviarMensajeProveedor(@RequestParam Long idCliente, @RequestParam Long idTrabajo, @RequestParam String mensaje, HttpSession session, ModelMap modelo) {
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+    modelo.put("usuario", usuario);
+	Proveedor proveedor = proveedorService.findByEmail(usuario.getEmail());
+	modelo.put("proveedor", proveedor);
+	
+    Cliente cliente = clienteRepository.findById(idCliente).orElse(null);
+    modelo.put("cliente", cliente);
+
+	     List<Trabajo> trabajosProveedor = trabajoRepository.buscarTrabajoPorProveedor(proveedor.getId());
+    modelo.addAttribute("trabajosProveedor", trabajosProveedor);
+    
+    Trabajo trabajo = trabajoRepository.findById(idTrabajo).orElse(null);
+    modelo.addAttribute("trabajo", trabajo);
+    
+   List<Mensaje> mensajes = mensajeRepository.buscarMensajesPorTrabajo(idTrabajo);
+   modelo.addAttribute("mensajes", mensajes);
+    
+    modelo.addAttribute("verificacion", "verificado");
+    
+    if(usuario.getRole().equals(Role.USER)){
+      trabajoService.enviarMensaje(idTrabajo, mensaje, TipoMensaje.CLIENTE);
+    } else {
+      trabajoService.enviarMensaje(idTrabajo, mensaje, TipoMensaje.PROVEEDOR);
+    }
+    
+    return "proveedor_vista.html";
+  }  
+  
 //  @PostMapping("/refresh")
 //  public String refrescar(ModelMap modelo, HttpSession session, @RequestParam Long idProveedor, @RequestParam Long idTrabajo, @RequestParam String mensaje){
 //  

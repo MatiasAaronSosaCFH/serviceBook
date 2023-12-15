@@ -7,6 +7,7 @@ import com.servicebook.models.Proveedor;
 import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.AdminDtoEnviado;
 import com.servicebook.models.enums.Role;
+import com.servicebook.repository.ClienteRepository;
 import com.servicebook.repository.ProveedorRepository;
 import com.servicebook.service.AdminService;
 import com.servicebook.service.ClienteService;
@@ -35,6 +36,8 @@ public class AdminController {
   ProveedorService proveedorService;
   @Autowired
   ProveedorRepository proveedorRepository;
+    @Autowired
+  ClienteRepository clienteRepository;
   @Autowired
   private AdminService adminService;
 
@@ -122,8 +125,11 @@ public class AdminController {
   @GetMapping("/proveedorAprobar/{id}")
   public String proveedorAprobar(@PathVariable Long id, ModelMap modelo, HttpSession session) {
     modelo.put("usuario", session.getAttribute("usuariosession"));
-    modelo.put("proveedor", proveedorRepository.findById(id));
-    proveedorService.aprobar(id);
+	 Proveedor proveedor = proveedorRepository.findById(id).orElse(null);
+    modelo.put("proveedor", proveedor);
+	 Cliente cliente = clienteRepository.findByEmail(proveedor.getEmail()).orElse(null);
+	 modelo.put("cliente", cliente);
+    proveedorService.aprobar(id, cliente.getId());
     modelo.addAttribute("proveedores", proveedorRepository.listarProveedoresTodo());
     return "proveedor_list.html";
   }

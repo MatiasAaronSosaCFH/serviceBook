@@ -19,8 +19,8 @@ public record ProveedorDtoEnviado(Long id,
         List<ProfesionDtoEnviado> profesiones,
         String presentacion,
         Integer precioPorHora,
-        Boolean disponible,
-        List<TrabajoDtoEnviado> trabajosRealizados) {
+        Boolean disponible
+	) {
 
   public ProveedorDtoEnviado(Proveedor proveedor) {
     this(proveedor.getId(),
@@ -35,8 +35,8 @@ public record ProveedorDtoEnviado(Long id,
             proveedor.getProfesiones().stream().map(ProfesionDtoEnviado::new).toList(),
             proveedor.getPresentacion(),
             proveedor.getPrecioPorHora(),
-            proveedor.getDisponible(),
-            proveedor.getTrabajosRealizados().stream().map(TrabajoDtoEnviado::new).toList());
+            proveedor.getDisponible()
+	 );
   }
 
 }

@@ -5,6 +5,7 @@ import com.servicebook.models.Cliente;
 import com.servicebook.models.FotoProveedor;
 import com.servicebook.models.Profesion;
 import com.servicebook.models.Proveedor;
+import com.servicebook.models.Usuario;
 import com.servicebook.models.dtos.ProveedorConFotosDto;
 import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -76,6 +78,16 @@ public class ProveedorService {
 
   }
 
+  public Proveedor findByEmail(String email) {
+  		Proveedor proveedor = new Proveedor();
+		Optional<Proveedor> respuesta = proveedorRepository.findByEmail(email);
+		 if (respuesta.isPresent()) {
+		  proveedor = respuesta.get();
+		 }	  
+    return proveedor;
+  }
+
+  
   public void cambiarEstado(Long id) {
     Optional<Proveedor> respuesta = proveedorRepository.findById(id);
     if (respuesta.isPresent()) {
@@ -118,11 +130,11 @@ public class ProveedorService {
     }
   }
 
-  public void aprobar(Long id) {
-    Optional<Proveedor> respuesta = proveedorRepository.findById(id);
-    if (respuesta.isPresent()) {
-      Boolean aprobacion = respuesta.get().getAprobacion();
-      Proveedor proveedor = respuesta.get();
+  public void aprobar(Long id, Long idCliente) {
+    Optional<Proveedor> respuestaProveedor = proveedorRepository.findById(id);
+    if (respuestaProveedor.isPresent()) {
+      Boolean aprobacion = respuestaProveedor.get().getAprobacion();
+      Proveedor proveedor = respuestaProveedor.get();
 
       proveedor.setAlta(true);
       proveedor.setAprobacion(true);
@@ -130,6 +142,16 @@ public class ProveedorService {
 
       proveedorRepository.save(proveedor);
     }
+	 Optional<Cliente> respuestaCliente = clienteRepository.findById(id);
+    if (respuestaCliente.isPresent()) {
+      Cliente cliente = respuestaCliente.get();
+
+      cliente.setAlta(false);
+      cliente.setRole(Role.PROVEEDOR);
+
+      clienteRepository.save(cliente);
+    }
+	 
   }
 
   public Proveedor crearProveedor(Long idCliente, String emailDeContacto, String numeroDeContacto, List<Profesion> profesiones, String presentacion, Integer precioPorHora, Boolean disponible) {

@@ -11,6 +11,7 @@ import com.servicebook.models.dtos.ClienteDtoEnviado;
 import com.servicebook.models.dtos.ProveedorConFotosDto;
 import com.servicebook.models.dtos.ProveedorDtoEnviado;
 import com.servicebook.models.enums.Role;
+import com.servicebook.repository.ClienteRepository;
 import com.servicebook.service.ClienteService;
 import com.servicebook.service.DireccionService;
 import com.servicebook.service.ProveedorService;
@@ -39,7 +40,9 @@ public class PortalController {
 
   @Autowired
   private ProveedorService proveedorService;
-
+  @Autowired
+  private ClienteRepository clienteRepository;
+  
 //  @GetMapping
 //  public String dashboard(ModelMap map) {
 //
@@ -70,12 +73,15 @@ public class PortalController {
     return "perfil.html";
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
+ @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
   @GetMapping("/inicio")
   public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
           @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
           ModelMap model, @RequestParam(required = false) Long idProveedor) {
+
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+    model.put("usuario", usuario);
+	 
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
         Long clienteId = usuario.getId();
@@ -105,11 +111,35 @@ public class PortalController {
       Proveedor proveedor = proveedorService.findById(idProveedor);
       model.addAttribute("prov", proveedor);
       model.addAttribute("verificacion", "verificado");
-    }
+    } 
 
     return "inicio.html";
-  }
+  }  
+  
+//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
+//  @GetMapping("/inicio")
+//  public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
+//          @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+//          ModelMap model) {
+//    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+//    model.put("usuario", usuario);
+//	Proveedor proveedor = proveedorService.findByEmail(usuario.getEmail());
+//	model.put("proveedor", proveedor);
+//	
+//    Cliente cliente = clienteRepository.findByEmail(usuario.getEmail()).orElse(null);
+//    model.put("cliente", cliente);
+//
+//    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
+//
+//    model.addAttribute("proveedores", proveedoresPage.getContent());
+//    model.addAttribute("currentPage", proveedoresPage.getNumber());
+//    model.addAttribute("totalPages", proveedoresPage.getTotalPages());
+//	 
+//    return "inicio.html";
+//  }
 
+  
+  
 //  @GetMapping("/inicio/{idProveedor}")
 //  public String crearTrabajo(@PathVariable Long idProveedor, HttpSession session, ModelMap modelo) {
 //    modelo.addAttribute("usuario", session.getAttribute("usuariosession"));
