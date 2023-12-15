@@ -84,57 +84,64 @@
           <form class="formulario" th:action="@{/trabajo/modificarTrabajo}" method="POST" enctype="multipart/form-data">
             <div class="form-group my-3">
                 <input hidden  th:value="${usuario.id}" type="text" class="form-control" name="idCliente">                    
-                <b th:text="'T:' + ${trabajo.id}"></b>
-                <input hidden th:value="${trabajo.id}" type="text" class="form-control" name="id">                    
-                <label class="mb-2">  Fecha: </label>
-                <b th:text="${trabajo.fechaTrabajo}"></b></label><br>
-                <label class="mb-2">Usted esta contratando a: </label>
-                <b th:text="${proveedor.nombre}"></b></label><br>
+                <div class="d-flex justify-content-end">
+                  <b class="me-3" th:text="'T:' + ${trabajo.id}"></b>
+                  <input hidden th:value="${trabajo.id}" type="text" class="form-control" name="id">                    
+                  <label class="mb-2">  Fecha: </label>
+                  <b th:text="${trabajo.fechaTrabajo}"></b></label><br>
+                </div>
+                
+                <div class="mb-4 d-flex me-3">
+                  <p class="me-2">Usted esta contratando a: </p>
+                  <b th:text="${proveedor.nombre}"></b></label><br>
+                </div>
                 <input hidden th:value="${proveedor.id}" type="text" class="form-control" name="idProveedor">                    
                 <label class="mb-2">Titulo</label>
-                <input type="text" class="form-control" th:value="${trabajo.tituloTrabajo}" name="tituloTrabajo" placeholder="titulo del trabajo">
+                <input type="text" class="mb-2 form-control" th:value="${trabajo.tituloTrabajo}" name="tituloTrabajo" placeholder="titulo del trabajo">
                 <label class="mb-2">Horas de Trabajo</label>
-                <input type="text" class="form-control" th:value="${trabajo.horasTrabajo}" name="horasTrabajo" placeholder="horas de trabajo">
+                <input type="text" class="mb-4 form-control" th:value="${trabajo.horasTrabajo}" name="horasTrabajo" placeholder="horas de trabajo">
+ <!-- <input th:value="${trabajo.fechaTrabajo}" type="date" name="fechaTrabajo" id="calendario"> -->
+                  <input class="mb-4" th:value="${#dates.format(trabajo.fechaTrabajo, 'yyyy-MM-dd')}" type="date" name="fechaTrabajo" id="calendario" />
+
                 <div
-                  class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
+                  class="mb-4 d-flex justify-content-start align-items-center">
                   <span>Alta</span>
                   <input class="disponible" th:checked="${trabajo.alta}" type="checkbox" name="alta" />
                 </div>
+                
                 <div
-                  class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
+                  class="mb-4 d-flex justify-content-start align-items-center">
                   <span>terminoCliente</span>
                   <input class="disponible" th:checked="${trabajo.terminoCliente}" type="checkbox" name="terminoCliente" />
                 </div>
                 <div
-                  class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
+                  class="mb-4 d-flex justify-content-start align-items-center">
                   <span>terminoProveedor</span>
                   <input class="disponible" th:checked="${trabajo.terminoProveedor}" type="checkbox" name="terminoProveedor" />
                 </div>
                 <div
-                  class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
+                  class="mb-4 d-flex justify-content-start align-items-center">
                   <span>estaAceptadoCliente</span>
                   <input class="disponible" th:checked="${trabajo.estaAceptadoCliente}" type="checkbox" name="estaAceptadoCliente" />
                 </div>
             </div>
-            <aside>
-              <!-- <input th:value="${trabajo.fechaTrabajo}" type="date" name="fechaTrabajo" id="calendario"> -->
-              <input th:value="${#dates.format(trabajo.fechaTrabajo, 'yyyy-MM-dd')}" type="date" name="fechaTrabajo" id="calendario" />
-              <button type="submit" class="btn btn-primary mt-3"> Actualizar </button>
-  
-            </aside>                 
+            <button type="submit" class="btn btn-primary mt-3 btn-margen"> Actualizar </button>                
         </form>  
         </div>
         <div class="col-1"></div>
         <div class="col-5">
-          <div class="my-3">
+          <div>
               
             <section style="background-color: #eee;">
               <div class="container py-5">
             
                 <div class="row d-flex justify-content-center g-0 m-0 p-0">
-                  <div class="col-12">
-                    <label class="mb-2">Titulo</label>
-                    <input type="text" class="form-control" name="tituloTrabajo" th:value="${trabajo.tituloTrabajo}">
+                  <div class="col-10">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                      <label class="me-3">Titulo:</label>
+                      <input type="text" class="form-control" name="tituloTrabajo" th:value="${trabajo.tituloTrabajo}">
+                    </div>
+                    
                     <div class="card" id="chat1" style="border-radius: 15px;">
                       <div
                         class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
@@ -145,20 +152,22 @@
                       </div>
                       <div class="card-body">
                         <div th:each="mensaje : ${mensajes}">
-                          <div class="d-flex flex-row mb-4 justify-content-start">
+                          <div class="d-flex flex-row mb-4 justify-content-start align-items-center">
                             <img th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).PROVEEDOR}"
                             th:src="${proveedor?.foto != null} ? ${proveedor?.foto?.url} : '../../img/usuario-de-perfil.png'"
                             alt="foto proveedor" style="width: 45px; height: 100%;">
                             <div class="p-3 ms-3" th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).PROVEEDOR}" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                              <p class="small mb-0" th:text="${mensaje.fecha}"></p>
                               <p class="small mb-0" th:text="${mensaje.texto}"></p>
                             </div>
                           </div>
   
-                          <div class="d-flex flex-row mb-4 justify-content-end">
+                          <div class="d-flex flex-row mb-4 justify-content-end align-items-center">
                             <img th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).CLIENTE}" 
                             th:src="${usuario?.foto != null} ? ${usuario?.foto?.url} : '../../img/usuario-de-perfil.png'"
                               alt="foto usuario" style="width: 45px; height: 100%;">
                             <div class="p-3 ms-3" th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).CLIENTE}" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                              <p class="small mb-0" th:text="${mensaje.fecha}"></p>
                               <p class="small mb-0" th:text="${mensaje.texto}"></p>
                             </div>
                           </div>

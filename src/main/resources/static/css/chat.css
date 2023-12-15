@@ -75,6 +75,22 @@
   }
 
   .card-body {
-    max-height: 500px; 
+    max-height: 350px;
+    min-height: 350px; 
     overflow-y: auto;
+  }
+
+  .card-body img {
+    border-radius: 50% !important;
+    height: 50px !important;
+    object-fit: cover !important;
+    width: 50px !important;
+  }
+
+  .btn-primary { 
+    width: 30% !important;
+  }
+
+  .btn-margen { 
+    margin-bottom: 145px;
   }
