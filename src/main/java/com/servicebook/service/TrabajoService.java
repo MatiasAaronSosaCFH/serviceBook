@@ -76,6 +76,27 @@ public class TrabajoService {
 
     trabajoRepository.save(trabajo);
   }
+  
+  @Transactional
+  public void enviarMensaje(Long id, String comentario, TipoMensaje tipo) {
+    Trabajo trabajo = new Trabajo();
+    Optional<Trabajo> respuesta = trabajoRepository.buscarPorId(id);
+    if (respuesta.isPresent() && respuesta.get().getAlta() == true) {
+      trabajo = respuesta.get();
+      Mensaje mensaje = new Mensaje();
+      mensaje.setTexto(comentario);
+      mensaje.setFecha(new Date());
+      mensaje.setAlta(Boolean.TRUE);
+      mensaje.setTipo(tipo);
+      mensaje.setTrabajo(trabajo);
+
+      mensajeRepository.save(mensaje);
+      
+      trabajo.getMensajes().add(mensaje);
+      
+      trabajoRepository.save(trabajo);
+    }
+  }
 
   @Transactional
   public void agendarTrabajo(Long id, String tituloTrabajo, String descripcionTrabajo, Date fechaTrabajo, Integer horasTrabajo) {
