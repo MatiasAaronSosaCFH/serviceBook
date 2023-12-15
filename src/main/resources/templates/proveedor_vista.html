@@ -33,7 +33,7 @@
                           <th class="text-center" scope="col">Ver Trabajo</th>
                       </tr>
                   </thead>
-                  <tbody th:each="trabajo : ${trabajos}">
+                  <tbody th:each="trabajo : ${trabajosProveedor}">
                       <tr>
                           <td class="text-center" th:text="${trabajo.id}"></td>
                           <td class="text-center" th:text="${trabajo.cliente.id}"></td>
@@ -49,9 +49,9 @@
                           <!-- <td class="text-center" th:text="${trabajo.calificaion}"></td> -->
                           <!-- <td class="text-center" th:text="${trabajo.Descripcion}"></td> -->
                           <td>
-                            <form action="/trabajo/listaCliente" method="POST">
+                            <form action="/trabajo/listaProveedor" method="POST">
                               <input hidden name="idTrabajo" th:value="${trabajo.id}">
-                              <input hidden name="idProveedor" th:value="${trabajo.proveedor.id}">
+                              <input hidden name="idCliente" th:value="${trabajo.cliente.id}">
                               <button type="submit" class="btn btn-ver-trabajo">
                                 <img src="../../img/edit.png" alt="editar perfil">
                               </button>
@@ -69,7 +69,7 @@
     
     <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
 
-    <h1 class="fw-light bienvenido text-center">Cliente ServiceBook</h1>
+    <h1 class="fw-light bienvenido text-center">Proveedor ServiceBook</h1>
 
     <div class="container-fluid m-5 contenedor">
         
@@ -77,45 +77,50 @@
        <div class="row">
         
         <div class="col-5">
-          <form class="formulario" th:action="@{/trabajo/crearTrabajo}" method="POST" enctype="multipart/form-data">
+          <form class="formulario" th:action="@{/trabajo/modificarTrabajo}" method="POST" enctype="multipart/form-data">
             <div class="form-group my-3">
                 <!-- <label class="mb-2">Usuario Id</label>
                 <b th:text="${usuario.id}"></b></label><br> -->
-                <input hidden  th:value="${usuario.id}" type="text" class="form-control" name="idCliente">                    
-                <label class="mb-2">Fecha: </label>
-                <b th:text="${trabajo.fechaTrabajo}"></b></label><br>
-                <label class="mb-2">Usted esta contratando a: </label>
-                <b th:text="${proveedor.nombre}"></b></label><br>
+                <!-- <input hidden  th:value="${usuario.id}" type="text" class="form-control" name="idCliente">                     -->
+                <b th:text="'T:' + ${trabajo.id}"></b>
+                <label class="mb-2">  Fecha: </label>
+                <input hidden th:value="${trabajo.id}" type="text" class="form-control" name="id">                    
+                <b th:text="${trabajo.fechaTrabajo}"></b></label>
+                <label hidden class="mb-2">Usted esta contratando a: </label>
+                <b hidden th:text="${proveedor.nombre}"></b></label><br>
                 <input hidden th:value="${proveedor.id}" type="text" class="form-control" name="idProveedor">                    
+                <label class="mb-2">Cliente contratante: </label>
+                <b th:text="${cliente.nombre}"></b></label><br>
+                <input hidden th:value="${cliente.id}" type="text" class="form-control" name="idCliente">                    
                 <label class="mb-2">Titulo</label>
                 <input type="text" class="form-control" th:value="${trabajo.tituloTrabajo}" name="tituloTrabajo" placeholder="titulo del trabajo">
                 <label class="mb-2">Horas de Trabajo</label>
-                <input type="text" class="form-control" name="horasTrabajo" placeholder="horas de trabajo">
+                <input type="text" class="form-control" th:value="${trabajo.horasTrabajo}" name="horasTrabajo" placeholder="horas de trabajo">
                 <div
                   class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
                   <span>Alta</span>
-                  <input class="disponible" type="checkbox" name="alta" />
+                  <input class="disponible" th:checked="${trabajo.alta}" type="checkbox" name="alta" />
                 </div>
                 <div
                   class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
                   <span>terminoCliente</span>
-                  <input class="disponible" type="checkbox" name="terminoCliente" />
+                  <input class="disponible" th:checked="${trabajo.terminoCliente}" type="checkbox" name="terminoCliente" />
                 </div>
                 <div
                   class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
                   <span>terminoProveedor</span>
-                  <input class="disponible" type="checkbox" name="terminoProveedor" />
+                  <input class="disponible" th:checked="${trabajo.terminoProveedor}" type="checkbox" name="terminoProveedor" />
                 </div>
                 <div
                   class="mb-4 d-flex justify-content-start align-items-center contenedor-disponible">
                   <span>estaAceptadoCliente</span>
-                  <input class="disponible" type="checkbox" name="estaAceptadoCliente" />
+                  <input class="disponible" th:checked="${trabajo.estaAceptadoCliente}" type="checkbox" name="estaAceptadoCliente" />
                 </div>
             </div>
             <aside>
-              <input type="date" name="calendario" id="calendario">
-              <input type="text">
-              <button type="submit" class="btn btn-primary mt-3"> Aceptar </button>
+              <!-- <input th:value="${trabajo.fechaTrabajo}" type="date" name="fechaTrabajo" id="calendario"> -->
+              <input th:value="${#dates.format(trabajo.fechaTrabajo, 'yyyy-MM-dd')}" type="date" name="fechaTrabajo" id="calendario" />
+    
               <button type="submit" class="btn btn-primary mt-3"> Actualizar </button>
   
             </aside>                
@@ -146,9 +151,10 @@
 
                 </div>
               </div>
-              <form action="/trabajo/enviarMensaje" method="POST">
+              <form action="/trabajo/enviarMensajeProveedor" method="POST">
                 <input hidden name="idTrabajo" th:value="${trabajo.id}">
-                <input hidden name="idProveedor" th:value="${trabajo.proveedor.id}">
+                <!-- <input hidden name="idProveedor" th:value="${trabajo.proveedor.id}"> -->
+                <input hidden name="idCliente" th:value="${trabajo.cliente.id}">
                 <input type="text" placeholder="Enviar Mensaje" name="mensaje" id="mensaje">
                 <button type="submit" class="btn btn-primary mt-3">Enviar Mensaje</button>
               </form>

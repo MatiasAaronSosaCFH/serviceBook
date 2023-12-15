@@ -30,7 +30,7 @@ public class Calificacion {
     
     @Column(name = "estrellas")
     @Enumerated(EnumType.ORDINAL)
-    private Estrellas estrellas;
+    private Estrellas estrellas = Estrellas.TRES_ESTRELLAS;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trabajo_id", referencedColumnName = "id")

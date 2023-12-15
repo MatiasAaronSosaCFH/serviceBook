@@ -77,6 +77,38 @@ public class TrabajoService {
     trabajoRepository.save(trabajo);
   }
   
+@Transactional
+  public void modificarTrabajo(Long id, Long idCliente, Long idProveedor, String tituloTrabajo, Boolean alta, Boolean estaAceptadoCliente, Date fechaTrabajo, Integer horasTrabajo, Boolean terminoCliente, Boolean terminoProveedor) {
+    
+	 Trabajo trabajo = trabajoRepository.getReferenceById(id);
+	 Cliente cliente = clienteRepository.getReferenceById(idCliente);
+	 Proveedor proveedor  = proveedorRepository.getReferenceById(idProveedor);
+
+    trabajo.setCliente(cliente);
+    trabajo.setProveedor(proveedor);
+    trabajo.setTituloTrabajo(tituloTrabajo);
+    trabajo.setAlta(alta);
+    trabajo.setEstaAceptadoCliente(estaAceptadoCliente);
+    trabajo.setFechaTrabajo(fechaTrabajo);
+    trabajo.setHorasTrabajo(horasTrabajo);
+    trabajo.setTerminoCliente(terminoCliente);
+    trabajo.setTerminoProveedor(terminoProveedor);
+    trabajo.setCalificacion(null);
+
+//    Mensaje mensaje = new Mensaje();
+//    mensaje.setTexto(descripcionTrabajo);
+//    mensaje.setFecha(new Date());
+//    mensaje.setAlta(Boolean.TRUE);
+//    mensaje.setTipo(TipoMensaje.CLIENTE);
+//    mensaje.setTrabajo(trabajo);
+//
+//    trabajo.getMensajes().add(mensaje);
+//    
+//    mensajeRepository.save(mensaje);
+
+    trabajoRepository.save(trabajo);
+  }
+  
   @Transactional
   public void enviarMensaje(Long id, String comentario, TipoMensaje tipo) {
     Trabajo trabajo = new Trabajo();

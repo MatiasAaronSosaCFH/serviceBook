@@ -147,8 +147,7 @@
                             th:text="${profesion.nombre}"></span>
                         </span>
                         <div class="precio">
-                          <h5
-                            th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></h5>
+                          <p th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></p>
                         </div>
                         <div>
                           <a href="#" class="btn btn-primary btn-sm"><i
@@ -169,6 +168,10 @@
                             th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></h3>
                         </div>
                         <div>
+                          <div class="precio">
+                            <p th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></p>
+                          </div>
+  
                           <form action="/inicio" method="GET" class="d-inline">
                             <input hidden name="idProveedor"
                               th:value="${proveedor.id}">

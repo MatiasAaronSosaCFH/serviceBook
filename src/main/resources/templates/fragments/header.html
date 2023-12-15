@@ -107,9 +107,11 @@
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item"
                                 href="/modificar">Modificar Datos</a></li>
-                            <li><a class="dropdown-item"
-                                href="/trabajo/listaCliente">Ver Trabajos</a></li>
-                            <li><a class="dropdown-item"
+                            <li sec:authorize="hasRole('USER')"><a class="dropdown-item"
+                                href="/trabajo/listaCliente">Ver Trabajos Cliente</a></li>
+                            <li sec:authorize="hasAnyRole('PROVEEDOR')" ><a class="dropdown-item"
+                              href="/trabajo/listaProveedor">Ver Trabajos Proveedor</a></li>
+                              <li><a class="dropdown-item"
                                 href="/proveedor/registrar/id"
                                 sec:authorize="hasAnyRole('USER')">Solicitar ser
                                 Proveedor</a></li>
