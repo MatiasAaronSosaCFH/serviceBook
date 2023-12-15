@@ -51,9 +51,26 @@ public class PortalController {
   public String dashboard(
           @RequestParam(name = "page", defaultValue = "0") int page,
           @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+          @RequestParam(name = "filtro", required = false) String filtro,
           ModelMap map) {
 
-    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize, filtro);
+
+    map.addAttribute("proveedores", proveedoresPage.getContent());
+    map.addAttribute("currentPage", proveedoresPage.getNumber());
+    map.addAttribute("totalPages", proveedoresPage.getTotalPages());
+
+    return "index.html";
+  }
+  
+  @PostMapping("/")
+  public String dashboard2(
+          @RequestParam(name = "page", defaultValue = "0") int page,
+          @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+          @RequestParam(name = "filtro", required = false) String filtro,
+          ModelMap map) {
+
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize, filtro);
 
     map.addAttribute("proveedores", proveedoresPage.getContent());
     map.addAttribute("currentPage", proveedoresPage.getNumber());
@@ -74,7 +91,8 @@ public class PortalController {
   @GetMapping("/inicio")
   public String inicio(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
           @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
-          ModelMap model, @RequestParam(required = false) Long idProveedor) {
+          ModelMap model, @RequestParam(required = false) Long idProveedor,
+          @RequestParam(name = "filtro", required = false) String filtro) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     if (usuario != null) {
       if (usuario.getRole() == Role.USER) {
@@ -95,7 +113,7 @@ public class PortalController {
       }
     }
 
-    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize);
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize, filtro);
 
     model.addAttribute("proveedores", proveedoresPage.getContent());
     model.addAttribute("currentPage", proveedoresPage.getNumber());
@@ -110,6 +128,48 @@ public class PortalController {
     return "inicio.html";
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_PROVEEDOR','ROLE_ADMIN')")
+  @PostMapping("/inicio")
+  public String inicio2(HttpSession session, @RequestParam(name = "page", defaultValue = "0") int page,
+          @RequestParam(name = "pageSize", defaultValue = "12") int pageSize,
+          ModelMap model, @RequestParam(required = false) Long idProveedor,
+          @RequestParam(name = "filtro", required = false) String filtro) {
+    Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+    if (usuario != null) {
+      if (usuario.getRole() == Role.USER) {
+        Long clienteId = usuario.getId();
+        ClienteDtoEnviado clienteDto = clienteService.obtenerClienteConDirecciones(clienteId);
+        if (clienteDto != null) {
+          model.addAttribute("usuario", clienteDto);
+        }
+      } else if (usuario.getRole() == Role.PROVEEDOR) {
+        Long proveedorId = usuario.getId();
+        ProveedorDtoEnviado proveedorDto = proveedorService.obtenerProveedorConDirecciones(proveedorId);
+        if (proveedorDto != null) {
+          model.addAttribute("usuario", proveedorDto);
+        }
+      } else if (usuario.getRole() == Role.ADMIN) {
+        Admin admin = (Admin) session.getAttribute("usuariosession");
+        model.addAttribute("usuario", admin);
+      }
+    }
+
+    Page<ProveedorConFotosDto> proveedoresPage = proveedorService.obtenerProveedoresConFotos(page, pageSize, filtro);
+
+    model.addAttribute("proveedores", proveedoresPage.getContent());
+    model.addAttribute("currentPage", proveedoresPage.getNumber());
+    model.addAttribute("totalPages", proveedoresPage.getTotalPages());
+
+    if (idProveedor != null) {
+      Proveedor proveedor = proveedorService.findById(idProveedor);
+      model.addAttribute("prov", proveedor);
+      model.addAttribute("verificacion", "verificado");
+    }
+
+    return "inicio.html";
+  }
+  
+  
 //  @GetMapping("/inicio/{idProveedor}")
 //  public String crearTrabajo(@PathVariable Long idProveedor, HttpSession session, ModelMap modelo) {
 //    modelo.addAttribute("usuario", session.getAttribute("usuariosession"));

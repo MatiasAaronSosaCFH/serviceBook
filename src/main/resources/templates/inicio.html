@@ -146,6 +146,10 @@
                           <span class="badge bg-warning text-dark mb-3"
                             th:text="${profesion.nombre}"></span>
                         </span>
+                        <div class="precio">
+                          <h5
+                            th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></h5>
+                        </div>
                         <div>
                           <a href="#" class="btn btn-primary btn-sm"><i
                               class="fa fa-plus"></i></a>
@@ -160,6 +164,10 @@
                         <h4 class="card-title" th:text="${proveedor.nombre}"></h4>
                         <p class="card-text card-description text-center"
                           th:text="${proveedor.presentacion}"></p>
+                        <div class="precio">
+                          <h3
+                            th:text="'$' + ${proveedor.precioPorHora} + ' / hora'"></h3>
+                        </div>
                         <div>
                           <form action="/inicio" method="GET" class="d-inline">
                             <input hidden name="idProveedor"

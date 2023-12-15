@@ -1,0 +1,80 @@
+#chat1 .form-outline .form-control~.form-notch div {
+  background: transparent;
+  border: 1px solid;
+  border-color: #eee;
+  box-sizing: border-box;
+  pointer-events: none;
+  }
+  
+  #chat1 .form-outline .form-control~.form-notch .form-notch-leading {
+  border-radius: .65rem 0 0 .65rem;
+  border-right: none;
+  height: 100%;
+  left: 0;
+  top: 0;
+  }
+  
+  #chat1 .form-outline .form-control~.form-notch .form-notch-middle {
+  border-left: none;
+  border-right: none;
+  flex: 0 0 auto;
+  height: 100%;
+  max-width: calc(100% - 1rem);
+  }
+  
+  #chat1 .form-outline .form-control~.form-notch .form-notch-trailing {
+  border-left: none;
+  border-radius: 0 .65rem .65rem 0;
+  flex-grow: 1;
+  height: 100%;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-leading {
+  border-bottom: 0.125rem solid #00b6cd;
+  border-left: 0.125rem solid #00b6cd;
+  border-top: 0.125rem solid #00b6cd;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-leading,
+  #chat1 .form-outline .form-control.active~.form-notch .form-notch-leading {
+  border-right: none;
+  transition: all 0.2s linear;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-middle {
+  border-bottom: 0.125rem solid;
+  border-color: #00b6cd;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-middle,
+  #chat1 .form-outline .form-control.active~.form-notch .form-notch-middle {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  transition: all 0.2s linear;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-trailing {
+  border-bottom: 0.125rem solid #00b6cd;
+  border-right: 0.125rem solid #00b6cd;;
+  border-top: 0.125rem solid #00b6cd;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-notch .form-notch-trailing,
+  #chat1 .form-outline .form-control.active~.form-notch .form-notch-trailing {
+  border-left: none;
+  transition: all 0.2s linear;
+  }
+  
+  #chat1 .form-outline .form-control:focus~.form-label {
+  color: #00b6cd;
+  }
+  
+  #chat1 .form-outline .form-control~.form-label {
+  color: #bfbfbf;
+  }
+
+  .card-body {
+    max-height: 500px; 
+    overflow-y: auto;
+  }

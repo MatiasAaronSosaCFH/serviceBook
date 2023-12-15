@@ -281,9 +281,14 @@ public class ProveedorService {
 
   }
 
-  public Page<ProveedorConFotosDto> obtenerProveedoresConFotos(int page, int pageSize) {
+  public Page<ProveedorConFotosDto> obtenerProveedoresConFotos(int page, int pageSize, String filtro) {
     PageRequest pageable = PageRequest.of(page, pageSize);
-    Page<Proveedor> proveedoresPage = proveedorRepository.listarProveedores(pageable);
+    Page<Proveedor> proveedoresPage;
+    if(filtro != null && !filtro.isEmpty()){
+      proveedoresPage = proveedorRepository.findByProfesion(filtro, pageable);
+    } else {
+      proveedoresPage = proveedorRepository.listarProveedores(pageable);
+    }
     
     return proveedoresPage.map(proveedor -> {
       Long idProveedor = proveedor.getId();

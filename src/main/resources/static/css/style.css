@@ -105,7 +105,7 @@ body {
 h5,
 h4,
 h3 {
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .modal-content textarea {
@@ -940,3 +940,8 @@ section .section-title {
 .toastr.error h5 {
   color: #3d0101;
 }
+
+.precio h3, h5 {
+  color: red;
+}
+

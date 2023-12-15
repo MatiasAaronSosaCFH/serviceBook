@@ -65,7 +65,6 @@ public class TrabajoController {
   public String crearTrabajo(HttpSession session, ModelMap modelo) {
     Usuario usuario = (Usuario) session.getAttribute("usuariosession");
     modelo.put("usuario", usuario);
-      System.out.println("\n+\n+\n");
 //    Proveedor proveedor = proveedorRepository.findById(idProveedor).orElse(null);
 //    modelo.put("proveedor", proveedor);
     List<Trabajo> trabajosCliente = trabajoRepository.buscarTrabajoPorCliente(usuario.getId());

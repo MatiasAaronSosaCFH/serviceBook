@@ -106,6 +106,9 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 //  List<Object[]> findAllProveedoresConFotos();
   @Query("SELECT p FROM Proveedor p WHERE p.alta = true")
   Page<Proveedor> listarProveedores(Pageable pageable);
+  
+  @Query("SELECT p FROM Proveedor p JOIN p.profesiones prof WHERE prof.nombre LIKE %:profesion% AND p.alta = true")
+  Page<Proveedor> findByProfesion(@Param("profesion") String profesion, Pageable pageable);
 
   @Query(value = "SELECT p.id FROM profesiones p "
           + "JOIN proveedores_profesiones pp ON p.id = pp.profesion_id "

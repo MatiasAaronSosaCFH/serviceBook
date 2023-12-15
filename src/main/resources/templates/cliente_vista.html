@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  <th:head th:replace="./fragments/head.html :: head"></th:head>
+  <head>
+    <th:head th:replace="./fragments/head.html :: head"></th:head>
+    <link rel="stylesheet" href="../../css/chat.css">
+  </head>
+  
 
   <body class="bg-gradient" style="background-image: linear-gradient(180deg, #e76b74  #D7AF70)">
 
     <th:header th:replace="./fragments/header.html :: header"></th:header>
 
-
+    <main id="main-content">
     <div class="container-fluid m-0 p-0 g-0 w-100 contenedor">
       <div class="row p-0 m-0 g-0 w-100">
           <div class="col-1"></div>
@@ -65,7 +69,7 @@
       <div class="col-1"></div>
   </div>
 
-  <main id="main-content" th:if="${verificacion != null}">
+  <div th:if="${verificacion != null}">
     
     <th:div th:replace="./fragments/exitoError.html :: div"></th:div>
 
@@ -73,14 +77,12 @@
 
     <div class="container-fluid m-5 contenedor">
         
-      <div>
+    
        <div class="row">
         
         <div class="col-5">
           <form class="formulario" th:action="@{/trabajo/crearTrabajo}" method="POST" enctype="multipart/form-data">
             <div class="form-group my-3">
-                <!-- <label class="mb-2">Usuario Id</label>
-                <b th:text="${usuario.id}"></b></label><br> -->
                 <input hidden  th:value="${usuario.id}" type="text" class="form-control" name="idCliente">                    
                 <label class="mb-2">Fecha: </label>
                 <b th:text="${trabajo.fechaTrabajo}"></b></label><br>
@@ -123,46 +125,73 @@
         </div>
         <div class="col-1"></div>
         <div class="col-5">
-          
-        
-        
           <div class="my-3">
-              <!-- <label class="mb-2">Usuario Id</label>
-              <b th:text="${usuario.id}"></b></label><br> -->
-                 
               
-
-              <label class="mb-2">Titulo</label>
-              <input type="text" class="form-control" name="tituloTrabajo" th:value="${trabajo.tituloTrabajo}">
-              <label class="mb-2">Chat</label>
-              <div name="chat" th:each="mensaje : ${mensajes}">
-                <div th:text="${mensaje.fecha}">
+            <section style="background-color: #eee;">
+              <div class="container py-5">
             
+                <div class="row d-flex justify-content-center g-0 m-0 p-0">
+                  <div class="col-12">
+                    <label class="mb-2">Titulo</label>
+                    <input type="text" class="form-control" name="tituloTrabajo" th:value="${trabajo.tituloTrabajo}">
+                    <div class="card" id="chat1" style="border-radius: 15px;">
+                      <div
+                        class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                        style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <i class="fas fa-angle-left"></i>
+                        <p class="mb-0 fw-bold">Mensajes</p>
+                        <i class="fas fa-times"></i>
+                      </div>
+                      <div class="card-body">
+                        <div th:each="mensaje : ${mensajes}">
+                          <div class="d-flex flex-row mb-4 justify-content-start">
+                            <img th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).PROVEEDOR}"
+                            th:src="${proveedor?.foto != null} ? ${proveedor?.foto?.url} : '../../img/usuario-de-perfil.png'"
+                            alt="foto proveedor" style="width: 45px; height: 100%;">
+                            <div class="p-3 ms-3" th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).PROVEEDOR}" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                              <p class="small mb-0" th:text="${mensaje.texto}"></p>
+                            </div>
+                          </div>
+  
+                          <div class="d-flex flex-row mb-4 justify-content-end">
+                            <img th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).CLIENTE}" 
+                            th:src="${usuario?.foto != null} ? ${usuario?.foto?.url} : '../../img/usuario-de-perfil.png'"
+                              alt="foto usuario" style="width: 45px; height: 100%;">
+                            <div class="p-3 ms-3" th:if="${mensaje.tipo == T(com.servicebook.models.enums.TipoMensaje).CLIENTE}" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                              <p class="small mb-0" th:text="${mensaje.texto}"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <form action="/trabajo/enviarMensaje" method="POST">
+                        <input hidden name="idTrabajo" th:value="${trabajo.id}">
+                        <input hidden name="idProveedor" th:value="${trabajo.proveedor.id}">
+                        <div class="form-outline">
+                          <textarea name="mensaje" id="mensaje" class="form-control" rows="4"></textarea>
+                          <label class="form-label" for="mensaje">Escriba su mensaje</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Enviar Mensaje</button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
-                <div th:text="${mensaje.texto}">
-
-                </div>
-                <div th:text="${mensaje.tipo}">
-
-                </div>
+            
               </div>
-              <form action="/trabajo/enviarMensaje" method="POST">
-                <input hidden name="idTrabajo" th:value="${trabajo.id}">
-                <input hidden name="idProveedor" th:value="${trabajo.proveedor.id}">
-                <input type="text" placeholder="Enviar Mensaje" name="mensaje" id="mensaje">
-                <button type="submit" class="btn btn-primary mt-3">Enviar Mensaje</button>
-              </form>
-          </div>               
-      
+            </section>    
+              
+          </div>                  
         </div>
        </div>
         
-      </div>
+      
   </div> 
 
-  </main>
-
+</div>
+</main>
   <th:footer th:replace="./fragments/footer.html :: footer"></th:footer>
+  <script src="../../js/color-modes.js"></script>
+  <script src="../../js/registro-login.js"></script>
+  <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="./js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
