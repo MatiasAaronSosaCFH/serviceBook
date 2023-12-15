@@ -15,13 +15,13 @@ import java.util.Optional;
 @Repository
 public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
 
-    @Query("SELECT t FROM Trabajo t  WHERE t.proveedor = :id AND t.alta = true")
+    @Query("SELECT t FROM Trabajo t  WHERE t.proveedor.id = :id AND t.alta = true")
     List<Trabajo> buscarTrabajoPorProveedor(@Param("id")Long id);
 
     @Query("SELECT t FROM Trabajo t  WHERE t.cliente.id = :id AND t.alta = true")
     List<Trabajo> buscarTrabajoPorCliente(@Param("id")Long id);
 
-    @Query("SELECT t FROM Trabajo t  WHERE t.calificacion = :id AND t.alta = true")
+    @Query("SELECT t FROM Trabajo t  WHERE t.calificacion.id = :id AND t.alta = true")
     List<Trabajo> buscarTrabajoPorCalificacion(@Param("id")Long id);
 
 
